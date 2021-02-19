@@ -1,0 +1,5 @@
+require("prototypes.fluidic-energy")
+require("prototypes.fluidic-transformers")
+require("prototypes.fluidic-small-pole")
+require("prototypes.fluidic-medium-pole-out")
+require("prototypes.fluidic-medium-pole-in")
