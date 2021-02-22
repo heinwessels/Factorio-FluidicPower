@@ -49,96 +49,10 @@ override = {
     energy_source =
     {
         type = "electric",
-        usage_priority = "secondary-output"
+        usage_priority = "tertiary"
     },
-    horizontal_animation =
-    {
-        layers =
-        {
-            {
-                filename = "__base__/graphics/entity/small-electric-pole/small-electric-pole.png",
-                priority = "extra-high",
-                width = 36,
-                height = 108,
-                direction_count = 4,
-                shift = util.by_pixel(2, -42),
-                hr_version =
-                {
-                  filename = "__base__/graphics/entity/small-electric-pole/hr-small-electric-pole.png",
-                  priority = "extra-high",
-                  width = 72,
-                  height = 220,
-                  direction_count = 4,
-                  shift = util.by_pixel(1.5, -42.5),
-                  scale = 0.5
-                }
-            },
-            {
-                filename = "__base__/graphics/entity/small-electric-pole/small-electric-pole-shadow.png",
-                priority = "extra-high",
-                width = 130,
-                height = 28,
-                direction_count = 4,
-                shift = util.by_pixel(50, 2),
-                draw_as_shadow = true,
-                hr_version =
-                {
-                  filename = "__base__/graphics/entity/small-electric-pole/hr-small-electric-pole-shadow.png",
-                  priority = "extra-high",
-                  width = 256,
-                  height = 52,
-                  direction_count = 4,
-                  shift = util.by_pixel(51, 3),
-                  draw_as_shadow = true,
-                  scale = 0.5
-                }
-            }
-        }
-    },
-    vertical_animation =
-    {
-        layers =
-        {
-            {
-                filename = "__base__/graphics/entity/small-electric-pole/small-electric-pole.png",
-                priority = "extra-high",
-                width = 36,
-                height = 108,
-                direction_count = 4,
-                shift = util.by_pixel(2, -42),
-                hr_version =
-                {
-                    filename = "__base__/graphics/entity/small-electric-pole/hr-small-electric-pole.png",
-                    priority = "extra-high",
-                    width = 72,
-                    height = 220,
-                    direction_count = 4,
-                    shift = util.by_pixel(1.5, -42.5),
-                    scale = 0.5
-                }
-            },
-            {
-                filename = "__base__/graphics/entity/small-electric-pole/small-electric-pole-shadow.png",
-                priority = "extra-high",
-                width = 130,
-                height = 28,
-                direction_count = 4,
-                shift = util.by_pixel(50, 2),
-                draw_as_shadow = true,
-                hr_version =
-                {
-                    filename = "__base__/graphics/entity/small-electric-pole/hr-small-electric-pole-shadow.png",
-                    priority = "extra-high",
-                    width = 256,
-                    height = 52,
-                    direction_count = 4,
-                    shift = util.by_pixel(51, 3),
-                    draw_as_shadow = true,
-                    scale = 0.5
-                }
-            }
-        }
-    },
+    vertical_animation = pole.pictures,
+    horizontal_animation = pole.pictures,
 }
 for k,v in pairs(override) do
     pole[k]=v
@@ -185,30 +99,7 @@ override = {
         filter = "megajoules"
       },
     },
-    animation =
-    {
-      layers =
-      {
-        {
-            filename = "__base__/graphics/entity/small-electric-pole/small-electric-pole.png",
-            priority = "extra-high",
-            width = 36,
-            height = 108,
-            direction_count = 4,
-            shift = util.by_pixel(2, -42),
-            hr_version =
-            {
-                filename = "__base__/graphics/entity/small-electric-pole/hr-small-electric-pole.png",
-                priority = "extra-high",
-                width = 72,
-                height = 220,
-                direction_count = 4,
-                shift = util.by_pixel(1.5, -42.5),
-                scale = 0.5
-            }
-        }
-      }
-    },
+    animation = pole.pictures,
 }
 for k,v in pairs(override) do
     pole[k]=v
