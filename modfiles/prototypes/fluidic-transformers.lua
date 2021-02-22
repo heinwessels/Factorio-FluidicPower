@@ -33,7 +33,7 @@ override = {
     energy_source = nil,
     module_specification = {module_slots=0},
     crafting_speed = 1,
-    source_inventory_size = 0,
+    source_inventory_size = 1,
     result_inventory_size = 0,
     energy_source = {
         type = "void",        
@@ -45,9 +45,10 @@ override = {
         production_type = "input",        
         base_area = 10,
         base_level = -1,
+        height = 2,
         pipe_connections = {
-            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 10},        
-            {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 10},
+            {type = "input", position = {-1.5, 0.5}, max_underground_distance = 10},        
+            {type = "input", position = {-1.5, -0.5}, max_underground_distance = 10},
         },        
       },
       {
@@ -55,8 +56,8 @@ override = {
         base_area = 10,
         base_level = 1,
         pipe_connections = {
-            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 10},        
-            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 10},
+            {type = "output", position = {1.5, 0.5}, max_underground_distance = 10},        
+            {type = "output", position = {1.5, -0.5}, max_underground_distance = 10},
         },        
       },
     },
@@ -71,7 +72,7 @@ data:extend({transformer})
 local transformer2 = table.deepcopy(data.raw["furnace"]["fluidic-step-up-transformer"])
 override = {
     name = "fluidic-step-down-transformer",    
-    crafting_categories = {"fluidic-transformers-step-down"},   
+    crafting_categories = {"fluidic-transformers-step-down"},    
 }
 for k,v in pairs(override) do
     transformer2[k]=v

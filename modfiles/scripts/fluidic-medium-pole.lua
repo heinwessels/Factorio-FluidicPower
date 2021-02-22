@@ -15,8 +15,7 @@ function power_pole.on_entity_created(event)
             position = {x = entity.position.x, y = entity.position.y},
             direction = entity.direction,                
             force = entity.force
-        }
-        if entity.name == "fluidic-medium-pole-in" then entity.set_recipe("kilojoules") end
+        }        
     end
 end
 

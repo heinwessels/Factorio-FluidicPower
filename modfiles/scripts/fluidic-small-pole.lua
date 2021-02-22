@@ -16,8 +16,6 @@ function power_pole_out.on_entity_created(event)
             direction = entity.direction,                
             force = entity.force
         }
-        
-        if entity.name == "fluidic-small-pole-in" then entity.set_recipe("kilojoules") end        
     end
 end
 

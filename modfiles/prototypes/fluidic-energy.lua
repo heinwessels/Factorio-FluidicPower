@@ -2,7 +2,11 @@ data:extend
 ({   
     {
         type = "recipe-category",
-        name = "fluid-kilojoule-generate"
+        name = "fluidic-kilojoule-generate"
+    },
+    {
+        type = "recipe-category",
+        name = "fluidic-megajoule-generate"
     },
     {
         type = "recipe-category",
@@ -58,17 +62,29 @@ data:extend
 
     {
         type = "recipe",
-        name = "kilojoules",        
+        name = "fluidic-kilojoules-generate",
         icon_size = 64,
         icon = "__base__/graphics/icons/list-dot.png",
-        category = "fluid-kilojoule-generate",
+        category = "fluidic-kilojoule-generate",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
         energy_required = 0.05,
         results={{type="fluid", name="kilojoules", amount=500}},        
     },
-
+    {
+        type = "recipe",
+        name = "fluidic-megajoules-generate",        
+        icon_size = 64,
+        icon = "__base__/graphics/icons/list-dot.png",
+        category = "fluidic-megajoule-generate",
+        subgroup = "energy-pipe-distribution",
+        order = "a[kilojoules]-a[kilojoules]",        
+        ingredients ={},
+        energy_required = 1,
+        results={{type="fluid", name="megajoules", amount=30}},
+    },
+    
     {
         type = "recipe",
         name = "kilo-to-megajoules",        
@@ -78,7 +94,7 @@ data:extend
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={{type="fluid", name="kilojoules", amount=1000}},
-        energy_required = 0.1,
+        energy_required = 0.01,
         results={{type="fluid", name="megajoules", amount=1}},        
     },
     {
@@ -90,7 +106,7 @@ data:extend
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={{type="fluid", name="megajoules", amount=1000}},
-        energy_required = 0.1,
+        energy_required = 0.01,
         results={{type="fluid", name="gigajoules", amount=1}},        
     },
     {
