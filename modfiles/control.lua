@@ -1,6 +1,7 @@
 small_pole = require("scripts.fluidic-small-pole")
 medium_pole = require("scripts.fluidic-medium-pole")
 substation = require("scripts.fluidic-substation")
+build_tools = require("scripts.fluidic-build-tools")
 
 function creation_event (event)
     small_pole.on_entity_created(event)
