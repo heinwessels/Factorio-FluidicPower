@@ -26,6 +26,7 @@ local pole = table.deepcopy(data.raw["electric-pole"]["substation"])
 override = {
     type = "assembling-machine",
     name = "fluidic-substation-in",
+    minable = {mining_time = 0.5, result = "fluidic-substation-in"},
     next_upgrade = nil,
     crafting_speed = 1,
     energy_usage = "30MW",

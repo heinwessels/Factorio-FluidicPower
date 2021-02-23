@@ -4,6 +4,7 @@ require("prototypes.fluidic-small-pole")
 require("prototypes.fluidic-medium-pole")
 require("prototypes.fluidic-big-pole")
 require("prototypes.fluidic-substation")
+require("prototypes.fluidic-accumulator")
 
 
 
