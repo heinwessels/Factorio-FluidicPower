@@ -2,32 +2,22 @@ data:extend
 ({   
     {
         type = "item",
-        name = "fluidic-step-up-transformer",
+        name = "fluidic-transformer",
 		icon_size = 64,
-	    place_result = "fluidic-step-up-transformer",
+	    place_result = "fluidic-transformer",
         icon = "__base__/graphics/icons/substation.png",
 		subgroup = "energy-pipe-distribution",
-        order = "a[energy]-a[step-up-transformer]",
+        order = "a[energy]-a[transformer]",
         stack_size = 50
-    },
-    {
-        type = "item",
-        name = "fluidic-step-down-transformer",
-		icon_size = 64,
-	    place_result = "fluidic-step-down-transformer",
-        icon = "__base__/graphics/icons/substation.png",
-		subgroup = "energy-pipe-distribution",
-        order = "a[energy]-a[step-down-transformer]",
-        stack_size = 50
-    },
+    },    
 })
 
 local transformer = table.deepcopy(data.raw["electric-pole"]["substation"])
 override = {
     type = "furnace",
-    name = "fluidic-step-up-transformer",
+    name = "fluidic-transformer",
     mode = "output-to-separate-pipe",
-    crafting_categories = {"fluidic-transformers-step-up"},   
+    crafting_categories = {"fluidic-transformers"},   
     energy_usage = "10kW",
     allowed_effects = {},
     energy_source = nil,
@@ -67,14 +57,3 @@ for k,v in pairs(override) do
     transformer[k]=v
 end
 data:extend({transformer})
-
-
-local transformer2 = table.deepcopy(data.raw["furnace"]["fluidic-step-up-transformer"])
-override = {
-    name = "fluidic-step-down-transformer",    
-    crafting_categories = {"fluidic-transformers-step-down"},    
-}
-for k,v in pairs(override) do
-    transformer2[k]=v
-end
-data:extend({transformer2})

@@ -72,7 +72,7 @@ override = {
     energy_source = {
         type = "electric",
         input_priority = "secondary",
-        usage_priority = "secondary-input",
+        usage_priority = "tertiary",
         drain = "0kW"  
     },
     collision_box = {{-0.15, -0.15}, {0.15, 0.15}},

@@ -97,7 +97,7 @@ override = {
     energy_source =
     {
         type = "electric",
-        usage_priority = "secondary-output"
+        usage_priority = "tertiary"
     },
     vertical_animation = pole.pictures,
     horizontal_animation = pole.pictures,
