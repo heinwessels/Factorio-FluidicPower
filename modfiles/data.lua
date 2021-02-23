@@ -5,6 +5,7 @@ require("prototypes.fluidic-medium-pole")
 require("prototypes.fluidic-big-pole")
 require("prototypes.fluidic-substation")
 require("prototypes.fluidic-accumulator")
+require("prototypes.fluidic-power-switch")
 
 
 

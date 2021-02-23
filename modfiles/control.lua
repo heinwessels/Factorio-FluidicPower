@@ -7,6 +7,8 @@ function creation_event (event)
     small_pole.on_entity_created(event)
     medium_pole.on_entity_created(event)
     substation.on_entity_created(event)
+
+    -- Make sure power switch is not placed to pump a fluid wagon!
 end
 
 script.on_event(defines.events.on_built_entity, creation_event)
