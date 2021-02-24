@@ -37,11 +37,11 @@ override = {
     },
     energy_usage = "1W",
     pumping_speed = 200,
-    animations = {
-        north = entity.power_on_animation,
-        east = entity.power_on_animation,
-        south = entity.power_on_animation,
-        west = entity.power_on_animation,
+    animations = {      
+      north = entity.power_on_animation,
+      east = entity.power_on_animation,
+      south = entity.power_on_animation,
+      west = entity.power_on_animation,
     },
     fluid_animation = {
         north = entity.overlay_loop,
@@ -49,18 +49,29 @@ override = {
         south = entity.overlay_loop,
         west = entity.overlay_loop,
     },
-    -- Fix this!
     glass_pictures = {
       north = entity.overlay_loop,
       east = entity.overlay_loop,
       south = entity.overlay_loop,
       west = entity.overlay_loop,
     },
+
+    -- TODO Fix the circuit wire locations
     circuit_wire_connection_points = circuit_connector_definitions["pump"].points,
     circuit_connector_sprites = circuit_connector_definitions["pump"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance
 }
 for k,v in pairs(override) do
-    entity[k]=v
+  entity[k]=v
 end
+
+-- TODO Fix this hacky way to have a static animation. This is lame.
+-- TODO Fix power switch shadow too
+for _,direction in pairs(entity.animations) do
+  direction.layers[1].filename = "__FluidicPower__/graphics/entities/power-switch.png"
+  direction.layers[1].animation_speed = 0.4
+  direction.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/hr-power-switch.png"
+  direction.layers[1].hr_version.animation_speed = 0.4
+end
+
 data:extend({entity})

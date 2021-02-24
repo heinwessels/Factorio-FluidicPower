@@ -71,6 +71,7 @@ local pole = table.deepcopy(data.raw["electric-pole"]["substation"])
 override = {
     type = "generator",
     name = "fluidic-substation-out",
+    minable = {mining_time = 0.5, result = "fluidic-substation-out"},
     effectivity = 1,
     maximum_temperature = 15,
     fluid_usage_per_tick = 1,

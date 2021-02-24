@@ -26,6 +26,7 @@ local pole = table.deepcopy(data.raw["electric-pole"]["medium-electric-pole"])
 override = {
     type = "assembling-machine",
     name = "fluidic-medium-pole-in",
+    minable = {mining_time = 0.5, result = "fluidic-medium-pole-in"},
     next_upgrade = nil,
     crafting_speed = 1,
     energy_usage = "20MW",
@@ -73,6 +74,7 @@ local pole = table.deepcopy(data.raw["electric-pole"]["medium-electric-pole"])
 override = {
     type = "generator",
     name = "fluidic-medium-pole-out",
+    minable = {mining_time = 0.5, result = "fluidic-medium-pole-out"},
     effectivity = 1,
     maximum_temperature = 15,
     fluid_usage_per_tick = 1,

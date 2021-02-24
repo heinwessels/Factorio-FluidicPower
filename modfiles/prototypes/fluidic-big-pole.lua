@@ -16,6 +16,7 @@ local pole = table.deepcopy(data.raw["electric-pole"]["big-electric-pole"])
 override = {
     type = "pipe",
     name = "fluidic-big-pole",
+    minable = {mining_time = 0.5, result = "fluidic-big-pole"},
     horizontal_window_bounding_box = {{0,0},{0,0}},
     vertical_window_bounding_box = {{0,0},{0,0}},
     fluid_box =
