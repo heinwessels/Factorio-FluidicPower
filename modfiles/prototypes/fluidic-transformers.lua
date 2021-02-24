@@ -1,23 +1,99 @@
+local item = table.deepcopy(data.raw["item"]["substation"])
+override = {
+    name = "fluidic-transformer-step-up",
+    place_result = "fluidic-transformer-step-up",
+    -- TODO Give different icon than substation
+}
+for k,v in pairs(override) do
+    item[k]=v
+end
+data:extend({item})
+
+local item = table.deepcopy(data.raw["item"]["substation"])
+override = {
+    name = "fluidic-transformer-step-down",
+    place_result = "fluidic-transformer-step-down",
+    -- TODO Give different icon than substation
+}
+for k,v in pairs(override) do
+    item[k]=v
+end
+data:extend({item})
+
 data:extend
-({   
+({ 
+    ------------------------
+    -- STEP UP RECIPES
+    ------------------------
     {
-        type = "item",
-        name = "fluidic-transformer",
-		icon_size = 64,
-	    place_result = "fluidic-transformer",
-        icon = "__base__/graphics/icons/substation.png",
-		subgroup = "energy-pipe-distribution",
-        order = "a[energy]-a[transformer]",
-        stack_size = 50
-    },    
+        type = "recipe-category",
+        name = "fluidic-transformers-step-up"
+    },
+    {
+        type = "recipe",
+        name = "fluidic-10-kilo-to-megajoules",        
+        icon_size = 64,
+        icon = "__base__/graphics/icons/list-dot.png",
+        category = "fluidic-transformers-step-up",
+        subgroup = "energy-pipe-distribution",
+        order = "a[kilojoules]-a[kilojoules]",        
+        ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=100}},
+        energy_required = 0.1,
+        results={{type="fluid", name="fluidic-megajoules", amount=1}},        
+    },
+    {
+        type = "recipe",
+        name = "fluidic-mega-to-gigajoules",        
+        icon_size = 64,
+        icon = "__base__/graphics/icons/list-dot.png",
+        category = "fluidic-transformers-step-up",
+        subgroup = "energy-pipe-distribution",
+        order = "a[kilojoules]-a[kilojoules]",        
+        ingredients ={{type="fluid", name="fluidic-megajoules", amount=1000}},
+        energy_required = 0.1,
+        results={{type="fluid", name="fluidic-gigajoules", amount=1}},        
+    },
+
+    ------------------------
+    -- STEP DOWN RECIPES
+    ------------------------
+    {
+        type = "recipe-category",
+        name = "fluidic-transformers-step-down"
+    },  
+    {
+        type = "recipe",
+        name = "fluidic-mega-to-10-kilojoules",        
+        icon_size = 64,
+        icon = "__base__/graphics/icons/list-dot.png",
+        category = "fluidic-transformers-step-down",
+        subgroup = "energy-pipe-distribution",
+        order = "a[kilojoules]-a[kilojoules]",        
+        ingredients ={{type="fluid", name="fluidic-megajoules", amount=1}},
+        energy_required = 0.1,
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=100}},        
+    },
+    {
+        type = "recipe",
+        name = "fluidic-giga-to-megajoule",        
+        icon_size = 64,
+        icon = "__base__/graphics/icons/list-dot.png",
+        category = "fluidic-transformers-step-down",
+        subgroup = "energy-pipe-distribution",
+        order = "a[kilojoules]-a[kilojoules]",        
+        ingredients ={{type="fluid", name="fluidic-gigajoules", amount=1}},
+        energy_required = 0.1,
+        results={{type="fluid", name="fluidic-megajoules", amount=1000}},        
+    }
 })
 
-local transformer = table.deepcopy(data.raw["electric-pole"]["substation"])
+local transformer_up = table.deepcopy(data.raw["electric-pole"]["substation"])
 override = {
     type = "furnace",
-    name = "fluidic-transformer",
+    name = "fluidic-transformer-step-up",
     mode = "output-to-separate-pipe",
-    crafting_categories = {"fluidic-transformers"},   
+    crafting_categories = {"fluidic-transformers-step-up"},
+    minable = {mining_time = 0.2, result = "fluidic-transformer-step-up"},
     energy_usage = "10kW",
     allowed_effects = {},
     energy_source = nil,
@@ -43,7 +119,7 @@ override = {
       },
       {
         production_type = "output",        
-        base_area = 10,
+        base_area = 1,
         base_level = 1,
         pipe_connections = {
             {type = "output", position = {1.5, 0.5}, max_underground_distance = 10},        
@@ -51,9 +127,23 @@ override = {
         },        
       },
     },
-    animation = transformer.pictures,
+    animation = transformer_up.pictures,
 }
 for k,v in pairs(override) do
-    transformer[k]=v
+    transformer_up[k]=v
 end
-data:extend({transformer})
+data:extend({transformer_up})
+
+
+local transformer_down = table.deepcopy(data.raw["furnace"]["fluidic-transformer-step-up"])
+override = {
+    name = "fluidic-transformer-step-down",
+    crafting_categories = {"fluidic-transformers-step-down"},
+    minable = {mining_time = 0.2, result = "fluidic-transformer-step-down"},
+}
+for k,v in pairs(override) do
+    transformer_down[k]=v
+end
+transformer_down.fluid_boxes[1].base_area = 1
+transformer_down.fluid_boxes[2].base_area = 10
+data:extend({transformer_down})

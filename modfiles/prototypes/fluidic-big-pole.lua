@@ -19,20 +19,20 @@ override = {
     horizontal_window_bounding_box = {{0,0},{0,0}},
     vertical_window_bounding_box = {{0,0},{0,0}},
     fluid_box =
-    {      
-      pipe_connections =
-      {
-        {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 30},        
-        {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 30},
-        {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 30},
-        {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 30},
+    {     
+        height = 2,
+        pipe_connections =
+        {
+            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 30},        
+            {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 30},
+            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 30},
+            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 30},
 
-        {type = "input-output", position = { 0.5, -1.5,}, max_underground_distance = 30},        
-        {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = 30},
-        {type = "input-output", position = { 0.5, 1.5}, max_underground_distance = 30},
-        {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = 30},
-      },
-      filter = "gigajoules"
+            {type = "input-output", position = { 0.5, -1.5,}, max_underground_distance = 30},        
+            {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = 30},
+            {type = "input-output", position = { 0.5, 1.5}, max_underground_distance = 30},
+            {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = 30},
+        },
     },
     pictures = {
         straight_vertical_single = pole.pictures,

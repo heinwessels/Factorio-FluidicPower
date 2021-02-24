@@ -43,8 +43,8 @@ override = {
             {type = "input-output", position = {0, 1}, max_underground_distance = 10},
         },
         production_type = "input-output",
-        filter = "megajoules",
-        minimum_temperature = 10
+        minimum_temperature = 10,
+        filter = "fluidic-10-kilojoules"
     },
     energy_source =
     {
@@ -65,7 +65,7 @@ override = {
     name = "fluidic-small-pole-in",
     next_upgrade = nil,
     crafting_speed = 1,
-    energy_usage = "30MW",
+    energy_usage = "20MW",
     module_specification = nil,
     allowed_effects = {},
     module_specification = { module_slots = 0 },
@@ -81,8 +81,8 @@ override = {
     maximum_wire_distance = 0,
     open_sound = nil,
     close_sound = nil,
-    crafting_categories = {"fluidic-megajoule-generate"},
-    fixed_recipe = "fluidic-megajoules-generate",
+    fixed_recipe = "fluidic-10-kilojoules-generate",
+    crafting_categories = {"fluidic-generate"},
     fluid_boxes =
     { 
       {
@@ -96,7 +96,6 @@ override = {
             { type="input-output", position = {-1, 0}, max_underground_distance = 10}
         },
         secondary_draw_orders = { north = -1 },
-        filter = "megajoules"
       },
     },
     animation = pole.pictures,

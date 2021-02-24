@@ -2,19 +2,11 @@ data:extend
 ({   
     {
         type = "recipe-category",
-        name = "fluidic-kilojoule-generate"
-    },
-    {
-        type = "recipe-category",
-        name = "fluidic-megajoule-generate"
+        name = "fluidic-generate"
     },    
     {
-        type = "recipe-category",
-        name = "fluidic-transformers"
-    },
-    {
         type = "fluid",
-        name = "kilojoules",
+        name = "fluidic-kilojoules",
         default_temperature = 15,
         max_temperature = 15,
         fuel_value = "1kJ",
@@ -28,7 +20,21 @@ data:extend
     },
     {
         type = "fluid",
-        name = "megajoules",
+        name = "fluidic-10-kilojoules",
+        default_temperature = 15,
+        max_temperature = 15,
+        fuel_value = "10kJ",
+        heat_capacity = "10KJ",
+        base_color = {r=0, g=1, b=0},
+        flow_color = {r=0, g=1, b=0},
+        icon = "__base__/graphics/icons/list-dot.png",
+        icon_size = 64, icon_mipmaps = 4,
+        order = "a[kilojoules]-a[kilojoules]",
+        -- hidden = true
+    },
+    {
+        type = "fluid",
+        name = "fluidic-megajoules",
         default_temperature = 15,
         max_temperature = 15,
         fuel_value = "1MJ",
@@ -42,7 +48,7 @@ data:extend
     },
     {
         type = "fluid",
-        name = "gigajoules",
+        name = "fluidic-gigajoules",
         default_temperature = 15,
         max_temperature = 15,
         fuel_value = "1GJ",
@@ -61,48 +67,35 @@ data:extend
         name = "fluidic-kilojoules-generate",
         icon_size = 64,
         icon = "__base__/graphics/icons/list-dot.png",
-        category = "fluidic-kilojoule-generate",
+        category = "fluidic-generate",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
         energy_required = 0.05,
-        results={{type="fluid", name="kilojoules", amount=500}},        
+        results={{type="fluid", name="fluidic-kilojoules", amount=500}},        
+    },
+    {
+        type = "recipe",
+        name = "fluidic-10-kilojoules-generate",
+        icon_size = 64,
+        icon = "__base__/graphics/icons/list-dot.png",
+        category = "fluidic-generate",
+        subgroup = "energy-pipe-distribution",
+        order = "a[kilojoules]-a[kilojoules]",        
+        ingredients ={},
+        energy_required = 0.5,
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=100}},        
     },
     {
         type = "recipe",
         name = "fluidic-megajoules-generate",        
         icon_size = 64,
         icon = "__base__/graphics/icons/list-dot.png",
-        category = "fluidic-megajoule-generate",
+        category = "fluidic-generate",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
         energy_required = 1,
-        results={{type="fluid", name="megajoules", amount=30}},
+        results={{type="fluid", name="fluidic-megajoules", amount=30}},
     },
-    
-    {
-        type = "recipe",
-        name = "mega-to-gigajoules",        
-        icon_size = 64,
-        icon = "__base__/graphics/icons/list-dot.png",
-        category = "fluidic-transformers",
-        subgroup = "energy-pipe-distribution",
-        order = "a[kilojoules]-a[kilojoules]",        
-        ingredients ={{type="fluid", name="megajoules", amount=1000}},
-        energy_required = 0.01,
-        results={{type="fluid", name="gigajoules", amount=1}},        
-    },
-    {
-        type = "recipe",
-        name = "giga-to-megajoules",        
-        icon_size = 64,
-        icon = "__base__/graphics/icons/list-dot.png",
-        category = "fluidic-transformers",
-        subgroup = "energy-pipe-distribution",
-        order = "a[kilojoules]-a[kilojoules]",        
-        ingredients ={{type="fluid", name="gigajoules", amount=1}},
-        energy_required = 0.1,
-        results={{type="fluid", name="megajoules", amount=1000}},        
-    }
 })

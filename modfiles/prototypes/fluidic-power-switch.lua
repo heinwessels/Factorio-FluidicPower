@@ -13,7 +13,7 @@ local pump = table.deepcopy(data.raw["power-switch"]["power-switch"])
 override = {
     name = "fluidic-power-switch",
     type = "pump",
-    place_result = "fluidic-power-switch",
+    minable = {mining_time = 0.2, result = "fluidic-power-switch"},
 
     fluid_wagon_connector_graphics = nil,
     fluid_wagon_connector_frame_count = nil,
