@@ -5,9 +5,7 @@ local script_data =
     current_overlay_target = nil
 }
 
-
 function build_tools.on_entity_created(event)
-
     if settings.global["fluidic-electric-overlay-depth"].value then
         local entity
         if event.entity and event.entity.valid then
@@ -28,14 +26,17 @@ function build_tools.on_entity_created(event)
                 -- a power fluid!
                 
                 -- Notify the player
+                -- TODO Get better way to get player. Not MP save maybe?
                 game.players[1].create_local_flying_text{
                     text = "Can't connect Fluidic Power with normal fluids",
                     position  = entity.position
                 }
                 
-                -- Prevent player from placing this entity
-                -- TODO Give the player the item back!
-                entity.destroy()
+                -- Prevent player from placing this entity                
+                for _, product in pairs(entity.prototype.mineable_properties.products) do
+                    entity.last_user.insert{name=product.name or product[1], count=product.amount or product[2]}
+                end                
+                entity.destroy()                
                 
                 -- Don't look at other neighbours, already destroyed this entity.
                 return
@@ -71,8 +72,10 @@ function build_tools.on_entity_removed(event)
                         }
                         
                         -- Destroy this neighbour and go to the next neighbour
-                        -- TODO Give the player the item back!
-                        neighbour.destroy()
+                        for _, product in pairs(neighbour.prototype.mineable_properties.products) do
+                            neighbour.last_user.insert{name=product.name or product[1], count=product.amount or product[2]}
+                        end                
+                        entity.destroy()
                         break                        
                     end
                 end
@@ -208,13 +211,6 @@ function get_fluid_neighbours(entity)
         end 
     end
     return neighbours
-end
-
-function contains_key(this, wanted_key)
-    for key, _ in pairs(this) do
-        if key == wanted_key then return true end
-    end
-    return false
 end
 
 return build_tools
