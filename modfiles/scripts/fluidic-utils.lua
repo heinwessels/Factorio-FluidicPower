@@ -13,4 +13,11 @@ function utils.entity_has_attribute(entity, attribute)
 	return nil
 end
 
+
+function utils.entity_exists_at(entity_name, surface, position)
+    local e = surface.find_entity(entity_name, position)
+    if e then return true end
+    return false
+end
+
 return utils

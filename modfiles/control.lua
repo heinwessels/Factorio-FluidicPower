@@ -1,12 +1,8 @@
-small_pole = require("scripts.fluidic-small-pole")
-medium_pole = require("scripts.fluidic-medium-pole")
-substation = require("scripts.fluidic-substation")
 build_tools = require("scripts.fluidic-build-tools")
+poles = require("scripts.fluidic-handle-poles")
 
 function creation_event (event)
-    small_pole.on_entity_created(event)
-    medium_pole.on_entity_created(event)
-    substation.on_entity_created(event)
+    poles.on_entity_created(event)
     build_tools.on_entity_created(event)
 end
 
@@ -17,9 +13,7 @@ script.on_event(defines.events.script_raised_revive, creation_event)
 script.on_event(defines.events.on_robot_built_entity, creation_event)
 
 function removal_event (event)
-    small_pole.on_entity_removed(event)
-    medium_pole.on_entity_removed(event)    
-    substation.on_entity_removed(event)    
+    poles.on_entity_removed(event)
     build_tools.on_entity_removed(event)    
 end
 
@@ -30,7 +24,7 @@ script.on_event(defines.events.script_raised_destroy, removal_event)
 
 
 function on_cursor_change (event)
-    -- This is to fix the pipette tool
+    -- This is to fix the pipette tool picking up the non-electric entity
     build_tools.on_cursor_change(event)    
 end
 script.on_event(defines.events.on_player_cursor_stack_changed, on_cursor_change)

@@ -95,6 +95,26 @@ function build_tools.on_entity_removed(event)
     end    
 end
 
+local cursor_lookup = {}
+cursor_lookup[
+    "fluidic-small-pole-in-electric"
+] = "fluidic-small-pole-in"
+cursor_lookup[
+    "fluidic-small-pole-out-electric"
+] = "fluidic-small-pole-out"
+cursor_lookup[
+    "fluidic-medium-pole-in-electric"
+] = "fluidic-medium-pole-in"
+cursor_lookup[
+    "fluidic-medium-pole-out-electric"
+] = "fluidic-medium-pole-out"
+cursor_lookup[
+    "fluidic-substation-in-electric"
+] = "fluidic-substation-in"
+cursor_lookup[
+    "fluidic-substation-out-electric"
+] = "fluidic-substation-out"
+     
 function build_tools.on_cursor_change(event)
     -- When you pipette over a fluidic pole you will
     -- pick up the electric pole, and not the fluid counterpart.
@@ -106,16 +126,6 @@ function build_tools.on_cursor_change(event)
         -- Most likely after a pipette action
 
         local entity = player.selected
-
-        local cursor_lookup = {}
-        cursor_lookup[
-            "fluidic-medium-pole-in-electric"
-        ] = "fluidic-medium-pole-in"
-        cursor_lookup[
-            "fluidic-medium-pole-out-electric"
-        ] = "fluidic-medium-pole-out"
-             
-
         if cursor_lookup[entity.name] then
             -- Player pipetted a fluidic pole!
             -- This is (should be) the only way to get this item in cursor
@@ -215,7 +225,7 @@ function show_fluidic_entity_connections(
 
             if should_draw_connection then
                 -- This is a new neighbour
-                -- TODO draw from the fluidbox, not the entity
+                -- TODO draw from the fluidbox, not the entity?                
                 draw_connection(entity, entity.position, neighbour.position)
 
                 -- Recursively draw neighbours' neighbours after blacklisting the current entity

@@ -16,7 +16,7 @@ data:extend
         icon = "__base__/graphics/icons/list-dot.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[kilojoules]-a[kilojoules]",
-        -- hidden = true
+        hidden = true
     },
     {
         type = "fluid",
@@ -30,7 +30,7 @@ data:extend
         icon = "__base__/graphics/icons/list-dot.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[kilojoules]-a[kilojoules]",
-        -- hidden = true
+        hidden = true
     },
     {
         type = "fluid",
@@ -44,7 +44,7 @@ data:extend
         icon = "__base__/graphics/icons/list-dot.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[megajoules]-a[megajoules]",
-        -- hidden = true
+        hidden = true
     },
     {
         type = "fluid",
@@ -58,7 +58,7 @@ data:extend
         icon = "__base__/graphics/icons/list-dot.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[gigajoules]-a[gigajoules]",
-        -- hidden = true     
+        hidden = true
     },
 
 
@@ -72,7 +72,8 @@ data:extend
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
         energy_required = 0.05,
-        results={{type="fluid", name="fluidic-kilojoules", amount=500}},        
+        results={{type="fluid", name="fluidic-kilojoules", amount=500}},  
+        hidden = true      
     },
     {
         type = "recipe",
@@ -84,7 +85,8 @@ data:extend
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
         energy_required = 0.5,
-        results={{type="fluid", name="fluidic-10-kilojoules", amount=100}},        
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=100}},      
+        hidden = true  
     },
     {
         type = "recipe",
@@ -97,5 +99,6 @@ data:extend
         ingredients ={},
         energy_required = 1,
         results={{type="fluid", name="fluidic-megajoules", amount=30}},
+        hidden = true
     },
 })
