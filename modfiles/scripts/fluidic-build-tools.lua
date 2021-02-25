@@ -154,9 +154,23 @@ script.on_event(defines.events.on_tick, function (event)
         if entity ~= script_data.current_overlay_target then
             -- It's a new target!            
             reset_rendering()   -- Make sure we don't have any left-over overlays
-            
+
+            if string.match(entity.name, "-electric") then
+                -- At the moment power pole is selected, not fluid entity.
+                -- Get the fluid entity
+                e = entity.surface.find_entity(
+                    string.sub(entity.name, 1, -10),  -- Remove '-electric' keyword
+                    entity.position
+                )
+                if not e then error(
+                    [[There should be a fluidic fluid entity here. Bug report the developer please.
+                    Original: <]]..entity.name..[[>.
+                    Searched: <]]..string.sub(entity.name, 1, -10)..[[>]]
+                ) end                
+                entity = e  -- This should exist. If not, there's a problem.
+            end
+
             script_data.current_overlay_target = entity
-            -- TODO Find the non-electric entity and use that
             show_fluidic_entity_connections(entity, settings.global["fluidic-electric-overlay-depth"].value)
         
         else

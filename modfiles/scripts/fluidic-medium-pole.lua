@@ -24,7 +24,7 @@ function power_pole.on_entity_created(event)
     cursor_lookup[
         "fluidic-medium-pole-out"
     ] = "fluidic-medium-pole-out-electric"
-    
+
     if cursor_lookup[entity.name] then
         if not entity_exists_at(cursor_lookup[entity.name], entity.surface, entity.position) 
         then
@@ -49,7 +49,7 @@ function power_pole.on_entity_removed(event)
         if e then e.destroy{raise_destroy=false} end        
       elseif event.entity.name == "fluidic-medium-pole-out-electric" then
         local e = event.entity.surface.find_entity("fluidic-medium-pole-out", event.entity.position)
-        if e then e.destroy{raise_destroy=false} end        
+        if e then e.destroy{raise_destroy=false} end
       end
     end
 end
