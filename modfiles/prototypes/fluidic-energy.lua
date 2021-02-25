@@ -62,22 +62,18 @@ data:extend
     },
 
 
+
+    -- Here is a formula to show the correlation between
+    -- the recipe and the requried assembler energy usage
+    --      P = Assembler power usage in Watt
+    --      u = energy of single unit in Joule    
+    --      n = Amount of units produced per craft
+    --      t = Time required per craft
+    -- Then:
+    --      P = ( u * n ) / t
     {
         type = "recipe",
-        name = "fluidic-kilojoules-generate",
-        icon_size = 64,
-        icon = "__base__/graphics/icons/list-dot.png",
-        category = "fluidic-generate",
-        subgroup = "energy-pipe-distribution",
-        order = "a[kilojoules]-a[kilojoules]",        
-        ingredients ={},
-        energy_required = 0.05,
-        results={{type="fluid", name="fluidic-kilojoules", amount=500}},  
-        hidden = true      
-    },
-    {
-        type = "recipe",
-        name = "fluidic-10-kilojoules-generate",
+        name = "fluidic-10-kilojoules-generate-small",
         icon_size = 64,
         icon = "__base__/graphics/icons/list-dot.png",
         category = "fluidic-generate",
@@ -85,20 +81,33 @@ data:extend
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
         energy_required = 0.5,
-        results={{type="fluid", name="fluidic-10-kilojoules", amount=100}},      
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=250}},
         hidden = true  
     },
     {
         type = "recipe",
-        name = "fluidic-megajoules-generate",        
+        name = "fluidic-10-kilojoules-generate-medium",
         icon_size = 64,
         icon = "__base__/graphics/icons/list-dot.png",
         category = "fluidic-generate",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
-        energy_required = 1,
-        results={{type="fluid", name="fluidic-megajoules", amount=30}},
-        hidden = true
+        energy_required = 0.25,
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=750}},
+        hidden = true  
+    },
+    {
+        type = "recipe",
+        name = "fluidic-10-kilojoules-generate-subsation",
+        icon_size = 64,
+        icon = "__base__/graphics/icons/list-dot.png",
+        category = "fluidic-generate",
+        subgroup = "energy-pipe-distribution",
+        order = "a[kilojoules]-a[kilojoules]",        
+        ingredients ={},
+        energy_required = 0.25,
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},      
+        hidden = true  
     },
 })

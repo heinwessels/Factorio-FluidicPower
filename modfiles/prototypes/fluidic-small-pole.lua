@@ -108,7 +108,7 @@ data:extend({util.merge{
         minable = {result = "fluidic-small-pole-in"},
         next_upgrade = nil,
         crafting_speed = 1,
-        energy_usage = "20MW",
+        energy_usage = "5MW",   -- This is essentially the maximum power into the pole
         module_specification = nil,
         allowed_effects = {},
         module_specification = { module_slots = 0 },
@@ -123,7 +123,7 @@ data:extend({util.merge{
         maximum_wire_distance = 0,
         open_sound = nil,
         close_sound = nil,
-        fixed_recipe = "fluidic-10-kilojoules-generate",
+        fixed_recipe = "fluidic-10-kilojoules-generate-small",
         crafting_categories = {"fluidic-generate"},
         fluid_boxes =
         { 
