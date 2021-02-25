@@ -1,3 +1,5 @@
+fluidic_utils = require("scripts.fluidic-utils")
+
 build_tools = {}
 
 local script_data =
@@ -5,83 +7,92 @@ local script_data =
     current_overlay_target = nil
 }
 
-function build_tools.on_entity_created(event)
-    if settings.global["fluidic-electric-overlay-depth"].value then
-        local entity
-        if event.entity and event.entity.valid then
-            entity = event.entity
-        end
-        if event.created_entity and event.created_entity.valid then
-            entity = event.created_entity
-        end
-        if not entity then return end
-        if entity.name == "entity-ghost" then return end
-        
-        -- Something has been built. Make sure there are no unwanted connections
-        if not entity.neighbours then return end
-        for _, neighbour in ipairs(get_fluid_neighbours(entity)) do
-            if is_isvalid_fluid_connection(entity, neighbour) then
-                -- Invalid connection!
-                -- User is trying to connect a normal fluid to
-                -- a power fluid!
-                
-                -- Notify the player
-                -- TODO Get better way to get player. Not MP save maybe?
-                game.players[1].create_local_flying_text{
-                    text = "Can't connect Fluidic Power with normal fluids",
-                    position  = entity.position
-                }
-                
+function build_tools.on_entity_created(event)    
+    local entity
+    if event.entity and event.entity.valid then
+        entity = event.entity
+    end
+    if event.created_entity and event.created_entity.valid then
+        entity = event.created_entity
+    end
+    if not entity then return end
+    if entity.name == "entity-ghost" then return end
+    
+    -- Something has been built. Make sure there are no unwanted connections        
+    for _, neighbour in ipairs(get_fluid_neighbours(entity)) do
+        if is_isvalid_fluid_connection(entity, neighbour) then
+            -- Invalid connection!
+            -- User is trying to connect a normal fluid to
+            -- a power fluid!
+            
+            -- Notify the player
+            -- TODO Get better way to get player. Not MP save maybe?
+            game.players[1].create_local_flying_text{
+                text = "Can't connect Fluidic Power with normal fluids",
+                position  = entity.position
+            }
+            
+            if settings.global["fluidic-enable-build-limitations"].value then
                 -- Prevent player from placing this entity                
                 for _, product in pairs(entity.prototype.mineable_properties.products) do
                     entity.last_user.insert{name=product.name or product[1], count=product.amount or product[2]}
                 end                
                 entity.destroy()                
-                
-                -- Don't look at other neighbours, already destroyed this entity.
-                return
-            end                    
-        end
-    end
+            end
+
+            -- Don't look at other neighbours, already destroyed this entity.
+            return
+        end                    
+    end   
 end
 
 function build_tools.on_entity_removed(event)
-    if settings.global["fluidic-electric-overlay-depth"].value then
-        if event.entity and event.entity.valid then
-            local entity = event.entity
-            -- Something has been removed. Make sure there are no unwanted connections
-                                    
-            -- Remember entity's neighbours and then destroy him as user wants
-            local neighbours = get_fluid_neighbours(entity)
-            entity.destroy()
+    
+    if event.entity and event.entity.valid then
+        local entity = event.entity
+        -- Something has been removed. Make sure there are no unwanted connections
+
+        -- Remember entity's neighbours and then destroy him as user wants
+        local neighbours = get_fluid_neighbours(entity)
+        entity.destroy()
+
+        -- Now make sure this didn't create any unwanted connections
+        for _, neighbour in ipairs(neighbours) do
             
-            -- Now make sure this didn't create any unwanted connections
-            for _, neighbour in ipairs(neighbours) do
+            -- Between this neighbour and his neighbours
+            local his_neighbours = get_fluid_neighbours(neighbour)
+            for _, his_neighbour in ipairs(his_neighbours) do
 
-                local his_neighbours = get_fluid_neighbours(neighbour)
-                for _, his_neighbour in ipairs(his_neighbours) do
+                if is_isvalid_fluid_connection(neighbour, his_neighbour) then
+                    -- Invalid connection with the neighbour's neighbour!
+                    -- It might connect a normal pipe to a fluidic pipe!
 
-                    if is_isvalid_fluid_connection(neighbour, his_neighbour) then
-                        -- Invalid connection with the neighbour's neighbour!
-                        -- It might connect a normal pipe to a fluidic pipe!
-                                                
-                        -- Notify the player
-                        game.players[1].create_local_flying_text{
-                            text = "Can't connect Fluidic Power with normal fluids",
-                            position  = neighbour.position
+                    -- Notify the player
+                    game.players[1].create_local_flying_text{
+                        text = "Can't connect Fluidic Power with normal fluids",
+                        position  = neighbour.position
+                    }
+                    
+                    if settings.global["fluidic-enable-build-limitations"].value then
+                        -- Destroy the non-fluidic entiry to avoid this connection.
+                        -- And give the player the item back
+                        local entity_to_destroy = his_neighbour
+                        if string.match(his_neighbour.name, "fluidic") then entity_to_destroy = neighbour end
+                        for _, product in pairs(entity_to_destroy.prototype.mineable_properties.products) do
+                            entity_to_destroy.last_user.insert{name=product.name or product[1], count=product.amount or product[2]}
+                        end
+                        entity_to_destroy.destroy{
+                            -- If allowed, raise another event on the destroid entity, 
+                            -- because it might cause yet another incorrect connection.
+                            -- Can be disabled, cause it can cause chain reactions
+                            raise_destroy=settings.global["fluidic-allow-chained-destruction"].value
                         }
-                        
-                        -- Destroy this neighbour and go to the next neighbour
-                        for _, product in pairs(neighbour.prototype.mineable_properties.products) do
-                            neighbour.last_user.insert{name=product.name or product[1], count=product.amount or product[2]}
-                        end                
-                        entity.destroy()
-                        break                        
                     end
+                    break                        
                 end
             end
         end
-    end
+    end    
 end
 
 function is_isvalid_fluid_connection(this, that)
@@ -198,7 +209,8 @@ function get_fluid_neighbours(entity)
     -- Returns all fluid neighbours of this entity    
     local neighbours = {}
 
-    -- Does this entity even have a fluidbox?
+    -- Is this a valid entity with neighbours we want?
+    if not fluidic_utils.entity_has_attribute(entity, "neighbours") then return neighbours end
     if entity.fluidbox == nil then return neighbours end
 
     -- It does. Look at it's neighbours
