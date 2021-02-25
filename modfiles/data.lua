@@ -9,6 +9,7 @@ require("prototypes.fluidic-power-switch")
 
 
 -- TODO (NB!) Change recipes to actually unlock fluidic items
--- TODO Add flow meter
+-- TODO Add flow meter?
+-- TODO Add level meter (little storage tank)
 
 -- Fluid Mechanics: https://forums.factorio.com/viewtopic.php?t=19851

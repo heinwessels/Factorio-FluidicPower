@@ -7,4 +7,10 @@ data:extend({
         minimum_value = 0,
         maximum_value = 20
     },
+    {
+        type = "bool-setting",
+        name = "fluidic-enable-build-limitations",
+        setting_type = "runtime-global",
+        default_value = true
+    },
 })
