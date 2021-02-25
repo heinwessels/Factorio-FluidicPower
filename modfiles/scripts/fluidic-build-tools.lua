@@ -95,6 +95,38 @@ function build_tools.on_entity_removed(event)
     end    
 end
 
+function build_tools.on_cursor_change(event)
+    -- When you pipette over a fluidic pole you will
+    -- pick up the electric pole, and not the fluid counterpart.
+    -- We will enforce this    
+
+    local player = game.players[event.player_index]
+    if player.selected then
+        -- The player is currently selecting some entity
+        -- Most likely after a pipette action
+
+        local entity = player.selected
+
+        local cursor_lookup = {}
+        cursor_lookup[
+            "fluidic-medium-pole-in-electric"
+        ] = "fluidic-medium-pole-in"
+        cursor_lookup[
+            "fluidic-medium-pole-out-electric"
+        ] = "fluidic-medium-pole-out"
+             
+
+        if cursor_lookup[entity.name] then
+            -- Player pipetted a fluidic pole!
+            -- This is (should be) the only way to get this item in cursor
+
+            -- Clear the cursor and put there what it should be
+            player.clear_cursor()
+            player.pipette_entity(cursor_lookup[entity.name])            
+        end
+    end
+end
+
 function is_isvalid_fluid_connection(this, that)
     -- Checks if the fluid connection between this entity 
     -- and that entity is invalid
@@ -124,6 +156,7 @@ script.on_event(defines.events.on_tick, function (event)
             reset_rendering()   -- Make sure we don't have any left-over overlays
             
             script_data.current_overlay_target = entity
+            -- TODO Find the non-electric entity and use that
             show_fluidic_entity_connections(entity, settings.global["fluidic-electric-overlay-depth"].value)
         
         else

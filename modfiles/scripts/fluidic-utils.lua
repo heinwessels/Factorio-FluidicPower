@@ -1,6 +1,5 @@
 utils = {}
 
-
 -- Check if an entity have an attribute,
 -- check that if entity is not null too
 -- Credit to Fluid Must Flow mod

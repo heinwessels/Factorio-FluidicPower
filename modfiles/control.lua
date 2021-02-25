@@ -27,3 +27,14 @@ script.on_event(defines.events.on_player_mined_entity, removal_event)
 script.on_event(defines.events.on_robot_mined_entity, removal_event)
 script.on_event(defines.events.on_entity_died, removal_event)
 script.on_event(defines.events.script_raised_destroy, removal_event)
+
+
+function on_cursor_change (event)
+    -- This is to fix the pipette tool
+    build_tools.on_cursor_change(event)    
+end
+script.on_event(defines.events.on_player_cursor_stack_changed, on_cursor_change)
+
+
+-- TODO Handle blueprints correctly. Need to remove electric poles
+-- Currently when blueprinting it picks up both items

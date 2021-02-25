@@ -18,6 +18,29 @@ for k,v in pairs(override) do
 end
 data:extend({item})
 
+
+-- These two dummy items is there so the pipette action will trigger
+local item = table.deepcopy(data.raw["item"]["medium-electric-pole"])
+override = {
+    name = "fluidic-medium-pole-in-electric",
+    place_result = "fluidic-medium-pole-in-electric",
+    hidden = true
+}
+for k,v in pairs(override) do
+    item[k]=v
+end
+data:extend({item})
+local item = table.deepcopy(data.raw["item"]["medium-electric-pole"])
+override = {
+    name = "fluidic-medium-pole-out-electric",
+    place_result = "fluidic-medium-pole-out-electric",
+    hidden = true
+}
+for k,v in pairs(override) do
+    item[k]=v
+end
+data:extend({item})
+
 local pole = table.deepcopy(data.raw["electric-pole"]["medium-electric-pole"])
 override = {
     type = "assembling-machine",
@@ -75,6 +98,7 @@ override = {
     flow_length_in_ticks = 360,
     burns_fluid = true,
     two_direction_only = true,
+    selection_box = {{0,0},{0,0}}, -- <fluidic-medium-pole> is what will be selectable
     fluid_box =
     {
         base_area = 1,        
