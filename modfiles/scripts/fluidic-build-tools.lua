@@ -18,7 +18,8 @@ function build_tools.on_entity_created(event)
     if not entity then return end
     if entity.name == "entity-ghost" then return end
     
-    -- Something has been built. Make sure there are no unwanted connections        
+    -- Something has been built. Make sure there are no unwanted connections
+    -- TODO check big poles aren't connected to little ones
     for _, neighbour in ipairs(get_fluid_neighbours(entity)) do
         if is_isvalid_fluid_connection(entity, neighbour) then
             -- Invalid connection!

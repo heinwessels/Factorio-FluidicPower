@@ -32,3 +32,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, on_cursor_change)
 
 -- TODO Handle blueprints correctly. Need to remove electric poles
 -- Currently when blueprinting it picks up both items
+
+
+-- TODO Need an easy visualisation to see what power unit is in the current power pole. 
+--  Maybe a little indicator similar to bottleneck. It shines through the bottom!
