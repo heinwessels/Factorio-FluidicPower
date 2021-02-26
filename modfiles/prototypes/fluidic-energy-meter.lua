@@ -36,11 +36,11 @@ data:extend({
         collision_box = {{-0.35, -0.35}, {0.35, 0.35}},
         selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
         flow_length_in_ticks = 360,
-        two_direction_only = true,
-        window_bounding_box = {{-0.3, -0.4}, {0.1, 0}},
+        two_direction_only = true,  -- TODO What does this even do?
+        window_bounding_box = {{-0.3, -0.45}, {0.1, -0.1}},
         fluid_box =
         {
-            base_area = 10,
+            base_area = 1,
             pipe_connections =
             {
                 { type="input-output", position = {0, 1}, max_underground_distance = 1},
@@ -90,10 +90,15 @@ data:extend({
           max_sounds_per_type = 3
         },
         -- TODO Fix stupid circuit wires
-        circuit_wire_connection_points = circuit_connector_definitions["storage-tank"].points,
-        circuit_connector_sprites = circuit_connector_definitions["storage-tank"].sprites,
-        circuit_wire_max_distance = default_circuit_wire_max_distance,        
+        circuit_wire_connection_points = {
+            circuit_connector_definitions["chest"].points,
+            circuit_connector_definitions["chest"].points,
+        },
+        circuit_wire_connection_points = circuit_connector_definitions["offshore-pump"].points,
+        circuit_connector_sprites = circuit_connector_definitions["offshore-pump"].sprites,
+        circuit_wire_max_distance = 9
     }
 })
 data.raw["storage-tank"]["fluidic-energy-meter"].pictures.fluid_background.width = 14
 data.raw["storage-tank"]["fluidic-energy-meter"].pictures.window_background.scale = 0.75
+data.raw["storage-tank"]["fluidic-energy-meter"].pictures.window_background.hr_version.scale = 0.75
