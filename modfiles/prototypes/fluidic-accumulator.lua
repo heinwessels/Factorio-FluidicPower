@@ -48,8 +48,8 @@ override = {
     circuit_connector_sprites = circuit_connector_definitions["storage-tank"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance,   
 }
-override.pictures.picture.layers[1].filename = "__FluidicPower__/graphics/entities/accumulator.png"
-override.pictures.picture.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/hr-accumulator.png"
+override.pictures.picture.layers[1].filename = "__FluidicPower__/graphics/entities/accumulator/accumulator.png"
+override.pictures.picture.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/accumulator/hr-accumulator.png"
 for k,v in pairs(override) do
     entity[k]=v
 end

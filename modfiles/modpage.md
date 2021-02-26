@@ -24,11 +24,11 @@ All power generation and consumption is done at a low voltage, or more specifica
 
 Transformers will increase the voltage of your power and allow you to distribute your power through the big power poles. For example, a `Step Up Transformer` will turn `1000 10kJ` fluid units into a single `10MJ` fluid. This higher voltage should distribute further and more balanced through your network. However, remember you need to bring the voltage down again if you want to use it using a `Step Down Transformer`. 
 
-Currently there are 3 voltage levels, or different fluid concentrations, namely `10kJ`, `10MJ`, and `1GJ`.
+Currently there are 3 voltage levels, or different fluid concentrations, namely `10kJ`, `10MJ`, and `1GJ`. It's recommend to only use the highest voltage (`1GJ`) when absolutely neccesary (see current limitations).
 
 ### Other Important Components
 
-- **Power Meter:**
+- **Energy Meter:**
 
 - **Power Switch:**
 
@@ -36,6 +36,7 @@ Currently there are 3 voltage levels, or different fluid concentrations, namely 
 
 - **Power Generation:**
 
-- **Accumulators:** 
+- **Accumulators:**
 
-## Current Limiations
+
+

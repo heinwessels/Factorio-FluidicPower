@@ -169,7 +169,7 @@ script.on_event(defines.events.on_tick, function (event)
             if string.match(entity.name, "-electric") then
                 -- At the moment power pole is selected, not fluid entity.
                 -- Get the fluid entity
-                e = entity.surface.find_entity(
+                local e = entity.surface.find_entity(
                     string.sub(entity.name, 1, -10),  -- Remove '-electric' keyword
                     entity.position
                 )

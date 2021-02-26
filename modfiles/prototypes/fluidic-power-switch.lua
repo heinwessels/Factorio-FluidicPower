@@ -68,9 +68,9 @@ end
 -- TODO Fix this hacky way to have a static animation. This is lame.
 -- TODO Fix power switch shadow too
 for _,direction in pairs(entity.animations) do
-  direction.layers[1].filename = "__FluidicPower__/graphics/entities/power-switch.png"
+  direction.layers[1].filename = "__FluidicPower__/graphics/entities/power-switch/power-switch.png"
   direction.layers[1].animation_speed = 0.4
-  direction.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/hr-power-switch.png"
+  direction.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/power-switch/hr-power-switch.png"
   direction.layers[1].hr_version.animation_speed = 0.4
 end
 
