@@ -3,20 +3,6 @@ data:extend
     {
         type = "recipe-category",
         name = "fluidic-generate"
-    },    
-    {
-        type = "fluid",
-        name = "fluidic-kilojoules",
-        default_temperature = 15,
-        max_temperature = 15,
-        fuel_value = "1kJ",
-        heat_capacity = "1KJ",
-        base_color = {r=0, g=1, b=0},
-        flow_color = {r=0, g=1, b=0},
-        icon = "__base__/graphics/icons/list-dot.png",
-        icon_size = 64, icon_mipmaps = 4,
-        order = "a[kilojoules]-a[kilojoules]",
-        hidden = true
     },
     {
         type = "fluid",
@@ -27,7 +13,7 @@ data:extend
         heat_capacity = "10KJ",
         base_color = {r=0, g=1, b=0},
         flow_color = {r=0, g=1, b=0},
-        icon = "__base__/graphics/icons/list-dot.png",
+        icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[kilojoules]-a[kilojoules]",
         hidden = true
@@ -41,7 +27,7 @@ data:extend
         heat_capacity = "10MJ",
         base_color = {r=0, g=1, b=0},
         flow_color = {r=0, g=1, b=0},
-        icon = "__base__/graphics/icons/list-dot.png",
+        icon = "__FluidicPower__/graphics/icons/fluidic-level-2-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[megajoules]-a[megajoules]",
         hidden = true
@@ -55,7 +41,7 @@ data:extend
         heat_capacity = "1GJ",
         base_color = {r=0, g=1, b=0},
         flow_color = {r=0, g=1, b=0},
-        icon = "__base__/graphics/icons/list-dot.png",
+        icon = "__FluidicPower__/graphics/icons/fluidic-level-3-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[gigajoules]-a[gigajoules]",
         hidden = true
@@ -75,7 +61,7 @@ data:extend
         type = "recipe",
         name = "fluidic-10-kilojoules-generate-small",
         icon_size = 64,
-        icon = "__base__/graphics/icons/list-dot.png",
+        icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
         category = "fluidic-generate",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
@@ -88,7 +74,7 @@ data:extend
         type = "recipe",
         name = "fluidic-10-kilojoules-generate-medium",
         icon_size = 64,
-        icon = "__base__/graphics/icons/list-dot.png",
+        icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
         category = "fluidic-generate",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
@@ -101,7 +87,7 @@ data:extend
         type = "recipe",
         name = "fluidic-10-kilojoules-generate-substation",
         icon_size = 64,
-        icon = "__base__/graphics/icons/list-dot.png",
+        icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
         category = "fluidic-generate",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
