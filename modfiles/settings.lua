@@ -19,4 +19,11 @@ data:extend({
         setting_type = "runtime-global",
         default_value = true
     },
+    {
+        type = "bool-setting",
+        name = "fluidic-expose-fluid-components",
+        setting_type = "startup",
+        default_value = false,
+        -- hidden = true
+    },
 })

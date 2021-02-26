@@ -37,9 +37,9 @@ data:extend
         category = "fluidic-transformers-step-up",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
-        ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=100}},
+        ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         energy_required = 0.1,
-        results={{type="fluid", name="fluidic-megajoules", amount=1}},        
+        results={{type="fluid", name="fluidic-10-megajoules", amount=1}},        
     },
     {
         type = "recipe",
@@ -49,7 +49,7 @@ data:extend
         category = "fluidic-transformers-step-up",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
-        ingredients ={{type="fluid", name="fluidic-megajoules", amount=1000}},
+        ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-gigajoules", amount=1}},        
     },
@@ -63,19 +63,19 @@ data:extend
     },  
     {
         type = "recipe",
-        name = "fluidic-mega-to-10-kilojoules",        
+        name = "fluidic-10-mega-to-10-kilojoules",        
         icon_size = 64,
         icon = "__base__/graphics/icons/list-dot.png",
         category = "fluidic-transformers-step-down",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
-        ingredients ={{type="fluid", name="fluidic-megajoules", amount=1}},
+        ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         energy_required = 0.1,
-        results={{type="fluid", name="fluidic-10-kilojoules", amount=100}},        
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},        
     },
     {
         type = "recipe",
-        name = "fluidic-giga-to-megajoule",        
+        name = "fluidic-giga-to-10-megajoule",        
         icon_size = 64,
         icon = "__base__/graphics/icons/list-dot.png",
         category = "fluidic-transformers-step-down",
@@ -83,7 +83,7 @@ data:extend
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={{type="fluid", name="fluidic-gigajoules", amount=1}},
         energy_required = 0.1,
-        results={{type="fluid", name="fluidic-megajoules", amount=1000}},        
+        results={{type="fluid", name="fluidic-10-megajoules", amount=100}},        
     }
 })
 

@@ -34,11 +34,11 @@ data:extend
     },
     {
         type = "fluid",
-        name = "fluidic-megajoules",
+        name = "fluidic-10-megajoules",
         default_temperature = 15,
         max_temperature = 15,
-        fuel_value = "1MJ",
-        heat_capacity = "1MJ",
+        fuel_value = "10MJ",
+        heat_capacity = "10MJ",
         base_color = {r=0, g=1, b=0},
         flow_color = {r=0, g=1, b=0},
         icon = "__base__/graphics/icons/list-dot.png",
@@ -66,11 +66,11 @@ data:extend
     -- Here is a formula to show the correlation between
     -- the recipe and the requried assembler energy usage
     --      P = Assembler power usage in Watt
-    --      u = energy of single unit in Joule    
+    --      i = energy of input unit in Joule        
     --      n = Amount of units produced per craft
     --      t = Time required per craft
     -- Then:
-    --      P = ( u * n ) / t
+    --      P = ( i * n ) / t
     {
         type = "recipe",
         name = "fluidic-10-kilojoules-generate-small",
@@ -99,7 +99,7 @@ data:extend
     },
     {
         type = "recipe",
-        name = "fluidic-10-kilojoules-generate-subsation",
+        name = "fluidic-10-kilojoules-generate-substation",
         icon_size = 64,
         icon = "__base__/graphics/icons/list-dot.png",
         category = "fluidic-generate",

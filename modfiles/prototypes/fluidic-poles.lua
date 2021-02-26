@@ -59,13 +59,10 @@ function create_in_variant(base_name, name)
                 input_priority = "secondary",
                 usage_priority = "tertiary",
                 drain = "0kW"  
-            },        
-            selection_box = {{0,0}, {0,0}},
-            drawing_box = {{0,0}, {0,0}},
+            },
             maximum_wire_distance = 0,
             open_sound = nil,
-            close_sound = nil,
-            fixed_recipe = "fluidic-10-kilojoules-generate-small",
+            close_sound = nil,            
             crafting_categories = {"fluidic-generate"},
             fluid_boxes =
             { 
@@ -87,6 +84,7 @@ function create_in_variant(base_name, name)
             animation = data.raw["electric-pole"][base_name].pictures,
         }
     }})
+
     data:extend({util.merge{
         data.raw["electric-pole"][base_name],
         {
@@ -95,6 +93,17 @@ function create_in_variant(base_name, name)
             maximum_wire_distance = 1,
         }
     }})
+
+    -- Depending on debug option, choose which entity is exposed
+    if not settings.startup["fluidic-expose-fluid-components"].value then
+        -- Default
+        data.raw["assembling-machine"][name_in].selection_box = {{0,0}, {0,0}}
+        data.raw["assembling-machine"][name_in].drawing_box = {{0,0}, {0,0}}
+    else
+        -- Debug option
+        data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
+        data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
+    end
 end
 
 function create_out_variant(base_name, name)
@@ -148,9 +157,7 @@ function create_out_variant(base_name, name)
             fluid_usage_per_tick = 1,  -- Default energy output. value = P / 60
             flow_length_in_ticks = 360,
             burns_fluid = true,
-            two_direction_only = true,
-            selection_box = {{0,0}, {0,0}},
-            drawing_box = {{0,0}, {0,0}},
+            two_direction_only = true,                        
             fluid_box =
             {
                 base_area = 10,            
@@ -184,6 +191,17 @@ function create_out_variant(base_name, name)
             maximum_wire_distance = 1,
         }
     }})
+
+    -- Depending on debug option, choose which entity is exposed
+    if not settings.startup["fluidic-expose-fluid-components"].value then
+        -- Default
+        data.raw["generator"][name_out].selection_box = {{0,0}, {0,0}}
+        data.raw["generator"][name_out].drawing_box = {{0,0}, {0,0}}
+    else
+        -- Debug option
+        data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
+        data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
+    end
 end
 
 
@@ -191,23 +209,33 @@ end
 -- HERE I ACTUALLY CREATE THE PROTOTYPES
 ---------------------------------------------------
 
+-- Formula to calculate fluid usage per tick
+--      P = Maximum power usage
+--      u = energy of single unit in Joule    
+--      s = fluid usage per tick
+-- Then:
+--      P = u * s * 60
+
 -- Create small poles
 create_in_variant("small-electric-pole", "fluidic-small-pole")
 create_out_variant("small-electric-pole", "fluidic-small-pole")
-data.raw["generator"]["fluidic-small-pole-out"].fluid_usage_per_tick = 84 -- x 60 = 5MW
+data.raw["generator"]["fluidic-small-pole-out"].fluid_usage_per_tick = 9 -- P = 5MW
 data.raw["assembling-machine"]["fluidic-small-pole-in"].energy_usage = "5MW"
+data.raw["assembling-machine"]["fluidic-small-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-small"
 
 -- Create Medium poles
 create_in_variant("medium-electric-pole", "fluidic-medium-pole")
 create_out_variant("medium-electric-pole", "fluidic-medium-pole")
-data.raw["generator"]["fluidic-medium-pole-out"].fluid_usage_per_tick = 500 -- x 60 = 30MW
+data.raw["generator"]["fluidic-medium-pole-out"].fluid_usage_per_tick = 50 -- P = 30MW
 data.raw["assembling-machine"]["fluidic-medium-pole-in"].energy_usage = "30MW"
+data.raw["assembling-machine"]["fluidic-medium-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-medium"
 
 -- Create substations
 create_in_variant("substation", "fluidic-substation")
 create_out_variant("substation", "fluidic-substation")
-data.raw["generator"]["fluidic-substation-out"].fluid_usage_per_tick = 666 -- x 60 = 40MW
+data.raw["generator"]["fluidic-substation-out"].fluid_usage_per_tick = 67 -- P = 40MW
 data.raw["assembling-machine"]["fluidic-substation-in"].energy_usage = "40MW"
+data.raw["assembling-machine"]["fluidic-substation-in"].fixed_recipe = "fluidic-10-kilojoules-generate-substation"
 data.raw["generator"]["fluidic-substation-out"].fluid_box = 
 {
     base_area = 1,        
