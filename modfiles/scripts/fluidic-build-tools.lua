@@ -245,7 +245,7 @@ function draw_connection(entity, here, there)
         surface = entity.surface,
         players = players,
     }
-    for _, point in ipairs{this, that} do
+    for _, point in ipairs{here, there} do
         rendering.draw_circle{
             color = {r = 0,  g = 0.5, b = 0, a = 0},
             radius = 0.25,

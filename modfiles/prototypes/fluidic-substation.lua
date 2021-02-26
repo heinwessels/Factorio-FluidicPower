@@ -70,7 +70,7 @@ data:extend({util.merge{
         minable = {result = "fluidic-substation-out"},
         effectivity = 1,
         maximum_temperature = 15,
-        fluid_usage_per_tick = 1,
+        fluid_usage_per_tick = 666,  -- Power output. P / 60
         flow_length_in_ticks = 360,
         burns_fluid = true,
         two_direction_only = true,
