@@ -70,7 +70,8 @@ data:extend
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         scale_entity_info_icon = true,
-        hidden = true
+        hidden = true,
+        -- hide_from_stats = true, -- So that you can see how much you transform
     },
     {
         type = "recipe",
@@ -84,7 +85,8 @@ data:extend
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-gigajoules", amount=1}},
         scale_entity_info_icon = true,
-        hidden = true
+        hidden = true,
+        -- hide_from_stats = true, -- So that you can see how much you transform
     },
 
     ------------------------
@@ -106,7 +108,8 @@ data:extend
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         scale_entity_info_icon = true,
-        hidden = true
+        hidden = true,
+        hide_from_stats = true,
     },
     {
         type = "recipe",
@@ -120,7 +123,8 @@ data:extend
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         scale_entity_info_icon = true,
-        hidden = true
+        hidden = true,
+        hide_from_stats = true,
     }
 })
 

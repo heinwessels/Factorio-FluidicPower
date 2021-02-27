@@ -2,6 +2,14 @@
 
 It should work out of the box if the other mod doesn't touch power poles or create any new power poles. This does mean that overhaul mods like Krastorio or Space Exploration will definitely not work. Please let me know if it break with your mod, and I will see if I can support it.
 
+## Can I see my total power production and consumption on a graph?
+Yes! Open the production GUI (`P`) and click on `Fluids`. There you will see the total amount of kilojoules created and consumed in your world, while not taking transformers into the calculation. However, it will also show how much power you stepped up to higher voltages by using your transformers in the `Production`-tab. To put the numbers you see into usable terms you can do the following quick calculation:
+
+1. Read the production or consumption per minute, e.g. `1.35M/m`.
+2. Divide it by 60 to get it in `per second`, e.g. `1.35 M/m / 60 = 22.5k/s`.
+3. Hover over the fluid to see the unit and multiply this value by that unit, e.g. with a unit of `1 fluid = 10kJ` it will be `225 kJ/s`.
+4. You just calculated the power production or consmption, e.g. `225kW`. Power (`Watt`) is always Energy (`Joule`) per second.
+
 ## No Electric Network Info when I select Big Power Pole?
 
 This is as designed. The `Big Electric Pole` does not consume or supply power, only the other power poles does that. If you want to know the energy level on a Big Power Pole (the amount of fluid inside) place a `Energy Meter` right next to it.
