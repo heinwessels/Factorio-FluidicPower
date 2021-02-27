@@ -2,6 +2,13 @@ util = require("util")
 
 -- Here I create small, medium, big and substation pole variants
 
+function calculate_wire_reach(original)
+    -- The pole wire reach will be used as the fluid entity's
+    -- underground maximum distance. Since we cannot place
+    -- fluid poles diagonal we will buff it.
+    return math.floor(original * 1.4)
+end
+
 function create_in_variant(base_name, name)
     -- This will create the item, recipe, and entity
     -- in the fluidic IN variant with corresponding 
@@ -13,6 +20,11 @@ function create_in_variant(base_name, name)
 
     name_in = name.."-in"
     name_electric = name_in.."-electric"
+
+    -- How far should we make the "underground pipes"
+    wire_reach = calculate_wire_reach(
+        data.raw["electric-pole"][base_name].maximum_wire_distance
+    )
 
     -- ITEM
     data:extend({
@@ -71,10 +83,10 @@ function create_in_variant(base_name, name)
                 base_area = 10,
                 base_level = 1,
                 pipe_connections = {
-                    { type="input-output", position = {0, 1}, max_underground_distance = 10},
-                    { type="input-output", position = {0, -1}, max_underground_distance = 10},
-                    { type="input-output", position = {1, 0}, max_underground_distance = 10},
-                    { type="input-output", position = {-1, 0}, max_underground_distance = 10}
+                    { type="input-output", position = {0, 1}, max_underground_distance = wire_reach},
+                    { type="input-output", position = {0, -1}, max_underground_distance = wire_reach},
+                    { type="input-output", position = {1, 0}, max_underground_distance = wire_reach},
+                    { type="input-output", position = {-1, 0}, max_underground_distance = wire_reach}
                 },
                 secondary_draw_orders = { north = -1 },
               },
@@ -90,7 +102,7 @@ function create_in_variant(base_name, name)
         {
             name = name_electric,
             minable = {result = name_electric},
-            maximum_wire_distance = 1,
+            maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
         }
     }})
 
@@ -117,6 +129,11 @@ function create_out_variant(base_name, name)
 
     name_out = name.."-out"
     name_electric =name_out.."-electric"
+
+    -- How far should we make the "underground pipes"
+    wire_reach = calculate_wire_reach(
+        data.raw["electric-pole"][base_name].maximum_wire_distance
+    )
 
     -- ITEM
     data:extend({
@@ -163,10 +180,10 @@ function create_out_variant(base_name, name)
                 base_area = 10,            
                 pipe_connections =
                 {
-                    {type = "input-output", position = {-1, 0}, max_underground_distance = 10},
-                    {type = "input-output", position = {1, 0}, max_underground_distance = 10},
-                    {type = "input-output", position = {0, -1}, max_underground_distance = 10},
-                    {type = "input-output", position = {0, 1}, max_underground_distance = 10},
+                    {type = "input-output", position = {-1, 0}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = {1, 0}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = {0, -1}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = {0, 1}, max_underground_distance = wire_reach},
                 },
                 production_type = "input-output",
                 minimum_temperature = 10,
@@ -188,7 +205,7 @@ function create_out_variant(base_name, name)
         {
             name = name_electric,
             minable = {result = name_electric},
-            maximum_wire_distance = 1,
+            maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
         }
     }})
 

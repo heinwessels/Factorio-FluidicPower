@@ -59,17 +59,28 @@ function poles.on_entity_created(event)
         entity = event.created_entity
     end
     if not entity then return end
-    
+        
     if lu_on_created[entity.name] then
-        if not fluidic_utils.entity_exists_at(lu_on_created[entity.name], entity.surface, entity.position) 
-        then
-            entity.surface.create_entity{
+
+
+        -- Place the electronic entity on the fluid entity
+        if not fluidic_utils.entity_exists_at(
+            lu_on_created[entity.name], 
+            entity.surface, 
+            entity.position
+        ) then
+            -- But only if it doesn't exist already
+            local pole = entity.surface.create_entity{
                 name = lu_on_created[entity.name],
                 position = {x = entity.position.x, y = entity.position.y},
                 direction = entity.direction,                
                 force = entity.force,
                 raise_built = false
             }        
+
+            -- Now remove the copper wires.
+            -- <pole> should be a pole
+            disconnect_entity_and_neighbours(pole)
         end
     end
 
@@ -91,8 +102,27 @@ function poles.on_entity_created(event)
                 force = entity.force,
                 raise_built = false
             }     
-        end 
+        end
+
+        -- Also need to make sure no electric wires were placed
+        disconnect_entity_and_neighbours(entity)
     end
+end
+
+function disconnect_entity_and_neighbours(entity)
+    -- Removes all copper wires from current entity,
+    -- and all the entities it might have connected too
+    -- We assume it's an electric pole
+
+    -- First disconnect his neighbours
+    for _, neighbour in ipairs(entity.neighbours["copper"]) do
+        if neighbour.name ~= "entity-ghost" then
+            neighbour.disconnect_neighbour()
+        end
+    end
+
+    -- Now disconnect the entity itself from any remaining poles
+    entity.disconnect_neighbour()
 end
 
 function poles.on_entity_removed(event)
