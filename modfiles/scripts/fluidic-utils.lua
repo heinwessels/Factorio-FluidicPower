@@ -1,4 +1,39 @@
+require('__debugadapter__/debugadapter.lua')
+
 utils = {}
+
+function utils.overwrite_technology_for_recipe(old_recipe, new_recipe)
+	-- Looks for all technologies that unlocks the old_recipe,
+	-- and replaces said recipe with a new_recipe
+	for _, technology in pairs(data.raw.technology) do		
+		if not technology.enabled and technology.effects then			
+			for _, effect in pairs(technology.effects) do
+				if effect.type == "unlock-recipe" then					
+					if effect.recipe == old_recipe then
+						-- Overwrite the result
+						effect.recipe = new_recipe
+					end
+				end
+			end
+		end
+	end
+end
+
+function utils.find_technology_for_recipe(recipe)
+	-- Looks for the technology that unlocks the recipe
+	for _, technology in pairs(data.raw.technology) do		
+		if not technology.enabled and technology.effects then			
+			for _, effect in pairs(technology.effects) do
+				if effect.type == "unlock-recipe" then					
+					if effect.recipe == recipe then
+						return technology.name
+					end
+				end
+			end
+		end
+	end
+	return nil
+end
 
 -- Check if an entity have an attribute,
 -- check that if entity is not null too

@@ -1,3 +1,4 @@
+-- Create item
 local item = table.deepcopy(data.raw["item"]["power-switch"])
 override = {
     name = "fluidic-power-switch",
@@ -8,6 +9,17 @@ for k,v in pairs(override) do
 end
 data:extend({item})
 
+-- Recipe
+data:extend({util.merge{
+  data.raw["recipe"]["power-switch"],
+  {
+      name = "fluidic-power-switch",
+      result = "fluidic-power-switch",
+  }
+}})
+data.raw["recipe"]["power-switch"].enabled = false
+
+-- Create entity
 local entity = table.deepcopy(data.raw["power-switch"]["power-switch"])
 local pump = table.deepcopy(data.raw["power-switch"]["power-switch"])
 override = {
@@ -75,3 +87,6 @@ for _,direction in pairs(entity.animations) do
 end
 
 data:extend({entity})
+
+-- Disable vanilla entity
+data.raw["recipe"]["power-switch"].enabled = false

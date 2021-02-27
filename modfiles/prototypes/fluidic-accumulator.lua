@@ -1,3 +1,4 @@
+-- Create the items
 local item = table.deepcopy(data.raw["item"]["accumulator"])
 override = {
     name = "fluidic-accumulator",
@@ -8,6 +9,17 @@ for k,v in pairs(override) do
 end
 data:extend({item})
 
+-- Recipe
+data:extend({util.merge{
+    data.raw["recipe"]["accumulator"],
+    {
+        name = "fluidic-accumulator",
+        result = "fluidic-accumulator",
+    }
+}})
+data.raw["recipe"]["accumulator"].enabled = false
+
+-- Create the entity
 local entity = table.deepcopy(data.raw["accumulator"]["accumulator"])
 local tank = table.deepcopy(data.raw["storage-tank"]["storage-tank"])
 override = {
@@ -54,3 +66,4 @@ for k,v in pairs(override) do
     entity[k]=v
 end
 data:extend({entity})
+

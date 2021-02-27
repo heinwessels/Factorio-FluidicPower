@@ -1,4 +1,5 @@
 util = require("util")
+fluidic_utils = require("scripts.fluidic-utils")
 
 -- Here I create small, medium, big and substation pole variants
 
@@ -255,7 +256,7 @@ function create_transmit_variant(base_name, name)
         },
     })
 
-    -- RECIPE
+    -- RECIPE    
     data:extend({util.merge{
         data.raw["recipe"][base_name],
         {
@@ -263,7 +264,7 @@ function create_transmit_variant(base_name, name)
             result = name,
         }
     }})
-
+    
     -- ENTITY
     data:extend({util.merge{
         data.raw["electric-pole"][base_name],
@@ -324,6 +325,7 @@ function create_transmit_variant(base_name, name)
         {
             name = name_electric,
             minable = {result = name_electric},
+            supply_area_distance = 0,
             maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
         }
     }})
@@ -418,7 +420,7 @@ create_transmit_variant("big-electric-pole", "fluidic-big-pole")
 
 
 -- Finally hide the vanilla ones
-data.raw["recipe"]["small-electric-pole"].hidden = true
-data.raw["recipe"]["medium-electric-pole"].hidden = true
-data.raw["recipe"]["big-electric-pole"].hidden = true
-data.raw["recipe"]["substation"].hidden = true
+data.raw["recipe"]["small-electric-pole"].enabled = false
+data.raw["recipe"]["medium-electric-pole"].enabled = false
+data.raw["recipe"]["big-electric-pole"].enabled = false
+data.raw["recipe"]["substation"].enabled = false

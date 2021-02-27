@@ -1,3 +1,7 @@
+## Does it work with other mods?
+
+It should work out of the box if the other mod doesn't touch power poles or create any new power poles. This does mean that overhaul mods like Krastorio or Space Exploration will definitely not work. Please let me know if it break with your mod, and I will see if I can support it.
+
 ## No Electric Network Info when I select Big Power Pole?
 
 This is as designed. The `Big Electric Pole` does not consume or supply power, only the other power poles does that. If you want to know the energy level on a Big Power Pole (the amount of fluid inside) place a `Energy Meter` right next to it.

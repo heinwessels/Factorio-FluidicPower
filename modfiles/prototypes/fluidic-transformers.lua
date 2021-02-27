@@ -23,7 +23,35 @@ data:extend({item})
 data:extend
 ({ 
     ------------------------
-    -- STEP UP RECIPES
+    -- Transformer recipes
+    ------------------------
+    {
+        type = "recipe",
+        name = "fluidic-transformer-step-up",
+        enabled = false,
+        ingredients =
+        {
+            {"steel-plate", 10},
+            {"advanced-circuit", 5},
+            {"copper-cable", 20}
+        },
+        result = "fluidic-transformer-step-up"
+    },
+    {
+        type = "recipe",
+        name = "fluidic-transformer-step-down",
+        enabled = false,
+        ingredients =
+        {
+            {"steel-plate", 10},
+            {"advanced-circuit", 5},
+            {"copper-cable", 20}
+        },
+        result = "fluidic-transformer-step-down"
+    },
+
+    ------------------------
+    -- STEP UP POWER RECIPES
     ------------------------
     {
         type = "recipe-category",
@@ -39,7 +67,8 @@ data:extend
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         energy_required = 0.1,
-        results={{type="fluid", name="fluidic-10-megajoules", amount=1}},        
+        results={{type="fluid", name="fluidic-10-megajoules", amount=1}},
+        hidden = true
     },
     {
         type = "recipe",
@@ -51,11 +80,12 @@ data:extend
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         energy_required = 0.1,
-        results={{type="fluid", name="fluidic-gigajoules", amount=1}},        
+        results={{type="fluid", name="fluidic-gigajoules", amount=1}},
+        hidden = true
     },
 
     ------------------------
-    -- STEP DOWN RECIPES
+    -- STEP DOWN POWER RECIPES
     ------------------------
     {
         type = "recipe-category",
@@ -71,7 +101,8 @@ data:extend
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         energy_required = 0.1,
-        results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},        
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
+        hidden = true
     },
     {
         type = "recipe",
@@ -83,7 +114,8 @@ data:extend
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={{type="fluid", name="fluidic-gigajoules", amount=1}},
         energy_required = 0.1,
-        results={{type="fluid", name="fluidic-10-megajoules", amount=100}},        
+        results={{type="fluid", name="fluidic-10-megajoules", amount=100}},
+        hidden = true
     }
 })
 

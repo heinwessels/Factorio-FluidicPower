@@ -4,6 +4,7 @@ require("prototypes.fluidic-poles")
 require("prototypes.fluidic-accumulator")
 require("prototypes.fluidic-power-switch")
 require("prototypes.fluidic-energy-meter")
+require("prototypes.fluidic-technology")
 
 
 -- TODO (NB!) Change recipes to actually unlock fluidic items
