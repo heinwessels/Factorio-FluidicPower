@@ -1,7 +1,6 @@
 require("prototypes.fluidic-energy")
 require("prototypes.fluidic-transformers")
 require("prototypes.fluidic-poles")
-require("prototypes.fluidic-big-pole")
 require("prototypes.fluidic-accumulator")
 require("prototypes.fluidic-power-switch")
 require("prototypes.fluidic-energy-meter")

@@ -80,7 +80,7 @@ function create_in_variant(base_name, name)
             { 
               {
                 production_type = "output",        
-                base_area = 10,
+                base_area = 1,
                 base_level = 1,
                 pipe_connections = {
                     { type="input-output", position = {0, 1}, max_underground_distance = wire_reach},
@@ -177,7 +177,7 @@ function create_out_variant(base_name, name)
             two_direction_only = true,                        
             fluid_box =
             {
-                base_area = 10,            
+                base_area = 1,            
                 pipe_connections =
                 {
                     {type = "input-output", position = {-1, 0}, max_underground_distance = wire_reach},
@@ -221,6 +221,124 @@ function create_out_variant(base_name, name)
     end
 end
 
+function create_transmit_variant(base_name, name)
+    -- This will create the item, recipe, and entity
+    -- in for a fluidic entity that can only transmit
+    -- power. Currently this is only used for big poles
+
+    -- e.g.
+    --      base_name = "small-electric-pole"
+    --      name =      "fluidic-small-pole"
+    
+    name_electric =name.."-electric"
+
+    -- How far should we make the "underground pipes"
+    wire_reach = calculate_wire_reach(
+        data.raw["electric-pole"][base_name].maximum_wire_distance
+    )
+
+    -- ITEM
+    data:extend({
+        util.merge{
+            data.raw["item"][base_name],
+            {
+                name = name, 
+                place_result = name,
+            }
+        },
+        util.merge{
+            data.raw["item"][base_name],
+            {
+                name = name_electric, 
+                place_result = name_electric,
+            }
+        },
+    })
+
+    -- RECIPE
+    data:extend({util.merge{
+        data.raw["recipe"][base_name],
+        {
+            name = name, 
+            result = name,
+        }
+    }})
+
+    -- ENTITY
+    data:extend({util.merge{
+        data.raw["electric-pole"][base_name],
+        {
+            type = "pipe",
+            name = name,
+            minable = {result = name},
+            horizontal_window_bounding_box = {{0,0},{0,0}},
+            vertical_window_bounding_box = {{0,0},{0,0}},
+            fluid_box =
+            {     
+                height = 2,
+                pipe_connections =
+                {
+                    {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = wire_reach},        
+                    {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = {1.5, 0.5}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = {1.5, -0.5}, max_underground_distance = wire_reach},
+
+                    {type = "input-output", position = { 0.5, -1.5,}, max_underground_distance = wire_reach},        
+                    {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = { 0.5, 1.5}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = wire_reach},
+                },
+            },
+            pictures = {
+                straight_vertical_single = data.raw["electric-pole"][base_name].pictures,
+                straight_vertical = data.raw["electric-pole"][base_name].pictures,
+                straight_vertical_window = data.raw["electric-pole"][base_name].pictures,
+                straight_horizontal = data.raw["electric-pole"][base_name].pictures,
+                straight_horizontal_window = data.raw["electric-pole"][base_name].pictures,
+                straight_horizontal_single = data.raw["electric-pole"][base_name].pictures,
+                corner_up_right = data.raw["electric-pole"][base_name].pictures,
+                corner_up_left = data.raw["electric-pole"][base_name].pictures,
+                corner_down_right = data.raw["electric-pole"][base_name].pictures,
+                corner_down_left = data.raw["electric-pole"][base_name].pictures,
+                t_up = data.raw["electric-pole"][base_name].pictures,
+                t_down = data.raw["electric-pole"][base_name].pictures,
+                t_left = data.raw["electric-pole"][base_name].pictures,
+                t_right = data.raw["electric-pole"][base_name].pictures,
+                cross = data.raw["electric-pole"][base_name].pictures,
+                ending_up = data.raw["electric-pole"][base_name].pictures,
+                ending_down = data.raw["electric-pole"][base_name].pictures,
+                ending_left = data.raw["electric-pole"][base_name].pictures,
+                ending_right = data.raw["electric-pole"][base_name].pictures,
+                horizontal_window_background = data.raw["electric-pole"][base_name].pictures,
+                vertical_window_background = data.raw["electric-pole"][base_name].pictures,
+                fluid_background = data.raw["electric-pole"][base_name].pictures,
+                low_temperature_flow = data.raw["electric-pole"][base_name].pictures,
+                middle_temperature_flow = data.raw["electric-pole"][base_name].pictures,
+                high_temperature_flow = data.raw["electric-pole"][base_name].pictures,
+                gas_flow = data.raw["electric-pole"][base_name].pictures,
+            }
+        }
+    }})
+    data:extend({util.merge{
+        data.raw["electric-pole"][base_name],
+        {
+            name = name_electric,
+            minable = {result = name_electric},
+            maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
+        }
+    }})
+
+    -- Depending on debug option, choose which entity is exposed
+    if not settings.startup["fluidic-expose-fluid-components"].value then
+        -- Default
+        data.raw["pipe"][name].selection_box = {{0,0}, {0,0}}
+        data.raw["pipe"][name].drawing_box = {{0,0}, {0,0}}
+    else
+        -- Debug option
+        data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
+        data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
+    end
+end
 
 ---------------------------------------------------
 -- HERE I ACTUALLY CREATE THE PROTOTYPES
@@ -273,7 +391,6 @@ data.raw["generator"]["fluidic-substation-out"].fluid_box =
     minimum_temperature = 10,
     filter = "fluidic-10-kilojoules"
 }
-
 data.raw["assembling-machine"]["fluidic-substation-in"].fluid_boxes = { 
     {
         production_type = "output",        
@@ -296,7 +413,12 @@ data.raw["assembling-machine"]["fluidic-substation-in"].fluid_boxes = {
     },
 }
 
+-- Create big pole
+create_transmit_variant("big-electric-pole", "fluidic-big-pole")
+
+
 -- Finally hide the vanilla ones
 data.raw["recipe"]["small-electric-pole"].hidden = true
 data.raw["recipe"]["medium-electric-pole"].hidden = true
+data.raw["recipe"]["big-electric-pole"].hidden = true
 data.raw["recipe"]["substation"].hidden = true

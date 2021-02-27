@@ -115,6 +115,9 @@ cursor_lookup[
 cursor_lookup[
     "fluidic-substation-out-electric"
 ] = "fluidic-substation-out"
+cursor_lookup[
+    "fluidic-big-pole-electric"
+] = "fluidic-big-pole"
      
 function build_tools.on_cursor_change(event)
     -- When you pipette over a fluidic pole you will

@@ -22,6 +22,9 @@ lu_on_created[
 lu_on_created[
     "fluidic-substation-out"
 ] = "fluidic-substation-out-electric"
+lu_on_created[
+    "fluidic-big-pole"
+] = "fluidic-big-pole-electric"
 
 -- On entity destroyed connections lookup table
 local lu_on_destroyed = {}
@@ -43,7 +46,9 @@ lu_on_destroyed[
 lu_on_destroyed[
     "fluidic-substation-out-electric"
 ] = "fluidic-substation-out"
-
+lu_on_destroyed[
+    "fluidic-big-pole-electric"
+] = "fluidic-big-pole"
 
 
 -------------------------
