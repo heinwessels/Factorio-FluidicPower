@@ -19,7 +19,7 @@ data.raw.technology["electric-energy-distribution-1"].effects = {
     },
     {
         type = "unlock-recipe",
-        recipe = "fluidic-transformer-step-up"
+        recipe = "fluidic-transformer-step-down"
     }
 }
 data.raw.technology["electric-energy-distribution-2"].effects = {

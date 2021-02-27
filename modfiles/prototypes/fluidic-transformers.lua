@@ -1,25 +1,26 @@
-local item = table.deepcopy(data.raw["item"]["substation"])
-override = {
-    name = "fluidic-transformer-step-up",
-    place_result = "fluidic-transformer-step-up",
-    -- TODO Give different icon than substation
-}
-for k,v in pairs(override) do
-    item[k]=v
-end
-data:extend({item})
+-- Create items
+data:extend({
+    util.merge{
+        data.raw["item"]["substation"],
+        {
+            name = "fluidic-transformer-step-up",
+            place_result = "fluidic-transformer-step-up",
+            icon = "__FluidicPower__/graphics/entities/transformers/transformer-step-up-icon.png",
+            icon_size = 32,
+        }
+    },
+    util.merge{
+        data.raw["item"]["substation"],
+        {
+            name = "fluidic-transformer-step-down",
+            place_result = "fluidic-transformer-step-down",
+            icon = "__FluidicPower__/graphics/entities/transformers/transformer-step-down-icon.png",
+            icon_size = 32,
+        }
+    },
+})
 
-local item = table.deepcopy(data.raw["item"]["substation"])
-override = {
-    name = "fluidic-transformer-step-down",
-    place_result = "fluidic-transformer-step-down",
-    -- TODO Give different icon than substation
-}
-for k,v in pairs(override) do
-    item[k]=v
-end
-data:extend({item})
-
+-- Create some recipes
 data:extend
 ({ 
     ------------------------
@@ -119,63 +120,96 @@ data:extend
     }
 })
 
-local transformer_up = table.deepcopy(data.raw["electric-pole"]["substation"])
-override = {
-    type = "furnace",
-    name = "fluidic-transformer-step-up",
-    mode = "output-to-separate-pipe",
-    crafting_categories = {"fluidic-transformers-step-up"},
-    minable = {mining_time = 0.2, result = "fluidic-transformer-step-up"},
-    energy_usage = "10kW",
-    allowed_effects = {},
-    energy_source = nil,
-    module_specification = {module_slots=0},
-    crafting_speed = 1,
-    source_inventory_size = 1,
-    result_inventory_size = 0,
-    energy_source = {
-        type = "void",        
-        drain = "0kW"    
-    },
-    fluid_boxes =
-    { 
-      {
-        production_type = "input",        
-        base_area = 10,
-        base_level = -1,
-        height = 2,
-        pipe_connections = {
-            {type = "input", position = {-1.5, 0.5}, max_underground_distance = 10},        
-            {type = "input", position = {-1.5, -0.5}, max_underground_distance = 10},
+-- Creat the entities
+data:extend({util.merge{
+    -- This is a weird legacy hack where we use the accumulator shape, but create
+    -- a furnace with fluid inputs, using old beacon graphics. Don't judge me.
+    data.raw["electric-pole"]["substation"],
+    {
+        type = "furnace",
+        name = "fluidic-transformer-step-up",
+        mode = "output-to-separate-pipe",
+        crafting_categories = {"fluidic-transformers-step-up"},
+        minable = {mining_time = 1, result = "fluidic-transformer-step-up"},
+        energy_usage = "10kW",
+        allowed_effects = {},
+        energy_source = nil,
+        module_specification = {module_slots=0},
+        crafting_speed = 1,
+        source_inventory_size = 1,
+        result_inventory_size = 0,
+        energy_source = {
+            type = "void",        
+            drain = "0kW"    
+        },
+        fluid_boxes =
+        { 
+            {
+                production_type = "input",        
+                base_area = 10,
+                base_level = -1,
+                height = 2,
+                pipe_connections = {
+                    {type = "input", position = {-1.5, 0.5}, max_underground_distance = 10},        
+                    {type = "input", position = {-1.5, -0.5}, max_underground_distance = 10},
+                },        
+            },
+            {
+                production_type = "output",        
+                base_area = 1,
+                base_level = 1,
+                pipe_connections = {
+                    {type = "output", position = {1.5, 0.5}, max_underground_distance = 10},        
+                    {type = "output", position = {1.5, -0.5}, max_underground_distance = 10},
+                },        
+            },
         },        
-      },
-      {
-        production_type = "output",        
-        base_area = 1,
-        base_level = 1,
-        pipe_connections = {
-            {type = "output", position = {1.5, 0.5}, max_underground_distance = 10},        
-            {type = "output", position = {1.5, -0.5}, max_underground_distance = 10},
-        },        
-      },
-    },
-    animation = transformer_up.pictures,
-}
-for k,v in pairs(override) do
-    transformer_up[k]=v
-end
-data:extend({transformer_up})
+        animation =
+        {
+            layers =
+            {
+                {
+                    filename = "__FluidicPower__/graphics/entities/transformers/transformer-antenna-shadow.png",
+                    width = 63,
+                    height = 49,
+                    line_length = 8,
+                    frame_count = 32,
+                    shift = { 2.015, 0.34},
+                    animation_speed = 2,
+                    scale = 0.6
+                },
+                {
+                    filename = "__FluidicPower__/graphics/entities/transformers/transformer-base-sheet.png",
+                    width = 116,
+                    height = 93,
+                    frame_count = 32,
+                    line_length = 8,
+                    frame_count = 32,
+                    shift = { 0.23, 0.046875},
+                    scale = 0.66
+                },                
+                {
+                    filename = "__FluidicPower__/graphics/entities/transformers/transformer-antenna.png",
+                    width = 54,
+                    height = 50,
+                    line_length = 8,
+                    frame_count = 32,
+                    shift = { 0, -1.2},
+                    animation_speed = 2,
+                    scale = 0.8
+                },                
+            }
+        },
+    }
+}})
 
-
-local transformer_down = table.deepcopy(data.raw["furnace"]["fluidic-transformer-step-up"])
-override = {
-    name = "fluidic-transformer-step-down",
-    crafting_categories = {"fluidic-transformers-step-down"},
-    minable = {mining_time = 0.2, result = "fluidic-transformer-step-down"},
-}
-for k,v in pairs(override) do
-    transformer_down[k]=v
-end
-transformer_down.fluid_boxes[1].base_area = 1
-transformer_down.fluid_boxes[2].base_area = 10
-data:extend({transformer_down})
+data:extend({util.merge{
+    data.raw["furnace"]["fluidic-transformer-step-up"],
+    {
+        name = "fluidic-transformer-step-down",
+        crafting_categories = {"fluidic-transformers-step-down"},
+        minable = {result = "fluidic-transformer-step-down"},        
+    }
+}})
+data.raw["furnace"]["fluidic-transformer-step-down"].fluid_boxes[1].base_area = 1
+data.raw["furnace"]["fluidic-transformer-step-down"].fluid_boxes[2].base_area = 10
