@@ -34,6 +34,7 @@ function create_in_variant(base_name, name)
             {
                 name = name_in, 
                 place_result = name_in,
+                icon = "__FluidicPower__/graphics/icons/"..name_in.."-icon.png"
             }
         },
         util.merge{
@@ -41,6 +42,7 @@ function create_in_variant(base_name, name)
             {
                 name = name_electric, 
                 place_result = name_electric,
+                icon = "__FluidicPower__/graphics/icons/"..name_in.."-icon.png"
             }
         },
     })
@@ -420,7 +422,13 @@ create_transmit_variant("big-electric-pole", "fluidic-big-pole")
 
 
 -- Finally hide the vanilla ones
-data.raw["recipe"]["small-electric-pole"].enabled = false
-data.raw["recipe"]["medium-electric-pole"].enabled = false
-data.raw["recipe"]["big-electric-pole"].enabled = false
-data.raw["recipe"]["substation"].enabled = false
+for _, recipe in pairs{
+    data.raw["recipe"]["small-electric-pole"],
+    data.raw["recipe"]["medium-electric-pole"],
+    data.raw["recipe"]["big-electric-pole"],
+    data.raw["recipe"]["substation"]
+} do
+    recipe.enabled = false
+    recipe.hidden = true
+end
+

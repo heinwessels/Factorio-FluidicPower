@@ -3,7 +3,7 @@ data:extend({
         type = "item",
         name = "fluidic-energy-meter",
         place_result = "fluidic-energy-meter",
-        icon = "__FluidicPower__/graphics/energy-meter/energy-meter-icon.png",
+        icon = "__FluidicPower__/graphics/icons/energy-meter-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         subgroup = "circuit-network",
         order = "d[other]-a[energy-meter]",
@@ -26,7 +26,7 @@ data:extend({
     {
         type = "storage-tank",
         name = "fluidic-energy-meter",
-        icon = "__FluidicPower__/graphics/energy-meter/energy-meter-icon.png",
+        icon = "__FluidicPower__/graphics/icons/energy-meter-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         flags = {"placeable-player", "player-creation"},
         minable = {mining_time = 0.2, result = "fluidic-energy-meter"},
@@ -55,14 +55,14 @@ data:extend({
                 layers =
                 {
                     {
-                        filename = "__FluidicPower__/graphics/energy-meter/energy-meter.png",
+                        filename = "__FluidicPower__/graphics/entities/energy-meter/energy-meter.png",
                         priority = "extra-high",
                         width = 34,
                         height = 38,
                         shift = util.by_pixel(0, -0.5),
                         hr_version =
                         {
-                            filename = "__FluidicPower__/graphics/energy-meter/energy-meter.png",
+                            filename = "__FluidicPower__/graphics/entities/energy-meter/energy-meter.png",
                             priority = "extra-high",
                             width = 66,
                             height = 76,

@@ -5,7 +5,7 @@ data:extend({
         {
             name = "fluidic-transformer-step-up",
             place_result = "fluidic-transformer-step-up",
-            icon = "__FluidicPower__/graphics/entities/transformers/transformer-step-up-icon.png",
+            icon = "__FluidicPower__/graphics/icons/transformer-step-up-icon.png",
             icon_size = 32,
         }
     },
@@ -14,7 +14,7 @@ data:extend({
         {
             name = "fluidic-transformer-step-down",
             place_result = "fluidic-transformer-step-down",
-            icon = "__FluidicPower__/graphics/entities/transformers/transformer-step-down-icon.png",
+            icon = "__FluidicPower__/graphics/icons/transformer-step-down-icon.png",
             icon_size = 32,
         }
     },
@@ -69,6 +69,7 @@ data:extend
         ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-megajoules", amount=1}},
+        scale_entity_info_icon = true,
         hidden = true
     },
     {
@@ -82,6 +83,7 @@ data:extend
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-gigajoules", amount=1}},
+        scale_entity_info_icon = true,
         hidden = true
     },
 
@@ -103,6 +105,7 @@ data:extend
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
+        scale_entity_info_icon = true,
         hidden = true
     },
     {
@@ -116,6 +119,7 @@ data:extend
         ingredients ={{type="fluid", name="fluidic-gigajoules", amount=1}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-megajoules", amount=100}},
+        scale_entity_info_icon = true,
         hidden = true
     }
 })

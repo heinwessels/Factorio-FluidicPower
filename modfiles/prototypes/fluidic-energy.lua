@@ -16,7 +16,8 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[kilojoules]-a[kilojoules]",
-        hidden = true
+        hidden = true,
+        auto_barrel = false -- That would be fun
     },
     {
         type = "fluid",
@@ -30,7 +31,8 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[megajoules]-a[megajoules]",
-        hidden = true
+        hidden = true,
+        auto_barrel = false -- That would be fun
     },
     {
         type = "fluid",
@@ -44,10 +46,9 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-3-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[gigajoules]-a[gigajoules]",
-        hidden = true
+        hidden = true,
+        auto_barrel = false -- That would be fun
     },
-
-
 
     -- Here is a formula to show the correlation between
     -- the recipe and the requried assembler energy usage
@@ -61,13 +62,14 @@ data:extend
         type = "recipe",
         name = "fluidic-10-kilojoules-generate-small",
         icon_size = 64,
-        icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+        icon = "__FluidicPower__/graphics/icons/fluidic-level-1-generate-icon.png",
         category = "fluidic-generate",
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
         energy_required = 0.5,
         results={{type="fluid", name="fluidic-10-kilojoules", amount=250}},
+        scale_entity_info_icon = true,
         hidden = true  
     },
     {
