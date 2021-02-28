@@ -67,7 +67,7 @@ function create_in_variant(base_name, name)
             crafting_speed = 1,
             energy_usage = "1W",   -- Default maximum power input
             module_specification = nil,
-            allowed_effects = {},
+            allowed_effects = nil,
             module_specification = { module_slots = 0 },
             energy_source = {
                 type = "electric",
@@ -327,8 +327,8 @@ function create_transmit_variant(base_name, name)
         {
             name = name_electric,
             minable = {result = name_electric},
-            supply_area_distance = 0,
-            maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
+            supply_area_distance = 0,   -- This pole can't supply power to anything
+            maximum_wire_distance = wire_reach+2  -- +2 to include for size of pole
         }
     }})
 

@@ -33,7 +33,7 @@ data.raw.technology["electric-energy-distribution-2"].effects = {
     },
     {
         type = "unlock-recipe",
-        recipe = "fluidic-energy-meter"
+        recipe = "fluidic-energy-sensor"
     },
 }
 

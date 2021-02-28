@@ -1,6 +1,10 @@
+## Will the UPS be playable?
+
+Yes, it is. You will be able to build a decent sized based without any issues. Obviously you won't be able to build as big as you can in vanilla, but that's exacltly why it isn't part of vanilla.
+
 ## Does it work with other mods?
 
-It should work out of the box if the other mod doesn't touch power poles or create any new power poles. This does mean that overhaul mods like Krastorio or Space Exploration will definitely not work. Please let me know if it break with your mod, and I will see if I can support it.
+It should work out of the box if the other mod doesn't touch power poles or create any new power poles. Contact me if you want to make sure that it works with your mods. This also means that overhaul mods like Krastorio or Space Exploration will definitely not work.
 
 ## Can I see my total power production and consumption on a graph?
 Yes! Open the production GUI (`P`) and click on `Fluids`. There you will see the total amount of kilojoules created and consumed in your world, while not taking transformers into the calculation. However, it will also show how much power you stepped up to higher voltages by using your transformers in the `Production`-tab. To put the numbers you see into usable terms you can do the following quick calculation:

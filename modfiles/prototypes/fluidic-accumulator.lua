@@ -56,8 +56,8 @@ override = {
         gas_flow = table.deepcopy(tank.pictures.gas_flow),
     },
     -- Use Accumulator's sprites and such.
-    circuit_wire_connection_points = circuit_connector_definitions["storage-tank"].points,
-    circuit_connector_sprites = circuit_connector_definitions["storage-tank"].sprites,
+    circuit_wire_connection_points = circuit_connector_definitions["offshore-pump"].points,
+    circuit_connector_sprites = circuit_connector_definitions["offshore-pump"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance,   
 }
 override.pictures.picture.layers[1].filename = "__FluidicPower__/graphics/entities/accumulator/accumulator.png"
@@ -67,3 +67,9 @@ for k,v in pairs(override) do
 end
 data:extend({entity})
 
+-- Fix the satellite recipe to use this mod's accumulator
+for _, ingredient in pairs(data.raw.recipe["satellite"].ingredients) do
+    if ingredient[1] == "accumulator" then
+        ingredient[1] = "fluidic-accumulator"
+    end
+end

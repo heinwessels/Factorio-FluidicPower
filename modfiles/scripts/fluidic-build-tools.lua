@@ -272,7 +272,8 @@ function get_fluid_neighbours(entity)
 
     -- Is this a valid entity with neighbours we want?
     if not fluidic_utils.entity_has_attribute(entity, "neighbours") then return neighbours end
-    if entity.fluidbox == nil then return neighbours end
+    if #entity.fluidbox == 0 then return neighbours end
+    if entity.neighbours then return neighbours end
 
     -- It does. Look at it's neighbours
     for _, neighbours_section in ipairs(entity.neighbours) do

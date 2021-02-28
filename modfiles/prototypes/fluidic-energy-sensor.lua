@@ -1,17 +1,17 @@
 data:extend({
     {
         type = "item",
-        name = "fluidic-energy-meter",
-        place_result = "fluidic-energy-meter",
-        icon = "__FluidicPower__/graphics/icons/energy-meter-icon.png",
+        name = "fluidic-energy-sensor",
+        place_result = "fluidic-energy-sensor",
+        icon = "__FluidicPower__/graphics/icons/energy-sensor-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         subgroup = "circuit-network",
-        order = "d[other]-a[energy-meter]",
+        order = "d[other]-a[energy-sensor]",
         stack_size = 50
     },
     {
         type = "recipe",
-        name = "fluidic-energy-meter",
+        name = "fluidic-energy-sensor",
         enabled = false,
         energy_required = 2,
         ingredients =
@@ -21,15 +21,15 @@ data:extend({
             {"copper-cable", 5},
             {"electronic-circuit", 2}
         },
-        result = "fluidic-energy-meter"
+        result = "fluidic-energy-sensor"
     },
     {
         type = "storage-tank",
-        name = "fluidic-energy-meter",
-        icon = "__FluidicPower__/graphics/icons/energy-meter-icon.png",
+        name = "fluidic-energy-sensor",
+        icon = "__FluidicPower__/graphics/icons/energy-sensor-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         flags = {"placeable-player", "player-creation"},
-        minable = {mining_time = 0.2, result = "fluidic-energy-meter"},
+        minable = {mining_time = 0.2, result = "fluidic-energy-sensor"},
         max_health = 100,
         corpse = "iron-chest-remnants",
         dying_explosion = "iron-chest-explosion",
@@ -55,14 +55,14 @@ data:extend({
                 layers =
                 {
                     {
-                        filename = "__FluidicPower__/graphics/entities/energy-meter/energy-meter.png",
+                        filename = "__FluidicPower__/graphics/entities/energy-sensor/energy-sensor.png",
                         priority = "extra-high",
                         width = 34,
                         height = 38,
                         shift = util.by_pixel(0, -0.5),
                         hr_version =
                         {
-                            filename = "__FluidicPower__/graphics/entities/energy-meter/energy-meter.png",
+                            filename = "__FluidicPower__/graphics/entities/energy-sensor/energy-sensor.png",
                             priority = "extra-high",
                             width = 66,
                             height = 76,
@@ -96,9 +96,9 @@ data:extend({
         },
         circuit_wire_connection_points = circuit_connector_definitions["offshore-pump"].points,
         circuit_connector_sprites = circuit_connector_definitions["offshore-pump"].sprites,
-        circuit_wire_max_distance = 9
+        circuit_wire_max_distance = default_circuit_wire_max_distance
     }
 })
-data.raw["storage-tank"]["fluidic-energy-meter"].pictures.fluid_background.width = 14
-data.raw["storage-tank"]["fluidic-energy-meter"].pictures.window_background.scale = 0.75
-data.raw["storage-tank"]["fluidic-energy-meter"].pictures.window_background.hr_version.scale = 0.75
+data.raw["storage-tank"]["fluidic-energy-sensor"].pictures.fluid_background.width = 14
+data.raw["storage-tank"]["fluidic-energy-sensor"].pictures.window_background.scale = 0.75
+data.raw["storage-tank"]["fluidic-energy-sensor"].pictures.window_background.hr_version.scale = 0.75

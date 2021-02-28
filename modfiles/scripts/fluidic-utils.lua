@@ -1,5 +1,3 @@
-require('__debugadapter__/debugadapter.lua')
-
 utils = {}
 
 function utils.overwrite_technology_for_recipe(old_recipe, new_recipe)

@@ -24,19 +24,20 @@ All power generation and consumption is done at a low voltage, or more specifica
 
 Transformers will increase the voltage of your power and allow you to distribute your power through the big power poles. For example, a `Step Up Transformer` will turn `1000 10kJ` fluid units into a single `10MJ` fluid. This higher voltage should distribute further and more balanced through your network. However, remember you need to bring the voltage down again if you want to use it using a `Step Down Transformer`. 
 
-Currently there are 3 voltage levels, or different fluid concentrations, namely `10kJ`, `10MJ`, and `1GJ`. It's recommend to only use the highest voltage (`1GJ`) when absolutely neccesary (see current limitations).
+Currently there are 3 voltage levels, or different fluid concentrations, namely `10kJ`, `10MJ`, and `1GJ`. It's recommend to not use the highest voltage (`1GJ`) at unless, except when absolutely neccesary (See FAQ: `My generators runs full speed while it shouldn't?`)
 
 ### Other Important Components
 
-- **Energy Meter:**
+With Fluidic Power it's necessary to better manage your flow of power, more so than in vanilla. Therefore you are provided with the following components:
 
-- **Power Switch:**
+- **Accumulator:** This mod turns electricity into a fluid means it also turns accumulators into simple storage of fluid. Currently a single accumulator will store 5MJ like it does in vanilla. However, you will have to manage when to charge and when to discharge them yourself. 
 
-## New Interesting Challenges
+- **Power Switch:** This is what is says, allows or stops the flow of power. It needs to be built inline between powerpoles. This switch acts as a pump, which means it also acts as a `one-way` switch, and is `on` by default. The network `overlay` will show a connection regardless of if the switch is `on` or `off`.
 
-- **Power Generation:**
+- **Energy Sensor:** This is a little sensor that measures the power level of a powerpole - or more accurately - the amount of energy currently in the pole. It needs to be placed adjacent to a power pole in order to connect. This entity also has another useful feature, it has a `Flush` button to clean all the connected power poles of any power (be careful). 
 
-- **Accumulators:**
+
+
 
 
 

@@ -68,7 +68,7 @@ override = {
       west = entity.overlay_loop,
     },
 
-    -- TODO Fix the circuit wire locations
+    -- TODO Fix the circuit wire locations    
     circuit_wire_connection_points = circuit_connector_definitions["pump"].points,
     circuit_connector_sprites = circuit_connector_definitions["pump"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance
