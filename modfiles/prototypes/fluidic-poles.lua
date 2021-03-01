@@ -10,17 +10,20 @@ function calculate_wire_reach(original)
     return math.floor(original * 1.4)
 end
 
-function create_in_variant(base_name, name)
+function create_in_variant(base_name)
     -- This will create the item, recipe, and entity
     -- in the fluidic IN variant with corresponding 
     -- electrics
 
     -- e.g.
     --      base_name = "small-electric-pole"
-    --      name =      "fluidic-small-pole"
+    -- Will create
+    --      "fluidic-small-electric-pole-in"
+    --      "fluidic-small-electric-pole-in-place"
 
-    name_in = name.."-in"
-    name_electric = name_in.."-electric"
+    name = "fluidic-"..base_name.."-in"
+    name_place = name.."-place"
+    name_electric = name.."-electric"
 
     -- How far should we make the "underground pipes"
     wire_reach = calculate_wire_reach(
@@ -32,17 +35,16 @@ function create_in_variant(base_name, name)
         util.merge{
             data.raw["item"][base_name],
             {
-                name = name_in, 
-                place_result = name_in,
-                icon = "__FluidicPower__/graphics/icons/"..name_in.."-icon.png"
+                name = name, 
+                place_result = name_place,
+                icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png"
             }
         },
         util.merge{
             data.raw["item"][base_name],
             {
-                name = name_electric, 
+                name = name_electric,
                 place_result = name_electric,
-                icon = "__FluidicPower__/graphics/icons/"..name_in.."-icon.png"
             }
         },
     })
@@ -51,18 +53,19 @@ function create_in_variant(base_name, name)
     data:extend({util.merge{
         data.raw["recipe"][base_name],
         {
-            name = name_in, 
-            result = name_in,
+            name = name, 
+            result = name,
         }
     }})
 
     -- ENTITY
+    -- First create the PLACE entity
     data:extend({util.merge{
         data.raw["electric-pole"][base_name],
         {
             type = "assembling-machine",
-            name = name_in,
-            minable = {result = name_in},
+            name = name_place,
+            minable = {result = name},  -- It will return the normal item
             next_upgrade = nil,
             crafting_speed = 1,
             energy_usage = "1W",   -- Default maximum power input
@@ -100,6 +103,21 @@ function create_in_variant(base_name, name)
         }
     }})
 
+    -- Now create the main entity without graphics
+    data:extend({util.merge{
+        data.raw["assembling-machine"][name_place],
+        {
+            name = name,
+            minable = {result = name},  -- It will return the normal item
+        }
+    }})
+    data.raw["assembling-machine"][name].animation = {
+        filename = "__FluidicPower__/graphics/entities/empty.png",                
+        width = 32,
+        height = 32,
+    }
+
+    -- Now update create the electric entity
     data:extend({util.merge{
         data.raw["electric-pole"][base_name],
         {
@@ -109,11 +127,11 @@ function create_in_variant(base_name, name)
         }
     }})
 
-    -- Depending on debug option, choose which entity is exposed
+    -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
     if not settings.startup["fluidic-expose-fluid-components"].value then
-        -- Default
-        data.raw["assembling-machine"][name_in].selection_box = {{0,0}, {0,0}}
-        data.raw["assembling-machine"][name_in].drawing_box = {{0,0}, {0,0}}
+        -- Default fluid is not exposed
+        data.raw["assembling-machine"][name].selection_box = {{0,0}, {0,0}}
+        data.raw["assembling-machine"][name].drawing_box = {{0,0}, {0,0}}
     else
         -- Debug option
         data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
@@ -128,10 +146,13 @@ function create_out_variant(base_name, name)
 
     -- e.g.
     --      base_name = "small-electric-pole"
-    --      name =      "fluidic-small-pole"
+    -- Will create
+    --      "fluidic-small-electric-pole-out"
+    --      "fluidic-small-electric-pole-in-place"
 
-    name_out = name.."-out"
-    name_electric =name_out.."-electric"
+    name = "fluidic-"..base_name.."-out"
+    name_place = name.."-place"
+    name_electric = name.."-electric"
 
     -- How far should we make the "underground pipes"
     wire_reach = calculate_wire_reach(
@@ -143,14 +164,14 @@ function create_out_variant(base_name, name)
         util.merge{
             data.raw["item"][base_name],
             {
-                name = name_out, 
-                place_result = name_out,
+                name = name, 
+                place_result = name_place,
             }
         },
         util.merge{
             data.raw["item"][base_name],
             {
-                name = name_electric, 
+                name = name_electric,
                 place_result = name_electric,
             }
         },
@@ -160,18 +181,19 @@ function create_out_variant(base_name, name)
     data:extend({util.merge{
         data.raw["recipe"][base_name],
         {
-            name = name_out, 
-            result = name_out,
+            name = name, 
+            result = name,
         }
     }})
 
     -- ENTITY
+    -- First create the entity that will be placed
     data:extend({util.merge{
         data.raw["electric-pole"][base_name],
         {
             type = "generator",
-            name = name_out,
-            minable = {result = name_out},
+            name = name_place,
+            minable = {result = name},  -- Should return the normal item
             effectivity = 1,
             maximum_temperature = 15,
             fluid_usage_per_tick = 1,  -- Default energy output. value = P / 60
@@ -197,12 +219,31 @@ function create_out_variant(base_name, name)
                 type = "electric",
                 usage_priority = "tertiary"
             },
-
-            -- TODO Remove these
             vertical_animation = data.raw["electric-pole"][base_name].pictures,
             horizontal_animation = data.raw["electric-pole"][base_name].pictures,
         }
     }})
+
+    -- Now create the main entity without graphics
+    data:extend({util.merge{
+        data.raw["generator"][name_place],
+        {
+            name = name,
+            minable = {result = name},  -- It will return the normal item
+        }
+    }})
+    data.raw["generator"][name].vertical_animation = {
+        filename = "__FluidicPower__/graphics/entities/empty.png",                
+        width = 32,
+        height = 32,
+    }
+    data.raw["generator"][name].horizontal_animation = {
+        filename = "__FluidicPower__/graphics/entities/empty.png",                
+        width = 32,
+        height = 32,
+    }
+
+    -- Now update create the electric entity
     data:extend({util.merge{
         data.raw["electric-pole"][base_name],
         {
@@ -215,8 +256,8 @@ function create_out_variant(base_name, name)
     -- Depending on debug option, choose which entity is exposed
     if not settings.startup["fluidic-expose-fluid-components"].value then
         -- Default
-        data.raw["generator"][name_out].selection_box = {{0,0}, {0,0}}
-        data.raw["generator"][name_out].drawing_box = {{0,0}, {0,0}}
+        data.raw["generator"][name].selection_box = {{0,0}, {0,0}}
+        data.raw["generator"][name].drawing_box = {{0,0}, {0,0}}
     else
         -- Debug option
         data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
@@ -230,10 +271,12 @@ function create_transmit_variant(base_name, name)
     -- power. Currently this is only used for big poles
 
     -- e.g.
-    --      base_name = "small-electric-pole"
-    --      name =      "fluidic-small-pole"
+    --      base_name = "big-electric-pole"
+    --      name =      "fluidic-big-electric-pole"
     
-    name_electric =name.."-electric"
+    name = "fluidic-"..base_name
+    name_place = name.."-place"
+    name_electric = name.."-electric"
 
     -- How far should we make the "underground pipes"
     wire_reach = calculate_wire_reach(
@@ -246,19 +289,19 @@ function create_transmit_variant(base_name, name)
             data.raw["item"][base_name],
             {
                 name = name, 
-                place_result = name,
+                place_result = name_place,
             }
         },
         util.merge{
             data.raw["item"][base_name],
             {
-                name = name_electric, 
+                name = name_electric,
                 place_result = name_electric,
             }
         },
     })
 
-    -- RECIPE    
+    -- RECIPE
     data:extend({util.merge{
         data.raw["recipe"][base_name],
         {
@@ -266,13 +309,14 @@ function create_transmit_variant(base_name, name)
             result = name,
         }
     }})
-    
+
     -- ENTITY
+    -- First create the entity that will be used while placing
     data:extend({util.merge{
         data.raw["electric-pole"][base_name],
         {
             type = "pipe",
-            name = name,
+            name = name_place,
             minable = {result = name},
             horizontal_window_bounding_box = {{0,0},{0,0}},
             vertical_window_bounding_box = {{0,0},{0,0}},
@@ -322,15 +366,33 @@ function create_transmit_variant(base_name, name)
             }
         }
     }})
+
+    -- Now create the main entity without graphics
+    data:extend({util.merge{
+        data.raw["pipe"][name_place],
+        {
+            name = name,
+            minable = {result = name},  -- It will return the normal item            
+        }
+    }})    
+    for key, _ in pairs(data.raw["pipe"][name].pictures) do       
+        data.raw["pipe"][name].pictures[key] = {
+            filename = "__FluidicPower__/graphics/entities/empty.png",                
+            width = 32,
+            height = 32,
+        }
+    end
+    
+    -- Now update create the electric entity
     data:extend({util.merge{
         data.raw["electric-pole"][base_name],
         {
             name = name_electric,
             minable = {result = name_electric},
-            supply_area_distance = 0,   -- This pole can't supply power to anything
-            maximum_wire_distance = wire_reach+2  -- +2 to include for size of pole
+            maximum_wire_distance = wire_reach+2,  -- +2 to include for size of pole
+            supply_area_distance = 0
         }
-    }})
+    }})    
 
     -- Depending on debug option, choose which entity is exposed
     if not settings.startup["fluidic-expose-fluid-components"].value then
@@ -356,18 +418,18 @@ end
 --      P = u * s * 60
 
 -- Create small poles
-create_in_variant("small-electric-pole", "fluidic-small-pole")
-create_out_variant("small-electric-pole", "fluidic-small-pole")
-data.raw["generator"]["fluidic-small-pole-out"].fluid_usage_per_tick = 9 -- P = 5MW
-data.raw["assembling-machine"]["fluidic-small-pole-in"].energy_usage = "5MW"
-data.raw["assembling-machine"]["fluidic-small-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-small"
+create_in_variant("small-electric-pole")
+create_out_variant("small-electric-pole")
+data.raw["generator"]["fluidic-small-electric-pole-out"].fluid_usage_per_tick = 9 -- P = 5MW
+data.raw["assembling-machine"]["fluidic-small-electric-pole-in"].energy_usage = "5MW"
+data.raw["assembling-machine"]["fluidic-small-electric-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-small"
 
 -- Create Medium poles
-create_in_variant("medium-electric-pole", "fluidic-medium-pole")
-create_out_variant("medium-electric-pole", "fluidic-medium-pole")
-data.raw["generator"]["fluidic-medium-pole-out"].fluid_usage_per_tick = 50 -- P = 30MW
-data.raw["assembling-machine"]["fluidic-medium-pole-in"].energy_usage = "30MW"
-data.raw["assembling-machine"]["fluidic-medium-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-medium"
+create_in_variant("medium-electric-pole")
+create_out_variant("medium-electric-pole")
+data.raw["generator"]["fluidic-medium-electric-pole-out"].fluid_usage_per_tick = 50 -- P = 30MW
+data.raw["assembling-machine"]["fluidic-medium-electric-pole-in"].energy_usage = "30MW"
+data.raw["assembling-machine"]["fluidic-medium-electric-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-medium"
 
 -- Create substations
 create_in_variant("substation", "fluidic-substation")
@@ -418,10 +480,10 @@ data.raw["assembling-machine"]["fluidic-substation-in"].fluid_boxes = {
 }
 
 -- Create big pole
-create_transmit_variant("big-electric-pole", "fluidic-big-pole")
+create_transmit_variant("big-electric-pole")
 
 
--- Finally hide the vanilla ones
+-- Finally hide the vanilla recipes
 for _, recipe in pairs{
     data.raw["recipe"]["small-electric-pole"],
     data.raw["recipe"]["medium-electric-pole"],

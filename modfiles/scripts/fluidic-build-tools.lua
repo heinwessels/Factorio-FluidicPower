@@ -30,7 +30,7 @@ function build_tools.on_entity_created(event)
             -- TODO Get better way to get player. Not MP save maybe?
             game.players[1].create_local_flying_text{
                 text = "Can't connect Fluidic Power with normal fluids",
-                position  = entity.position
+                position = entity.position
             }
             
             if settings.global["fluidic-enable-build-limitations"].value then
@@ -98,26 +98,26 @@ end
 
 local cursor_lookup = {}
 cursor_lookup[
-    "fluidic-small-pole-in-electric"
-] = "fluidic-small-pole-in"
+    "fluidic-small-electric-pole-in-electric"
+] = "fluidic-small-electric-pole-in-place"
 cursor_lookup[
-    "fluidic-small-pole-out-electric"
-] = "fluidic-small-pole-out"
+    "fluidic-small-electric-pole-out-electric"
+] = "fluidic-small-electric-pole-out-place"
 cursor_lookup[
-    "fluidic-medium-pole-in-electric"
-] = "fluidic-medium-pole-in"
+    "fluidic-medium-electric-pole-in-electric"
+] = "fluidic-medium-electric-pole-in-place"
 cursor_lookup[
-    "fluidic-medium-pole-out-electric"
-] = "fluidic-medium-pole-out"
+    "fluidic-medium-electric-pole-out-electric"
+] = "fluidic-medium-electric-pole-out-place"
 cursor_lookup[
     "fluidic-substation-in-electric"
-] = "fluidic-substation-in"
+] = "fluidic-substation-in-place"
 cursor_lookup[
     "fluidic-substation-out-electric"
-] = "fluidic-substation-out"
+] = "fluidic-substation-out-place"
 cursor_lookup[
-    "fluidic-big-pole-electric"
-] = "fluidic-big-pole"
+    "fluidic-big-electric-pole-electric"
+] = "fluidic-big-electric-pole-place"
      
 function build_tools.on_cursor_change(event)
     -- When you pipette over a fluidic pole you will
@@ -157,7 +157,7 @@ end
 
 script.on_event(defines.events.on_tick, function (event)
     -- This functions only occationally draws an overlay.
-    -- No on_tick fluid calculations are done.
+    -- NOTE: No on_tick fluid calculations are done!
 
     local player = game.players[1]
 
@@ -169,7 +169,7 @@ script.on_event(defines.events.on_tick, function (event)
             -- It's a new target!            
             reset_rendering()   -- Make sure we don't have any left-over overlays
 
-            if string.match(entity.name, "-electric") then
+            if string.sub(entity.name, 1, -9) == "electric" then
                 -- At the moment power pole is selected, not fluid entity.
                 -- Get the fluid entity
                 local e = entity.surface.find_entity(

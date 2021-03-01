@@ -3,15 +3,15 @@ fluidic_utils = require("scripts.fluidic-utils")
 data.raw.technology["electric-energy-distribution-1"].effects = {
     {
         type = "unlock-recipe",
-        recipe = "fluidic-medium-pole-in"
+        recipe = "fluidic-medium-electric-pole-in"
     },
     {
         type = "unlock-recipe",
-        recipe = "fluidic-medium-pole-out"
+        recipe = "fluidic-medium-electric-pole-out"
     },
     {
         type = "unlock-recipe",
-        recipe = "fluidic-big-pole"
+        recipe = "fluidic-big-electric-pole"
     },
     {
         type = "unlock-recipe",

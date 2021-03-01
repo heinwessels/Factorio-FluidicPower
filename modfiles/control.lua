@@ -36,3 +36,11 @@ script.on_event(defines.events.on_player_cursor_stack_changed, on_cursor_change)
 
 -- TODO Need an easy visualisation to see what power unit is in the current power pole. 
 --  Maybe a little indicator similar to bottleneck. It shines through the bottom!
+
+
+
+-- Nice command ingame to see which entities are underneath the pointer
+-- /c for _,e in pairs(game.player.surface.find_entities({game.player.selected.position, game.player.selected.position})) do game.print(e.name) end
+
+-- Destroy specific entity
+-- /c game.player.surface.find_entity("fluidic-medium-electric-pole-electric", game.player.selected.position).destroy()

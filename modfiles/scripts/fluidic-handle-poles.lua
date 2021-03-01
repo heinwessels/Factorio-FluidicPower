@@ -2,20 +2,20 @@ fluidic_utils = require("scripts.fluidic-utils")
 
 poles = {}
 
--- On entity created connections lookup table
+-- Which entity should be created on the following occations
 local lu_on_created = {}
 lu_on_created[
-    "fluidic-small-pole-in"
-] = "fluidic-small-pole-in-electric"
+    "fluidic-small-electric-pole-in"
+] = "fluidic-small-electric-pole-in-electric"
 lu_on_created[
-    "fluidic-small-pole-out"
-] = "fluidic-small-pole-out-electric"
+    "fluidic-small-electric-pole-out"
+] = "fluidic-small-electric-pole-out-electric"
 lu_on_created[
-    "fluidic-medium-pole-in"
-] = "fluidic-medium-pole-in-electric"
+    "fluidic-medium-electric-pole-in"
+] = "fluidic-medium-electric-pole-in-electric"
 lu_on_created[
-    "fluidic-medium-pole-out"
-] = "fluidic-medium-pole-out-electric"
+    "fluidic-medium-electric-pole-out"
+] = "fluidic-medium-electric-pole-out-electric"
 lu_on_created[
     "fluidic-substation-in"
 ] = "fluidic-substation-in-electric"
@@ -23,23 +23,23 @@ lu_on_created[
     "fluidic-substation-out"
 ] = "fluidic-substation-out-electric"
 lu_on_created[
-    "fluidic-big-pole"
-] = "fluidic-big-pole-electric"
+    "fluidic-big-electric-pole"
+] = "fluidic-big-electric-pole-electric"
 
 -- On entity destroyed connections lookup table
 local lu_on_destroyed = {}
 lu_on_destroyed[
-    "fluidic-small-pole-in-electric"
-] = "fluidic-small-pole-in"
+    "fluidic-small-electric-pole-in-electric"
+] = "fluidic-small-electric-pole-in"
 lu_on_destroyed[
-    "fluidic-small-pole-out-electric"
-] = "fluidic-small-pole-out"
+    "fluidic-small-electric-pole-out-electric"
+] = "fluidic-small-electric-pole-out"
 lu_on_destroyed[
-    "fluidic-medium-pole-in-electric"
-] = "fluidic-medium-pole-in"
+    "fluidic-medium-electric-pole-in-electric"
+] = "fluidic-medium-electric-pole-in"
 lu_on_destroyed[
-    "fluidic-medium-pole-out-electric"
-] = "fluidic-medium-pole-out"
+    "fluidic-medium-electric-pole-out-electric"
+] = "fluidic-medium-electric-pole-out"
 lu_on_destroyed[
     "fluidic-substation-in-electric"
 ] = "fluidic-substation-in"
@@ -47,8 +47,8 @@ lu_on_destroyed[
     "fluidic-substation-out-electric"
 ] = "fluidic-substation-out"
 lu_on_destroyed[
-    "fluidic-big-pole-electric"
-] = "fluidic-big-pole"
+    "fluidic-big-electric-pole-electric"
+] = "fluidic-big-electric-pole"
 
 
 -------------------------
@@ -65,16 +65,30 @@ function poles.on_entity_created(event)
     end
     if not entity then return end
         
+    -- First check if a temporary "-place" entity was placed
+    if string.match(entity.name, "-place") then
+        -- Replace it with the correct entity
+        local replaced = entity.surface.create_entity{
+            name = string.sub(entity.name, 1, -7),
+            position = {x = entity.position.x, y = entity.position.y},
+            direction = entity.direction,                
+            force = entity.force,
+            raise_built = false
+        }
+        entity.destroy{raise_destroy=false}
+        entity = replaced   -- Overwrite the value as if nothing happend
+    end
+
+    -- Now create whatever is needed to assist this entity
     if lu_on_created[entity.name] then
 
-
         -- Place the electronic entity on the fluid entity
+        -- But only if it doesn't exist already
         if not fluidic_utils.entity_exists_at(
             lu_on_created[entity.name], 
             entity.surface, 
             entity.position
         ) then
-            -- But only if it doesn't exist already
             local pole = entity.surface.create_entity{
                 name = lu_on_created[entity.name],
                 position = {x = entity.position.x, y = entity.position.y},
@@ -131,6 +145,7 @@ function disconnect_entity_and_neighbours(entity)
 end
 
 function poles.on_entity_removed(event)
+    -- This simply destroys the fluid entity undeneath the electric entity
     if event.entity and event.entity.valid then
       local surface = event.entity.surface
       if lu_on_destroyed[event.entity.name] then
