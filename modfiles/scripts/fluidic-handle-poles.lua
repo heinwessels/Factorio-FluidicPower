@@ -1,4 +1,5 @@
 fluidic_utils = require("scripts.fluidic-utils")
+util = require("util")
 
 poles = {}
 
@@ -79,6 +80,26 @@ function poles.on_entity_created(event)
         entity = replaced   -- Overwrite the value as if nothing happend
     end
 
+    -- If it's the wrong ghost, replace it with the correct one
+    if entity.name == "entity-ghost" then
+        -- Okay, so it's a ghost. Is it one of ours that's wrong?
+        if string.sub(entity.ghost_name, -8, -1) == "electric" then
+            -- Yes. We need to replace it with the correct one
+            
+            -- TODO Better way to get surface
+            local new_ghost = game.surfaces[1].create_entity{
+                name = "entity-ghost",
+                inner_name = string.sub(entity.ghost_name, 1, -10).."-place",  -- Remove '-electric' keyword,
+                position = entity.position,
+                force = entity.force,
+                time_to_live = entity.time_to_live,
+                direction = entity.direction
+            }
+            entity.destroy()    -- Kill the wrong one
+            entity = new_ghost  -- Hehe
+        end
+    end
+
     -- Now create whatever is needed to assist this entity
     if lu_on_created[entity.name] then
 
@@ -149,10 +170,21 @@ function poles.on_entity_removed(event)
     if event.entity and event.entity.valid then
       local surface = event.entity.surface
       if lu_on_destroyed[event.entity.name] then
+        -- This entity was one of our special entities.
+
+        -- -- Make sure the correct item is mined
+        -- if fluidic_utils.table_has_attribute(event, "buffer") then
+        --     event.buffer.clear()
+        --     event.buffer.insert{name=lu_on_destroyed[event.entity.name]}
+        -- end
+
+        -- Destroy the fluidic component beneath
         local e = event.entity.surface.find_entity(lu_on_destroyed[event.entity.name], event.entity.position)
         if e then e.destroy{raise_destroy=false} end              
       end
     end
+
+    -- Was this entity mined by a
 end
 
 return poles

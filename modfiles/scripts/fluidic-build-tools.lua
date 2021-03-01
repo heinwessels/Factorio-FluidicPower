@@ -169,7 +169,7 @@ script.on_event(defines.events.on_tick, function (event)
             -- It's a new target!            
             reset_rendering()   -- Make sure we don't have any left-over overlays
 
-            if string.sub(entity.name, 1, -9) == "electric" then
+            if string.sub(entity.name, -8, -1) == "electric" then
                 -- At the moment power pole is selected, not fluid entity.
                 -- Get the fluid entity
                 local e = entity.surface.find_entity(
@@ -271,17 +271,15 @@ function get_fluid_neighbours(entity)
     local neighbours = {}
 
     -- Is this a valid entity with neighbours we want?
-    if not fluidic_utils.entity_has_attribute(entity, "neighbours") then return neighbours end
+    if not fluidic_utils.table_has_attribute(entity, "neighbours") then return neighbours end
     if #entity.fluidbox == 0 then return neighbours end
     if entity.neighbours then return neighbours end
 
     -- It does. Look at it's neighbours
     for _, neighbours_section in ipairs(entity.neighbours) do
         if next(neighbours_section) == nil then break end    -- Table is empty
-        for _, neighbour in ipairs(neighbours_section) do
-            
+        for _, neighbour in ipairs(neighbours_section) do            
             table.insert(neighbours, neighbour)
-
         end 
     end
     return neighbours

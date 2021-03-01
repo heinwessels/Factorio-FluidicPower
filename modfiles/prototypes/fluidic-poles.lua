@@ -1,5 +1,6 @@
 util = require("util")
 fluidic_utils = require("scripts.fluidic-utils")
+require('__debugadapter__/debugadapter.lua')
 
 -- Here I create small, medium, big and substation pole variants
 
@@ -97,8 +98,6 @@ function create_in_variant(base_name)
                 secondary_draw_orders = { north = -1 },
               },
             },  -- Default 1x1 sized fluidbox. Won't work for substation
-
-            -- TODO Remove these graphics
             animation = data.raw["electric-pole"][base_name].pictures,
         }
     }})
@@ -122,7 +121,7 @@ function create_in_variant(base_name)
         data.raw["electric-pole"][base_name],
         {
             name = name_electric,
-            minable = {result = name_electric},
+            minable = {result = name},
             maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
         }
     }})
@@ -130,8 +129,8 @@ function create_in_variant(base_name)
     -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
     if not settings.startup["fluidic-expose-fluid-components"].value then
         -- Default fluid is not exposed
-        data.raw["assembling-machine"][name].selection_box = {{0,0}, {0,0}}
-        data.raw["assembling-machine"][name].drawing_box = {{0,0}, {0,0}}
+        data.raw["assembling-machine"][name].selection_box = {{0,0}, {0,1}}
+        data.raw["assembling-machine"][name].drawing_box = {{0,0}, {0,1}}
     else
         -- Debug option
         data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
@@ -432,52 +431,61 @@ data.raw["assembling-machine"]["fluidic-medium-electric-pole-in"].energy_usage =
 data.raw["assembling-machine"]["fluidic-medium-electric-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-medium"
 
 -- Create substations
-create_in_variant("substation", "fluidic-substation")
-create_out_variant("substation", "fluidic-substation")
+create_in_variant("substation")
+create_out_variant("substation")
 data.raw["generator"]["fluidic-substation-out"].fluid_usage_per_tick = 67 -- P = 40MW
 data.raw["assembling-machine"]["fluidic-substation-in"].energy_usage = "40MW"
 data.raw["assembling-machine"]["fluidic-substation-in"].fixed_recipe = "fluidic-10-kilojoules-generate-substation"
-data.raw["generator"]["fluidic-substation-out"].fluid_box = 
-{
-    base_area = 1,        
-    pipe_connections =
+for _,substation in pairs{    
+    "fluidic-substation-out","fluidic-substation-out-place"
+} do 
+    __DebugAdapter.print("DOING THE THING: ".. substation)
+    data.raw["generator"][substation].fluid_box = 
     {
-        {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 10},
-        {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 10},
-        {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = 10},
-        {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = 10},
-
-        -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
-        {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 10},
-        {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 10},
-        {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 10},
-        {type = "input-output", position = {0.5, -1.5}, max_underground_distance = 10},
-    },
-    production_type = "input-output",        
-    minimum_temperature = 10,
-    filter = "fluidic-10-kilojoules"
-}
-data.raw["assembling-machine"]["fluidic-substation-in"].fluid_boxes = { 
-    {
-        production_type = "output",        
-        base_area = 1,
-        base_level = 1,
-        pipe_connections = {
-            {type = "output", position = {-1.5, 0.5}, max_underground_distance = 10},
-            {type = "output", position = {1.5, 0.5}, max_underground_distance = 10},
-            {type = "output", position = {-0.5, 1.5}, max_underground_distance = 10},
-            {type = "output", position = {-0.5, -1.5}, max_underground_distance = 10},
+        base_area = 1,        
+        pipe_connections =
+        {
+            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 10},
+            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 10},
+            {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = 10},
+            {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = 10},
 
             -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
-            {type = "output", position = {-1.5, -0.5}, max_underground_distance = 10},
-            {type = "output", position = {1.5, -0.5}, max_underground_distance = 10},
-            {type = "output", position = {0.5, 1.5}, max_underground_distance = 10},
-            {type = "output", position = {0.5, -1.5}, max_underground_distance = 10},
+            {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 10},
+            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 10},
+            {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 10},
+            {type = "input-output", position = {0.5, -1.5}, max_underground_distance = 10},
         },
-        secondary_draw_orders = { north = -1 },
+        production_type = "input-output",        
+        minimum_temperature = 10,
         filter = "fluidic-10-kilojoules"
-    },
-}
+    }
+end
+for _,substation in pairs{    
+    "fluidic-substation-in", "fluidic-substation-in-place",
+} do
+    data.raw["assembling-machine"][substation].fluid_boxes = { 
+        {
+            production_type = "output",        
+            base_area = 1,
+            base_level = 1,
+            pipe_connections = {
+                {type = "output", position = {-1.5, 0.5}, max_underground_distance = 10},
+                {type = "output", position = {1.5, 0.5}, max_underground_distance = 10},
+                {type = "output", position = {-0.5, 1.5}, max_underground_distance = 10},
+                {type = "output", position = {-0.5, -1.5}, max_underground_distance = 10},
+
+                -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
+                {type = "output", position = {-1.5, -0.5}, max_underground_distance = 10},
+                {type = "output", position = {1.5, -0.5}, max_underground_distance = 10},
+                {type = "output", position = {0.5, 1.5}, max_underground_distance = 10},
+                {type = "output", position = {0.5, -1.5}, max_underground_distance = 10},
+            },
+            secondary_draw_orders = { north = -1 },
+            filter = "fluidic-10-kilojoules"
+        },
+    }
+end
 
 -- Create big pole
 create_transmit_variant("big-electric-pole")
