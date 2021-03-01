@@ -1,23 +1,14 @@
--- Create items
+-- Create item
 data:extend({
     util.merge{
         data.raw["item"]["substation"],
         {
-            name = "fluidic-transformer-step-up",
-            place_result = "fluidic-transformer-step-up",
-            icon = "__FluidicPower__/graphics/icons/transformer-step-up-icon.png",
+            name = "fluidic-transformer",
+            place_result = "fluidic-transformer",
+            icon = "__FluidicPower__/graphics/icons/transformer-icon.png",
             icon_size = 32,
         }
-    },
-    util.merge{
-        data.raw["item"]["substation"],
-        {
-            name = "fluidic-transformer-step-down",
-            place_result = "fluidic-transformer-step-down",
-            icon = "__FluidicPower__/graphics/icons/transformer-step-down-icon.png",
-            icon_size = 32,
-        }
-    },
+    },    
 })
 
 -- Create some recipes
@@ -28,7 +19,7 @@ data:extend
     ------------------------
     {
         type = "recipe",
-        name = "fluidic-transformer-step-up",
+        name = "fluidic-transformer",
         enabled = false,
         ingredients =
         {
@@ -36,41 +27,28 @@ data:extend
             {"advanced-circuit", 5},
             {"copper-cable", 20}
         },
-        result = "fluidic-transformer-step-up"
-    },
-    {
-        type = "recipe",
-        name = "fluidic-transformer-step-down",
-        enabled = false,
-        ingredients =
-        {
-            {"steel-plate", 10},
-            {"advanced-circuit", 5},
-            {"copper-cable", 20}
-        },
-        result = "fluidic-transformer-step-down"
+        result = "fluidic-transformer"
     },
 
     ------------------------
-    -- STEP UP POWER RECIPES
+    -- TRANSFORMER RECIPES
     ------------------------
     {
         type = "recipe-category",
-        name = "fluidic-transformers-step-up"
+        name = "fluidic-transformers"
     },
     {
         type = "recipe",
         name = "fluidic-10-kilo-to-megajoules",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-up-icon.png",
-        category = "fluidic-transformers-step-up",
-        subgroup = "energy-pipe-distribution",
-        order = "a[kilojoules]-a[kilojoules]",        
+        category = "fluidic-transformers",
+        order = "a[up]-a[megajoules]",
         ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         scale_entity_info_icon = true,
-        hidden = true,
+        -- hidden = true,
         -- hide_from_stats = true, -- So that you can see how much you transform
     },
     {
@@ -78,37 +56,27 @@ data:extend
         name = "fluidic-mega-to-gigajoules",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-3-up-icon.png",
-        category = "fluidic-transformers-step-up",
-        subgroup = "energy-pipe-distribution",
-        order = "a[kilojoules]-a[kilojoules]",        
+        order = "a[up]-a[gigajoules]",
+        category = "fluidic-transformers",
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-gigajoules", amount=1}},
         scale_entity_info_icon = true,
-        hidden = true,
+        -- hidden = true,
         -- hide_from_stats = true, -- So that you can see how much you transform
-    },
-
-    ------------------------
-    -- STEP DOWN POWER RECIPES
-    ------------------------
-    {
-        type = "recipe-category",
-        name = "fluidic-transformers-step-down"
-    },  
+    },    
     {
         type = "recipe",
         name = "fluidic-10-mega-to-10-kilojoules",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-1-down-icon.png",
-        category = "fluidic-transformers-step-down",
-        subgroup = "energy-pipe-distribution",
-        order = "a[kilojoules]-a[kilojoules]",        
+        order = "a[down]-a[kilojoules]",
+        category = "fluidic-transformers",
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         scale_entity_info_icon = true,
-        hidden = true,
+        -- hidden = true,
         hide_from_stats = true,
     },
     {
@@ -116,14 +84,13 @@ data:extend
         name = "fluidic-giga-to-10-megajoule",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-down-icon.png",
-        category = "fluidic-transformers-step-down",
-        subgroup = "energy-pipe-distribution",
-        order = "a[kilojoules]-a[kilojoules]",        
+        category = "fluidic-transformers",
+        order = "a[down]-a[megajoules]",
         ingredients ={{type="fluid", name="fluidic-gigajoules", amount=1}},
         energy_required = 0.1,
         results={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         scale_entity_info_icon = true,
-        hidden = true,
+        -- hidden = true,
         hide_from_stats = true,
     }
 })
@@ -134,18 +101,16 @@ data:extend({util.merge{
     -- a furnace with fluid inputs, using old beacon graphics. Don't judge me.
     data.raw["electric-pole"]["substation"],
     {
-        type = "furnace",
-        name = "fluidic-transformer-step-up",
+        type = "assembling-machine",
+        name = "fluidic-transformer",
         mode = "output-to-separate-pipe",
-        crafting_categories = {"fluidic-transformers-step-up"},
-        minable = {mining_time = 1, result = "fluidic-transformer-step-up"},
+        crafting_categories = {"fluidic-transformers"},
+        minable = {result = "fluidic-transformer"},
         energy_usage = "10kW",
         allowed_effects = {},
         energy_source = nil,
         module_specification = {module_slots=0},
-        crafting_speed = 1,
-        source_inventory_size = 1,
-        result_inventory_size = 0,
+        crafting_speed = 1,        
         energy_source = {
             type = "void",        
             drain = "0kW"    
@@ -211,13 +176,13 @@ data:extend({util.merge{
     }
 }})
 
-data:extend({util.merge{
-    data.raw["furnace"]["fluidic-transformer-step-up"],
-    {
-        name = "fluidic-transformer-step-down",
-        crafting_categories = {"fluidic-transformers-step-down"},
-        minable = {result = "fluidic-transformer-step-down"},        
-    }
-}})
-data.raw["furnace"]["fluidic-transformer-step-down"].fluid_boxes[1].base_area = 1
-data.raw["furnace"]["fluidic-transformer-step-down"].fluid_boxes[2].base_area = 10
+-- data:extend({util.merge{
+--     data.raw["furnace"]["fluidic-transformer-step-up"],
+--     {
+--         name = "fluidic-transformer-step-down",
+--         crafting_categories = {"fluidic-transformers-step-down"},
+--         minable = {result = "fluidic-transformer-step-down"},        
+--     }
+-- }})
+-- data.raw["furnace"]["fluidic-transformer-step-down"].fluid_boxes[1].base_area = 1
+-- data.raw["furnace"]["fluidic-transformer-step-down"].fluid_boxes[2].base_area = 10
