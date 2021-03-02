@@ -101,4 +101,6 @@ data:extend({
 })
 data.raw["storage-tank"]["fluidic-energy-sensor"].pictures.fluid_background.width = 14
 data.raw["storage-tank"]["fluidic-energy-sensor"].pictures.window_background.scale = 0.75
+data.raw["storage-tank"]["fluidic-energy-sensor"].pictures.window_background.hr_version.width = 20  -- Hacking to not overlap
+data.raw["storage-tank"]["fluidic-energy-sensor"].pictures.window_background.hr_version.height = 20  -- Hacking to not overlap
 data.raw["storage-tank"]["fluidic-energy-sensor"].pictures.window_background.hr_version.scale = 0.75

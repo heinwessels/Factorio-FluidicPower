@@ -212,8 +212,8 @@ function show_fluidic_entity_connections(
             local should_draw_connection = true
 
             -- If both of these are <in> entities then this connection
-            -- isn't valid. Check if it's an assembling machine.
-            if entity.type == 'assembling-machine' and neighbour.type == 'assembling-machine' then
+            -- isn't valid. Check for keyword
+            if string.sub(entity.name, -2, -1)=='in' and string.sub(neighbour.name, -2, -1)=='in' then
                 should_draw_connection = false
             end
 
@@ -248,6 +248,7 @@ function draw_connection(entity, here, there)
         to = there,
         surface = entity.surface,
         players = players,
+        only_in_alt_mode = true
     }
     for _, point in ipairs{here, there} do
         rendering.draw_circle{
@@ -257,6 +258,7 @@ function draw_connection(entity, here, there)
             target = point,
             surface = entity.surface,
             players = players,
+            only_in_alt_mode = true
         }
     end
 end
