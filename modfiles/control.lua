@@ -25,7 +25,7 @@ script.on_event(defines.events.script_raised_destroy, removal_event)
 
 function on_cursor_change (event)
     -- This is to fix the pipette tool picking up the non-electric entity
-    -- build_tools.on_cursor_change(event)    
+    build_tools.on_cursor_change(event)    
 end
 script.on_event(defines.events.on_player_cursor_stack_changed, on_cursor_change)
 

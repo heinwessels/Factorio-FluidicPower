@@ -1,6 +1,5 @@
 util = require("util")
 fluidic_utils = require("scripts.fluidic-utils")
-require('__debugadapter__/debugadapter.lua')
 
 -- Here I create small, medium, big and substation pole variants
 
@@ -46,6 +45,7 @@ function create_in_variant(base_name)
             {
                 name = name_electric,
                 place_result = name_electric,
+                icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png"
             }
         },
     })
@@ -247,7 +247,7 @@ function create_out_variant(base_name, name)
         data.raw["electric-pole"][base_name],
         {
             name = name_electric,
-            minable = {result = name_electric},
+            minable = {result = name},
             maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
         }
     }})
@@ -387,9 +387,7 @@ function create_transmit_variant(base_name, name)
         data.raw["electric-pole"][base_name],
         {
             name = name_electric,
-            minable = {result = name_electric},
-            maximum_wire_distance = wire_reach+2,  -- +2 to include for size of pole
-            supply_area_distance = 0
+            minable = {result = name},
         }
     }})    
 
@@ -418,53 +416,34 @@ end
 
 -- Create small poles
 create_in_variant("small-electric-pole")
+for _, machine in pairs{"fluidic-small-electric-pole-in", "fluidic-small-electric-pole-in-place"} do
+    data.raw["assembling-machine"][machine].fixed_recipe = "fluidic-10-kilojoules-generate-small"
+    data.raw["assembling-machine"][machine].energy_usage = "5MW"
+end
 create_out_variant("small-electric-pole")
-data.raw["generator"]["fluidic-small-electric-pole-out"].fluid_usage_per_tick = 9 -- P = 5MW
-data.raw["assembling-machine"]["fluidic-small-electric-pole-in"].energy_usage = "5MW"
-data.raw["assembling-machine"]["fluidic-small-electric-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-small"
+for _, generator in pairs{"fluidic-small-electric-pole-out", "fluidic-small-electric-pole-out-place"} do
+    data.raw["generator"][generator].fluid_usage_per_tick = 8.333333 -- P = 5MW
+end
+
 
 -- Create Medium poles
 create_in_variant("medium-electric-pole")
+for _, machine in pairs{"fluidic-medium-electric-pole-in", "fluidic-medium-electric-pole-in-place"} do
+    data.raw["assembling-machine"][machine].fixed_recipe = "fluidic-10-kilojoules-generate-medium"
+    data.raw["assembling-machine"][machine].energy_usage = "30MW"
+end
 create_out_variant("medium-electric-pole")
-data.raw["generator"]["fluidic-medium-electric-pole-out"].fluid_usage_per_tick = 50 -- P = 30MW
-data.raw["assembling-machine"]["fluidic-medium-electric-pole-in"].energy_usage = "30MW"
-data.raw["assembling-machine"]["fluidic-medium-electric-pole-in"].fixed_recipe = "fluidic-10-kilojoules-generate-medium"
+for _, generator in pairs{"fluidic-medium-electric-pole-out", "fluidic-medium-electric-pole-out-place"} do
+    data.raw["generator"][generator].fluid_usage_per_tick = 50 -- P = 30MW
+end
 
 -- Create substations
 create_in_variant("substation")
 create_out_variant("substation")
-data.raw["generator"]["fluidic-substation-out"].fluid_usage_per_tick = 67 -- P = 40MW
-data.raw["assembling-machine"]["fluidic-substation-in"].energy_usage = "40MW"
-data.raw["assembling-machine"]["fluidic-substation-in"].fixed_recipe = "fluidic-10-kilojoules-generate-substation"
-for _,substation in pairs{    
-    "fluidic-substation-out","fluidic-substation-out-place"
-} do 
-    __DebugAdapter.print("DOING THE THING: ".. substation)
-    data.raw["generator"][substation].fluid_box = 
-    {
-        base_area = 1,        
-        pipe_connections =
-        {
-            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 10},
-            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 10},
-            {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = 10},
-            {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = 10},
-
-            -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
-            {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 10},
-            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 10},
-            {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 10},
-            {type = "input-output", position = {0.5, -1.5}, max_underground_distance = 10},
-        },
-        production_type = "input-output",        
-        minimum_temperature = 10,
-        filter = "fluidic-10-kilojoules"
-    }
-end
-for _,substation in pairs{    
-    "fluidic-substation-in", "fluidic-substation-in-place",
-} do
-    data.raw["assembling-machine"][substation].fluid_boxes = { 
+for _, machine in pairs{"fluidic-substation-in", "fluidic-substation-in-place"} do
+    data.raw["assembling-machine"][machine].fixed_recipe = "fluidic-10-kilojoules-generate-substation"
+    data.raw["assembling-machine"][machine].energy_usage = "40MW"
+    data.raw["assembling-machine"][machine].fluid_boxes = { 
         {
             production_type = "output",        
             base_area = 1,
@@ -486,9 +465,35 @@ for _,substation in pairs{
         },
     }
 end
+for _, generator in pairs{"fluidic-substation-out", "fluidic-substation-out-place"} do
+    data.raw["generator"][generator].fluid_usage_per_tick = 66.66666666 -- P = 40MW
+    data.raw["generator"][generator].fluid_box = 
+    {
+        base_area = 1,        
+        pipe_connections =
+        {
+            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 10},
+            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 10},
+            {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = 10},
+            {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = 10},
+
+            -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
+            {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 10},
+            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 10},
+            {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 10},
+            {type = "input-output", position = {0.5, -1.5}, max_underground_distance = 10},
+        },
+        production_type = "input-output",        
+        minimum_temperature = 10,
+        filter = "fluidic-10-kilojoules"
+    }
+end
+
 
 -- Create big pole
 create_transmit_variant("big-electric-pole")
+data.raw["electric-pole"]["fluidic-big-electric-pole-electric"].maximum_wire_distance =
+    data.raw["pipe"]["fluidic-big-electric-pole"].fluid_box.pipe_connections[1].max_underground_distance + 2
 
 
 -- Finally hide the vanilla recipes

@@ -62,7 +62,7 @@ data:extend({
                         shift = util.by_pixel(0, -0.5),
                         hr_version =
                         {
-                            filename = "__FluidicPower__/graphics/entities/energy-sensor/energy-sensor.png",
+                            filename = "__FluidicPower__/graphics/entities/energy-sensor/hr-energy-sensor.png",
                             priority = "extra-high",
                             width = 66,
                             height = 76,
