@@ -67,6 +67,7 @@ function create_in_variant(base_name)
             type = "assembling-machine",
             name = name_place,
             minable = {result = name},  -- It will return the normal item
+            icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
             next_upgrade = nil,
             crafting_speed = 1,
             energy_usage = "1W",   -- Default maximum power input
@@ -76,7 +77,7 @@ function create_in_variant(base_name)
             energy_source = {
                 type = "electric",
                 input_priority = "secondary",
-                usage_priority = "tertiary",
+                usage_priority = "secondary-input",
                 drain = "0kW"  
             },
             maximum_wire_distance = 0,
@@ -216,7 +217,12 @@ function create_out_variant(base_name, name)
             energy_source =
             {
                 type = "electric",
-                usage_priority = "tertiary"
+                
+                -- Ideally we want the priority to be secondary, so 
+                -- that you can use the Electricity Energy Source
+                -- as a void, but it results in bad feedback when
+                -- a source pole is placed over a normal pole.
+                usage_priority = "tertiary" 
             },
             vertical_animation = data.raw["electric-pole"][base_name].pictures,
             horizontal_animation = data.raw["electric-pole"][base_name].pictures,
@@ -388,6 +394,7 @@ function create_transmit_variant(base_name, name)
         {
             name = name_electric,
             minable = {result = name},
+            supply_area_distance = 0
         }
     }})    
 
@@ -440,6 +447,7 @@ end
 -- Create substations
 create_in_variant("substation")
 create_out_variant("substation")
+local new_wire_length = 2 * data.raw["assembling-machine"]["fluidic-substation-in-place"].supply_area_distance
 for _, machine in pairs{"fluidic-substation-in", "fluidic-substation-in-place"} do
     data.raw["assembling-machine"][machine].fixed_recipe = "fluidic-10-kilojoules-generate-substation"
     data.raw["assembling-machine"][machine].energy_usage = "40MW"
@@ -449,16 +457,16 @@ for _, machine in pairs{"fluidic-substation-in", "fluidic-substation-in-place"} 
             base_area = 1,
             base_level = 1,
             pipe_connections = {
-                {type = "output", position = {-1.5, 0.5}, max_underground_distance = 10},
-                {type = "output", position = {1.5, 0.5}, max_underground_distance = 10},
-                {type = "output", position = {-0.5, 1.5}, max_underground_distance = 10},
-                {type = "output", position = {-0.5, -1.5}, max_underground_distance = 10},
+                {type = "output", position = {-1.5, 0.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = {1.5, 0.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = {-0.5, 1.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = {-0.5, -1.5}, max_underground_distance = new_wire_length},
 
                 -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
-                {type = "output", position = {-1.5, -0.5}, max_underground_distance = 10},
-                {type = "output", position = {1.5, -0.5}, max_underground_distance = 10},
-                {type = "output", position = {0.5, 1.5}, max_underground_distance = 10},
-                {type = "output", position = {0.5, -1.5}, max_underground_distance = 10},
+                {type = "output", position = {-1.5, -0.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = {1.5, -0.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = {0.5, 1.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = {0.5, -1.5}, max_underground_distance = new_wire_length},
             },
             secondary_draw_orders = { north = -1 },
             filter = "fluidic-10-kilojoules"
@@ -472,16 +480,16 @@ for _, generator in pairs{"fluidic-substation-out", "fluidic-substation-out-plac
         base_area = 1,        
         pipe_connections =
         {
-            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 10},
-            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 10},
-            {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = 10},
-            {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = 10},
+            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = new_wire_length},
 
             -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
-            {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 10},
-            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 10},
-            {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 10},
-            {type = "input-output", position = {0.5, -1.5}, max_underground_distance = 10},
+            {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = {0.5, 1.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = {0.5, -1.5}, max_underground_distance = new_wire_length},
         },
         production_type = "input-output",        
         minimum_temperature = 10,

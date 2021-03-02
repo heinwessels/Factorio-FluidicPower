@@ -45,7 +45,7 @@ data:extend
         category = "fluidic-transformers",
         order = "a[up]-a[megajoules]",
         ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
-        energy_required = 0.1,
+        energy_required = 0.2,
         results={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         scale_entity_info_icon = true,
         -- hidden = true,
@@ -59,7 +59,7 @@ data:extend
         order = "a[up]-a[gigajoules]",
         category = "fluidic-transformers",
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=100}},
-        energy_required = 0.1,
+        energy_required = 0.2,
         results={{type="fluid", name="fluidic-gigajoules", amount=1}},
         scale_entity_info_icon = true,
         -- hidden = true,
@@ -73,7 +73,7 @@ data:extend
         order = "a[down]-a[kilojoules]",
         category = "fluidic-transformers",
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=1}},
-        energy_required = 0.1,
+        energy_required = 0.2,
         results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         scale_entity_info_icon = true,
         -- hidden = true,
@@ -87,7 +87,7 @@ data:extend
         category = "fluidic-transformers",
         order = "a[down]-a[megajoules]",
         ingredients ={{type="fluid", name="fluidic-gigajoules", amount=1}},
-        energy_required = 0.1,
+        energy_required = 0.2,
         results={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         scale_entity_info_icon = true,
         -- hidden = true,
@@ -123,8 +123,13 @@ data:extend({util.merge{
                 base_level = -1,
                 height = 2,
                 pipe_connections = {
-                    {type = "input", position = {-1.5, 0.5}, max_underground_distance = 10},        
+                    {type = "input", position = {-1.5, 0.5}, max_underground_distance = 10},
                     {type = "input", position = {-1.5, -0.5}, max_underground_distance = 10},
+                    
+                    {type = "input", position = {0.5, -1.5}, max_underground_distance = 10},
+                    {type = "input", position = {-0.5, -1.5}, max_underground_distance = 10},
+                    {type = "input", position = {0.5, 1.5}, max_underground_distance = 10},
+                    {type = "input", position = {-0.5, 1.5}, max_underground_distance = 10},
                 },        
             },
             {
@@ -175,14 +180,3 @@ data:extend({util.merge{
         },
     }
 }})
-
--- data:extend({util.merge{
---     data.raw["furnace"]["fluidic-transformer-step-up"],
---     {
---         name = "fluidic-transformer-step-down",
---         crafting_categories = {"fluidic-transformers-step-down"},
---         minable = {result = "fluidic-transformer-step-down"},        
---     }
--- }})
--- data.raw["furnace"]["fluidic-transformer-step-down"].fluid_boxes[1].base_area = 1
--- data.raw["furnace"]["fluidic-transformer-step-down"].fluid_boxes[2].base_area = 10
