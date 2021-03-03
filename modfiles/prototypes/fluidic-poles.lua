@@ -10,6 +10,10 @@ function calculate_wire_reach(original)
     return math.floor(original * 1.4)
 end
 
+------------------------------------------------------------------------------------------------------
+-- IN VARIANT (SOURCE POLE)
+------------------------------------------------------------------------------------------------------
+
 function create_in_variant(base_name)
     -- This will create the item, recipe, and entity
     -- in the fluidic IN variant with corresponding 
@@ -139,6 +143,10 @@ function create_in_variant(base_name)
     end
 end
 
+------------------------------------------------------------------------------------------------------
+-- OUT VARIANT (NORMAL ONE)
+------------------------------------------------------------------------------------------------------
+
 function create_out_variant(base_name, name)
     -- This will create the item, recipe, and entity
     -- in the fluidic OUT variant with corresponding 
@@ -218,11 +226,10 @@ function create_out_variant(base_name, name)
             {
                 type = "electric",
                 
-                -- Ideally we want the priority to be secondary, so 
-                -- that you can use the Electricity Energy Source
-                -- as a void, but it results in bad feedback when
-                -- a source pole is placed over a normal pole.
-                usage_priority = "tertiary" 
+                -- This is secondary to work with the Electric Energy Interface (?)
+                -- but it creates a feedback loop when placed right next to a source
+                -- pole. This will force user to not overlap two poles at power generation.
+                usage_priority = "secondary-output" 
             },
             vertical_animation = data.raw["electric-pole"][base_name].pictures,
             horizontal_animation = data.raw["electric-pole"][base_name].pictures,
@@ -269,6 +276,10 @@ function create_out_variant(base_name, name)
         data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
     end
 end
+
+------------------------------------------------------------------------------------------------------
+-- TRANSMIT VARIANT
+------------------------------------------------------------------------------------------------------
 
 function create_transmit_variant(base_name, name)
     -- This will create the item, recipe, and entity

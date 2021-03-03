@@ -123,13 +123,13 @@ data:extend({util.merge{
                 base_level = -1,
                 height = 2,
                 pipe_connections = {
-                    {type = "input", position = {-1.5, 0.5}, max_underground_distance = 1},
-                    {type = "input", position = {-1.5, -0.5}, max_underground_distance = 1},
+                    {type = "input", position = {-1.5, 0.5}, max_underground_distance = 3},
+                    {type = "input", position = {-1.5, -0.5}, max_underground_distance = 3},
                     
-                    {type = "input", position = {0.5, -1.5}, max_underground_distance = 1},
-                    {type = "input", position = {-0.5, -1.5}, max_underground_distance = 1},
-                    {type = "input", position = {0.5, 1.5}, max_underground_distance = 1},
-                    {type = "input", position = {-0.5, 1.5}, max_underground_distance = 1},
+                    {type = "input", position = {0.5, -1.5}, max_underground_distance = 3},
+                    {type = "input", position = {-0.5, -1.5}, max_underground_distance = 3},
+                    {type = "input", position = {0.5, 1.5}, max_underground_distance = 3},
+                    {type = "input", position = {-0.5, 1.5}, max_underground_distance = 3},
                 },        
             },
             {
