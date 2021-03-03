@@ -24,6 +24,6 @@ data:extend({
         name = "fluidic-expose-fluid-components",
         setting_type = "startup",
         default_value = false,
-        -- hidden = true
+        hidden = true
     },
 })

@@ -2,8 +2,11 @@ build_tools = require("scripts.fluidic-build-tools")
 poles = require("scripts.fluidic-handle-poles")
 
 function creation_event (event)
-    poles.on_entity_created(event)
     build_tools.on_entity_created(event)
+
+    -- This need to happen after build tools so that
+    -- build limitations can kick in
+    poles.on_entity_created(event)
 end
 
 script.on_event(defines.events.on_built_entity, creation_event)
@@ -14,22 +17,13 @@ script.on_event(defines.events.on_robot_built_entity, creation_event)
 
 function removal_event (event)
     poles.on_entity_removed(event)
-    build_tools.on_entity_removed(event)    
+    build_tools.on_entity_removed(event)
 end
 
 script.on_event(defines.events.on_player_mined_entity, removal_event)
 script.on_event(defines.events.on_robot_mined_entity, removal_event)
 script.on_event(defines.events.on_entity_died, removal_event)
 script.on_event(defines.events.script_raised_destroy, removal_event)
-
--- TODO Handle blueprints correctly. Need to remove electric poles
--- Currently when blueprinting it picks up both items
-
-
--- TODO Need an easy visualisation to see what power unit is in the current power pole. 
---  Maybe a little indicator similar to bottleneck. It shines through the bottom!
-
-
 
 -- Nice command ingame to see which entities are underneath the pointer
 -- /c for _,e in pairs(game.player.surface.find_entities({game.player.selected.position, game.player.selected.position})) do game.print(e.name) end

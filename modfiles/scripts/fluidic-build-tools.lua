@@ -20,7 +20,7 @@ function build_tools.on_entity_created(event)
     
     -- Something has been built. Make sure there are no unwanted connections
     -- TODO check big poles aren't connected to little ones
-    for _, neighbour in ipairs(get_fluid_neighbours(entity)) do
+    for _, neighbour in pairs(get_fluid_neighbours(entity)) do
         if is_isvalid_fluid_connection(entity, neighbour) then
             -- Invalid connection!
             -- User is trying to connect a normal fluid to
@@ -230,10 +230,10 @@ function get_fluid_neighbours(entity)
     -- Is this a valid entity with neighbours we want?
     if not fluidic_utils.table_has_attribute(entity, "neighbours") then return neighbours end
     if #entity.fluidbox == 0 then return neighbours end
-    if entity.neighbours then return neighbours end
+    if not entity.neighbours then return neighbours end
 
     -- It does. Look at it's neighbours
-    for _, neighbours_section in ipairs(entity.neighbours) do
+    for _, neighbours_section in pairs(entity.neighbours) do
         if next(neighbours_section) == nil then break end    -- Table is empty
         for _, neighbour in ipairs(neighbours_section) do            
             table.insert(neighbours, neighbour)
