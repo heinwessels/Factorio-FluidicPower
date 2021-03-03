@@ -43,41 +43,38 @@ data:extend
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-up-icon.png",
         category = "fluidic-transformers",
-        order = "a[up]-a[megajoules]",
+        order = "a[a]-a[a]",
         ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         energy_required = 0.2,
         results={{type="fluid", name="fluidic-10-megajoules", amount=1}},
-        scale_entity_info_icon = true,
-        -- hidden = true,
-        -- hide_from_stats = true, -- So that you can see how much you transform
+        scale_entity_info_icon = true,        
+        hide_from_stats = true, -- Hide stats to not influence production/consumption stats
     },
     {
         type = "recipe",
         name = "fluidic-mega-to-gigajoules",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-3-up-icon.png",
-        order = "a[up]-a[gigajoules]",
+        order = "a[c]-a[gigajoules]",
         category = "fluidic-transformers",
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         energy_required = 0.2,
         results={{type="fluid", name="fluidic-gigajoules", amount=1}},
         scale_entity_info_icon = true,
-        -- hidden = true,
-        -- hide_from_stats = true, -- So that you can see how much you transform
+        hide_from_stats = true, -- Hide stats to not influence production/consumption stats
     },    
     {
         type = "recipe",
         name = "fluidic-10-mega-to-10-kilojoules",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-1-down-icon.png",
-        order = "a[down]-a[kilojoules]",
+        order = "a[b]-a[b]",
         category = "fluidic-transformers",
         ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         energy_required = 0.2,
         results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         scale_entity_info_icon = true,
-        -- hidden = true,
-        hide_from_stats = true,
+        hide_from_stats = true, -- Hide stats to not influence production/consumption stats
     },
     {
         type = "recipe",
@@ -85,13 +82,12 @@ data:extend
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-down-icon.png",
         category = "fluidic-transformers",
-        order = "a[down]-a[megajoules]",
+        order = "a[d]-a[megajoules]",
         ingredients ={{type="fluid", name="fluidic-gigajoules", amount=1}},
         energy_required = 0.2,
         results={{type="fluid", name="fluidic-10-megajoules", amount=100}},
         scale_entity_info_icon = true,
-        -- hidden = true,
-        hide_from_stats = true,
+        hide_from_stats = true, -- Hide stats to not influence production/consumption stats
     }
 })
 
