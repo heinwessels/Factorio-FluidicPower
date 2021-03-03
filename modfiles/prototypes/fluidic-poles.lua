@@ -44,14 +44,6 @@ function create_in_variant(base_name)
                 icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png"
             }
         },
-        util.merge{
-            data.raw["item"][base_name],
-            {
-                name = name_electric,
-                place_result = name_electric,
-                icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png"
-            }
-        },
     })
 
     -- RECIPE
@@ -127,6 +119,7 @@ function create_in_variant(base_name)
         {
             name = name_electric,
             minable = {result = name},
+            placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
             maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
         }
     }})
@@ -174,13 +167,6 @@ function create_out_variant(base_name, name)
             {
                 name = name, 
                 place_result = name_place,
-            }
-        },
-        util.merge{
-            data.raw["item"][base_name],
-            {
-                name = name_electric,
-                place_result = name_electric,
             }
         },
     })
@@ -261,6 +247,7 @@ function create_out_variant(base_name, name)
         {
             name = name_electric,
             minable = {result = name},
+            placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
             maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
         }
     }})
@@ -306,13 +293,6 @@ function create_transmit_variant(base_name, name)
             {
                 name = name, 
                 place_result = name_place,
-            }
-        },
-        util.merge{
-            data.raw["item"][base_name],
-            {
-                name = name_electric,
-                place_result = name_electric,
             }
         },
     })
@@ -405,7 +385,8 @@ function create_transmit_variant(base_name, name)
         {
             name = name_electric,
             minable = {result = name},
-            supply_area_distance = 0
+            placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
+            supply_area_distance = 0,
         }
     }})    
 
@@ -515,7 +496,7 @@ data.raw["electric-pole"]["fluidic-big-electric-pole-electric"].maximum_wire_dis
     data.raw["pipe"]["fluidic-big-electric-pole"].fluid_box.pipe_connections[1].max_underground_distance + 2
 
 
--- Finally hide the vanilla recipes
+-- Finally hide the vanilla poles
 for _, recipe in pairs{
     data.raw["recipe"]["small-electric-pole"],
     data.raw["recipe"]["medium-electric-pole"],
@@ -526,3 +507,11 @@ for _, recipe in pairs{
     recipe.hidden = true
 end
 
+for _, item in pairs{
+    data.raw["item"]["small-electric-pole"],
+    data.raw["item"]["medium-electric-pole"],
+    data.raw["item"]["big-electric-pole"],
+    data.raw["item"]["substation"]
+} do
+    item.flags = {"hidden"}
+end
