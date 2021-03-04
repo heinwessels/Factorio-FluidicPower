@@ -121,11 +121,6 @@ data:extend({util.merge{
                 pipe_connections = {
                     {type = "input", position = {-1.5, 0.5}, max_underground_distance = 3},
                     {type = "input", position = {-1.5, -0.5}, max_underground_distance = 3},
-                    
-                    {type = "input", position = {0.5, -1.5}, max_underground_distance = 3},
-                    {type = "input", position = {-0.5, -1.5}, max_underground_distance = 3},
-                    {type = "input", position = {0.5, 1.5}, max_underground_distance = 3},
-                    {type = "input", position = {-0.5, 1.5}, max_underground_distance = 3},
                 },        
             },
             {

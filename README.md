@@ -14,6 +14,9 @@ The gameplay is designed to be close to vanilla where possible, which means the 
 This mod simulates power as a fluid using the `Joules` unit. This means that if `1 Joule` of "power fluid" flows through your pole in `1 second` it's the equivalent transmitting `1 Watt`. This fluid will travel through your base in different concentrations (e.g. `1kJ` or `1MJ`) and hopefully power all your entities. These `concentrations` can be seen as the `voltage` that you're transmitting the power, and that's how it will be referred to, but more on that later.
 
 ### Two Types of Power poles 
+
+Power poles are similar to pipes. This means they need to be placed inline with one another, and not diagonally. When placing down a power pole you will see similar markings as when placing a underground pipe.
+
 There are `two` types of `power poles`. The first is most of the normal power poles, i.e. the small and medium power poles and the substation. These you will use to distribute your power and supply power to your buildings as you would usually. However, each tier pole can only supply a limited amount of power, for example, the small pole can only supply 5MW, but can transmit more.
  
 Then there is a new type, the **Power Pole Source**. These are used *only* where you generate your power. You will place these next to steam engines, turbines, solar panels, or any modded power generation building (not accumulators). Currently, these poles cannot connect to one another directly, so you would need to transfer the generated power away by connecting each source pole *directly* to a normal pole (or transformer!). Each tier can only source a limited amount of power to your network. For example, the small electric pole can only source 5MW.
@@ -59,3 +62,7 @@ This mod will create all kind of new power distribution challenges! For example,
 Here you can see an example of how such an accumulator power storage could look like, showing some of the different components. The two transformers ensure the accumulators function at the required voltage, but the voltage is increased as it connects to the Big Electric Poles. The power switches control the flow (the bottom one is enabled in the picture).
 
 ![](https://github.com/heinwessels/Factorio-FluidicPower/blob/main/images/example-accumulator.png?raw=true)
+
+---
+
+*Note: If you're curious about the performance of this mod, or what kind of UPS you will be able to get, see the [FAQ](https://mods.factorio.com/mod/FluidicPower/faq).*
