@@ -16,7 +16,6 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[kilojoules]-a[kilojoules]",
-        hidden = true,
         auto_barrel = false -- That would be fun
     },
     {
@@ -31,7 +30,6 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[megajoules]-a[megajoules]",
-        hidden = true,
         auto_barrel = false -- That would be fun
     },
     {
@@ -46,7 +44,6 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-3-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "a[gigajoules]-a[gigajoules]",
-        hidden = true,
         auto_barrel = false -- That would be fun
     },
 

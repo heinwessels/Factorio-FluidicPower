@@ -92,3 +92,9 @@ This is normal in sub-optimal power generation designs. This happens when a norm
 If you're using `transformers` then it will definitely run full speed for a while to fill up the buffers inside the transformer. Each power pole also has a tiny buffer that needs to fill up. Don't worry, the power isn't disappearing, it's just stored.
 
 If you're transforming your power into `gigajoules` using two `step-up transformers` in series then your powerplant will take a while to fill up the buffers in the transformers. Remember, each unit of `gigajoule` fluid in the transformer buffer is equivalent to 200 vanilla accumulators, and a transformer can easily buffer up to 100. Don't step up the power so high unless you have the means to supply it.
+
+---
+
+## Solar farm not exporting all it's power.
+
+Solar farms work best using only source poles and big poles. If the electric network on a source pole still doesn't show the full output then the network cannot handle the power flow. Use less poles or step-up the voltage using a transformer.

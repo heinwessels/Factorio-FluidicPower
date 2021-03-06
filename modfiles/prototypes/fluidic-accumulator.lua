@@ -30,7 +30,7 @@ override = {
     fluid_box =
     {
       base_area = 50,
-      pipe_covers = pipecoverspictures(),
+      filter = "fluidic-10-kilojoules",      
       pipe_connections =
       {
         {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 1},

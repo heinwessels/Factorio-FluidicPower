@@ -1,4 +1,5 @@
 util = require("util")
+constants = require("constants")
 fluidic_utils = require("scripts.fluidic-utils")
 
 -- Here I create small, medium, big and substation pole variants
@@ -64,7 +65,9 @@ function create_in_variant(base_name)
             name = name_place,
             minable = {result = name},  -- It will return the normal item
             icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
-            next_upgrade = nil,
+            next_upgrade = nil,             -- Upgrading done through electric item
+            flags = {"not-upgradable"}, 
+            fast_replaceable_group = nil,
             crafting_speed = 1,
             energy_usage = "1W",   -- Default maximum power input
             module_specification = nil,
@@ -75,7 +78,7 @@ function create_in_variant(base_name)
                 input_priority = "secondary",
                 usage_priority = "secondary-input",
                 drain = "0kW"  
-            },
+            },            
             maximum_wire_distance = 0,
             open_sound = nil,
             close_sound = nil,            
@@ -83,9 +86,8 @@ function create_in_variant(base_name)
             fluid_boxes =
             { 
               {
-                production_type = "output",        
+                production_type = "output",
                 base_area = 1,
-                base_level = 1,
                 pipe_connections = {
                     { type="input-output", position = {0, 1}, max_underground_distance = wire_reach},
                     { type="input-output", position = {0, -1}, max_underground_distance = wire_reach},
@@ -105,6 +107,8 @@ function create_in_variant(base_name)
         {
             name = name,
             minable = {result = name},  -- It will return the normal item
+
+            flags = {}, -- Clear the upgradable flag. (Maybe)
         }
     }})
     data.raw["assembling-machine"][name].animation = {
@@ -118,21 +122,26 @@ function create_in_variant(base_name)
         data.raw["electric-pole"][base_name],
         {
             name = name_electric,
-            minable = {result = name},
+            icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
+            minable = {result = name},            
             placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
-            maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
+            maximum_wire_distance = wire_reach,  -- Make sure we can reach the extended length
+
+            fast_replaceable_group = nil,
         }
     }})
 
     -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
-    if not settings.startup["fluidic-expose-fluid-components"].value then
+    if not constants.expose_fluid_boxes then
         -- Default fluid is not exposed
-        data.raw["assembling-machine"][name].selection_box = {{0,0}, {0,1}}
-        data.raw["assembling-machine"][name].drawing_box = {{0,0}, {0,1}}
+        data.raw["assembling-machine"][name].selection_box = {{0,0}, {0,0}}
+        data.raw["assembling-machine"][name].drawing_box = {{0,0}, {0,0}}
+        -- data.raw["assembling-machine"][name].selection_priority = 0
     else
         -- Debug option
         data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
         data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
+        -- data.raw["electric-pole"][name].selection_priority = 0
     end
 end
 
@@ -188,6 +197,8 @@ function create_out_variant(base_name, name)
             type = "generator",
             name = name_place,
             minable = {result = name},  -- Should return the normal item
+            next_upgrade = nil,             -- Upgrading done through electric item
+            flags = {"not-upgradable"}, 
             effectivity = 1,
             maximum_temperature = 15,
             fluid_usage_per_tick = 1,  -- Default energy output. value = P / 60
@@ -196,7 +207,7 @@ function create_out_variant(base_name, name)
             two_direction_only = true,                        
             fluid_box =
             {
-                base_area = 1,            
+                base_area = 1,
                 pipe_connections =
                 {
                     {type = "input-output", position = {-1, 0}, max_underground_distance = wire_reach},
@@ -253,7 +264,7 @@ function create_out_variant(base_name, name)
     }})
 
     -- Depending on debug option, choose which entity is exposed
-    if not settings.startup["fluidic-expose-fluid-components"].value then
+    if not constants.expose_fluid_boxes then
         -- Default
         data.raw["generator"][name].selection_box = {{0,0}, {0,0}}
         data.raw["generator"][name].drawing_box = {{0,0}, {0,0}}
@@ -317,8 +328,8 @@ function create_transmit_variant(base_name, name)
             horizontal_window_bounding_box = {{0,0},{0,0}},
             vertical_window_bounding_box = {{0,0},{0,0}},
             fluid_box =
-            {     
-                height = 2,
+            {
+                base_area = 1,
                 pipe_connections =
                 {
                     {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = wire_reach},        
@@ -370,7 +381,7 @@ function create_transmit_variant(base_name, name)
             name = name,
             minable = {result = name},  -- It will return the normal item            
         }
-    }})    
+    }})
     for key, _ in pairs(data.raw["pipe"][name].pictures) do       
         data.raw["pipe"][name].pictures[key] = {
             filename = "__FluidicPower__/graphics/entities/empty.png",                
@@ -387,11 +398,12 @@ function create_transmit_variant(base_name, name)
             minable = {result = name},
             placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
             supply_area_distance = 0,
+            next_upgrade = nil                  -- Upgrade should be done through base entity
         }
     }})    
 
     -- Depending on debug option, choose which entity is exposed
-    if not settings.startup["fluidic-expose-fluid-components"].value then
+    if not constants.expose_fluid_boxes then
         -- Default
         data.raw["pipe"][name].selection_box = {{0,0}, {0,0}}
         data.raw["pipe"][name].drawing_box = {{0,0}, {0,0}}
@@ -417,13 +429,14 @@ end
 create_in_variant("small-electric-pole")
 for _, machine in pairs{"fluidic-small-electric-pole-in", "fluidic-small-electric-pole-in-place"} do
     data.raw["assembling-machine"][machine].fixed_recipe = "fluidic-10-kilojoules-generate-small"
-    data.raw["assembling-machine"][machine].energy_usage = "5MW"
+    data.raw["assembling-machine"][machine].energy_usage = "5MW"    
 end
+data.raw["electric-pole"]["fluidic-small-electric-pole-in-electric"].next_upgrade = "fluidic-medium-electric-pole-in-place"
 create_out_variant("small-electric-pole")
 for _, generator in pairs{"fluidic-small-electric-pole-out", "fluidic-small-electric-pole-out-place"} do
     data.raw["generator"][generator].fluid_usage_per_tick = 8.333333 -- P = 5MW
 end
-
+data.raw["electric-pole"]["fluidic-small-electric-pole-out-electric"].next_upgrade = "fluidic-medium-electric-pole-out-place"
 
 -- Create Medium poles
 create_in_variant("medium-electric-pole")
@@ -469,7 +482,7 @@ for _, generator in pairs{"fluidic-substation-out", "fluidic-substation-out-plac
     data.raw["generator"][generator].fluid_usage_per_tick = 66.66666666 -- P = 40MW
     data.raw["generator"][generator].fluid_box = 
     {
-        base_area = 1,        
+        base_area = 1,
         pipe_connections =
         {
             {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = new_wire_length},

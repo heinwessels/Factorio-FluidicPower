@@ -80,26 +80,6 @@ function poles.on_entity_created(event)
         entity = replaced   -- Overwrite the value as if nothing happend
     end
 
-    -- If it's the wrong ghost, replace it with the correct one
-    if entity.name == "entity-ghost" then
-        -- Okay, so it's a ghost. Is it one of ours that's wrong?
-        if string.sub(entity.ghost_name, -8, -1) == "electric" then
-            -- Yes. We need to replace it with the correct one
-            
-            -- TODO Better way to get surface
-            local new_ghost = game.surfaces[1].create_entity{
-                name = "entity-ghost",
-                inner_name = string.sub(entity.ghost_name, 1, -10).."-place",  -- Remove '-electric' keyword,
-                position = entity.position,
-                force = entity.force,
-                time_to_live = entity.time_to_live,
-                direction = entity.direction
-            }
-            entity.destroy()    -- Kill the wrong one
-            entity = new_ghost  -- Hehe
-        end
-    end
-
     -- Now create whatever is needed to assist this entity
     if lu_on_created[entity.name] then
 

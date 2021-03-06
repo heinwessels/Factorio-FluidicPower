@@ -47,7 +47,7 @@ Currently, there are 3 voltage levels, or different fluid concentrations, namely
 
 With Fluidic Power it's necessary to better manage your flow of power, even more so than in vanilla. Therefore you are provided with the following components:
 
-- **Accumulator:** This mod turns electricity into a fluid means it also turns accumulators into simple storage of fluid. Currently, a single accumulator will store 5MJ like as does in vanilla. However, you will have to manage when to charge and when to discharge them yourself. 
+- **Accumulator:** This mod turns electricity into a fluid means it also turns accumulators into simple storage of fluid. Currently, a single accumulator will store 50MJ. However, you will have to manage when to charge and when to discharge them yourself. 
 
 - **Power Switch:** This is what it says, allows or stops the flow of power. It needs to be built inline between power poles. This switch acts as a pump, which means it also acts as a `one-way` valve, and is `on` by default. The network `overlay` will show a connection regardless of if the switch is `on` or `off`. Unfortunately, the switch won't visually disconnect as it does in vanilla, but the sparks do move.
 

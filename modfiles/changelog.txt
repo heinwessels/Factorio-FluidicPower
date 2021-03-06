@@ -3,6 +3,13 @@ Version: 0.2.0
 Date: ?. 03. 2021
   Changes:
     - Removed side inputs of transformers.
+    - Accumulators now only accepts low voltages (10kJ fluid units) as it should have.
+    - Power switch power transfer limit now 50MW of 50GW depending on voltage.
+    - Halved internal energy buffer of big poles.
+  Bugfixes:
+    - Power units now actually available as signals for circuit network.
+    - Upgrade planner now works on small poles. (Upgrade filters still wonky)
+    - Fixed transformer output distance being too long.
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
