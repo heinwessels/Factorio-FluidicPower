@@ -52,6 +52,8 @@ Yes! Open the production GUI (`P`) and click on `Fluids`. There you will see the
 
 This means that it's not possible to see the global power produced per entity, but unlike vanilla, it's now possible to see a graph of your `total` power production and consumption.
 
+*Note: If you place normal power poles (i.e. not big poles) in your solar farm it will offset your statistics. Therefore it's better to build solar farms using only source poles and big poles."
+
 ---
 
 ## No Electric Network Info when I select Big Power Pole?

@@ -4,7 +4,7 @@ build_tools = {}
 
 local script_data =
 {
-    current_overlay_target = nil
+    current_overlay_target = nil,   -- This is currently a global. All players will see the overlay if alt-mode
 }
 
 function build_tools.on_entity_created(event)    
@@ -114,95 +114,98 @@ script.on_event(defines.events.on_tick, function (event)
     -- This functions only occationally draws an overlay.
     -- NOTE: No on_tick fluid calculations are done!
 
-    local player = game.players[1] -- THis is bad.
+    for _, player in pairs(game.players) do
+        local uid = player.name -- This should be unique enough
+        if player.selected and string.match(player.selected.name, "fluidic") then        
+            local entity = player.selected        
+            -- The player currently has his mouse over a fluidic entity
+            
+            if entity ~= script_data.current_overlay_target then
+                -- It's a new target!            
+                reset_rendering()   -- Make sure we don't have any left-over overlays
 
-    if player.selected and string.match(player.selected.name, "fluidic") then        
-        local entity = player.selected        
-        -- The player currently has his mouse over a fluidic entity
-        
-        if entity ~= script_data.current_overlay_target then
-            -- It's a new target!            
-            reset_rendering()   -- Make sure we don't have any left-over overlays
-
-            if string.sub(entity.name, -8, -1) == "electric" then
-                -- At the moment power pole is selected, not fluid entity.
-                -- Get the fluid entity
-                local e = entity.surface.find_entity(
-                    string.sub(entity.name, 1, -10),  -- Remove '-electric' keyword
-                    entity.position
-                )
-                if not e then error(
-                    [[There should be a fluidic fluid entity here. Bug report the developer please.
-                    Original: <]]..entity.name..[[>.
-                    Searched: <]]..string.sub(entity.name, 1, -10)..[[>]]
-                ) end                
-                entity = e  -- This should exist. If not, there's a problem.
+                if string.sub(entity.name, -8, -1) == "electric" then
+                    -- At the moment power pole is selected, not fluid entity.
+                    -- Get the fluid entity
+                    local e = entity.surface.find_entity(
+                        string.sub(entity.name, 1, -10),  -- Remove '-electric' keyword
+                        entity.position
+                    )
+                    if not e then error(
+                        [[There should be a fluidic fluid entity here. Bug report the developer please.
+                        Original: <]]..entity.name..[[>.
+                        Searched: <]]..string.sub(entity.name, 1, -10)..[[>]]
+                    ) end                
+                    entity = e  -- This should exist. If not, there's a problem.
+                end
+                
+                -- Now recursively draw connections from this entity
+                script_data.current_overlay_target = entity -- and remember that we did
+                show_fluidic_entity_connections(player, entity, settings.global["fluidic-electric-overlay-depth"].value)
+            
+            else
+                -- We've already drawn the overlay for this target. Do nothing but wait.
             end
-
-            script_data.current_overlay_target = entity
-            show_fluidic_entity_connections(entity, settings.global["fluidic-electric-overlay-depth"].value)
-        
         else
-            -- We've already drawn the overlay for this target. Do nothing but wait.
+            -- Not looking at anything important
+            if script_data.current_overlay_target ~= nil then            
+                reset_rendering()
+            end
         end
-    else
-        -- Not looking at anything important
-        if script_data.current_overlay_target ~= nil then            
-            reset_rendering()
-            script_data.current_overlay_target = nil
-        end
-    end 
+    end
 end)
 
 
 function show_fluidic_entity_connections(
-    entity, depth, black_list
+    player, entity, depth, black_list
 )   
     if depth == 0 then return end   -- Recursion stop
     if black_list == nil then black_list = {} end
-    for _, neighbours_section in ipairs(entity.neighbours) do
-        if next(neighbours_section) == nil then break end    -- Table is empty
-        for _, neighbour in ipairs(neighbours_section) do
+    for _, neighbour in ipairs(get_fluid_neighbours(entity)) do
             
-            local should_draw_connection = true
+        local should_draw_connection = true
 
-            -- If both of these are <in> entities then this connection
-            -- isn't valid. Check for keyword
-            if string.sub(entity.name, -2, -1)=='in' and string.sub(neighbour.name, -2, -1)=='in' then
-                should_draw_connection = false
-            end
+        -- If both of these are <in> entities then this connection
+        -- isn't valid. Check for keyword
+        if string.sub(entity.name, -2, -1)=='in' and string.sub(neighbour.name, -2, -1)=='in' then
+            should_draw_connection = false
+        end
 
-            -- Are we coming from this neighbour?
-            if black_list ~= nil then
-                -- if neighbour == black_list then should_draw_connection = false end
-                if black_list[neighbour.unit_number] ~= nil then
-                    -- TODO This elimination is too harsh, get better solution
-                    -- Currently it doesn't draw nice diamonds.
+        -- Draw the connection to this neighbour
+        -- Regardless if it's on the blacklist or not
+        draw_connection(player, entity, entity.position, neighbour.position)
+        
+        -- Are we coming from this neighbour?
+        if black_list ~= nil then
+            -- if neighbour == black_list then should_draw_connection = false end
+            if black_list[neighbour.unit_number] ~= nil then
+                -- We've already drawn towards this entity before
+
+                if depth <= black_list[neighbour.unit_number] then
+                    -- The previous time we drew further. Can skip now
                     should_draw_connection = false
                 end
-            end            
-
-            if should_draw_connection then
-                -- This is a new neighbour
-                -- TODO draw from the fluidbox, not the entity?                
-                draw_connection(entity, entity.position, neighbour.position)
-
-                -- Recursively draw neighbours' neighbours after blacklisting the current entity
-                black_list[entity.unit_number] = depth
-                show_fluidic_entity_connections(neighbour, depth - 1, black_list)
-            end 
+            end
+        end            
+        
+        if should_draw_connection then
+            -- This is a new neighbour
+            
+            -- Recursively draw neighbours' neighbours after blacklisting the current entity
+            black_list[entity.unit_number] = depth
+            show_fluidic_entity_connections(player, neighbour, depth - 1, black_list)
         end 
     end
 end
 
-function draw_connection(entity, here, there)
+function draw_connection(player, entity, here, there)
     rendering.draw_line{
         color = {r = 0,  g = 0.6, b = 0, a = 0},
         width = 3,
         from = here,
         to = there,
         surface = entity.surface,
-        players = players,
+        players = {player},
         only_in_alt_mode = true
     }
     for _, point in ipairs{here, there} do
@@ -212,7 +215,7 @@ function draw_connection(entity, here, there)
             width = 3,
             target = point,
             surface = entity.surface,
-            players = players,
+            players = {player},
             only_in_alt_mode = true
         }
     end
@@ -220,7 +223,8 @@ end
 
 function reset_rendering()
     -- TODO Make this specific to the lines I draw?
-    rendering.clear()
+    rendering.clear('FluidicPower')
+    script_data.current_overlay_target = nil
 end
 
 function get_fluid_neighbours(entity)
