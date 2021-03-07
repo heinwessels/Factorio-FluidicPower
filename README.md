@@ -6,6 +6,12 @@ More realistic power distribution has been requested from players for years. Ess
 
 ---
 
+*Note: This mod is still in Alpha. This means there will be no automatic migration from one version to the next. It won't break your save, but you might need to set new transformer recipes for example.*
+
+*Another note: If you're curious about the performance of this mod, or what kind of UPS you will be able to get, see the [FAQ](https://mods.factorio.com/mod/FluidicPower/faq).*
+
+---
+
 ## How It Works
 
 The gameplay is designed to be close to vanilla where possible, which means the way you play and understand power stays mostly the same. However, there are of course a few differences that you should know about.
@@ -47,7 +53,7 @@ Currently, there are 3 voltage levels, or different fluid concentrations, namely
 
 With Fluidic Power it's necessary to better manage your flow of power, even more so than in vanilla. Therefore you are provided with the following components:
 
-- **Accumulator:** This mod turns electricity into a fluid means it also turns accumulators into simple storage of fluid. Currently, a single accumulator will store 50MJ. However, you will have to manage when to charge and when to discharge them yourself. 
+- **Accumulator:** This mod turns electricity into a fluid means it also turns accumulators into simple storage of fluid. Currently, a single accumulator will store `5MJ`. However, you will have to manage when to charge and when to discharge them yourself. 
 
 - **Power Switch:** This is what it says, allows or stops the flow of power. It needs to be built inline between power poles. This switch acts as a pump, which means it also acts as a `one-way` valve, and is `on` by default. The network `overlay` will show a connection regardless of if the switch is `on` or `off`. Unfortunately, the switch won't visually disconnect as it does in vanilla, but the sparks do move.
 

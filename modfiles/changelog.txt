@@ -3,6 +3,7 @@ Version: 0.3.0
 Date: ??. 03. 2021
   Changes:
     - Improved fluidbox connections for increased power flow. Perfect alignment now necessary.
+    - Reduced fluid units to 10kJ, 1MJ, and 100MJ to reduce internal pole buffer.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 06. 03. 2021

@@ -114,7 +114,7 @@ script.on_event(defines.events.on_tick, function (event)
     -- This functions only occationally draws an overlay.
     -- NOTE: No on_tick fluid calculations are done!
 
-    local player = game.players[1]
+    local player = game.players[1] -- THis is bad.
 
     if player.selected and string.match(player.selected.name, "fluidic") then        
         local entity = player.selected        

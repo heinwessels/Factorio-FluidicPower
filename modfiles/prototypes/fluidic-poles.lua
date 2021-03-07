@@ -330,8 +330,7 @@ function create_transmit_variant(base_name, name)
             flags = {"not-rotatable"},
             fluid_box =
             {
-                base_area = 1,
-                height = 1,
+                base_area = 1,               
                 pipe_connections =
                 {
                     {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = wire_reach},

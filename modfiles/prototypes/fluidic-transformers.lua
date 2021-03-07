@@ -33,6 +33,12 @@ data:extend
     ------------------------
     -- TRANSFORMER RECIPES
     ------------------------
+    -- POWER rating forumla
+    -- P = o * u / t
+    --      where:
+    --          o : number of output units
+    --          u : unit of output units
+    --          t : time per craft (energy required)
     {
         type = "recipe-category",
         name = "fluidic-transformers"
@@ -40,37 +46,38 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-10-kilo-to-megajoules",        
-        icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-up-icon.png",
+        icon_size = 64,
         category = "fluidic-transformers",
         order = "a[a]-a[a]",
-        ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
-        energy_required = 0.2,
-        results={{type="fluid", name="fluidic-10-megajoules", amount=1}},
         scale_entity_info_icon = true,        
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
+
+        ingredients ={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
+        results={{type="fluid", name="fluidic-megajoules", amount=10}},
+        energy_required = 0.2,  --
     },
     {
         type = "recipe",
-        name = "fluidic-mega-to-gigajoules",        
+        name = "fluidic-mega-to-100-megajoules",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-3-up-icon.png",
-        order = "a[c]-a[gigajoules]",
+        order = "a[c]-a[100-megajoules]",
         category = "fluidic-transformers",
-        ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=100}},
+        ingredients ={{type="fluid", name="fluidic-megajoules", amount=100}},
         energy_required = 0.2,
-        results={{type="fluid", name="fluidic-gigajoules", amount=1}},
+        results={{type="fluid", name="fluidic-100-megajoules", amount=1}},
         scale_entity_info_icon = true,
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
     },    
     {
         type = "recipe",
-        name = "fluidic-10-mega-to-10-kilojoules",        
+        name = "fluidic-mega-to-10-kilojoules",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-1-down-icon.png",
         order = "a[b]-a[b]",
         category = "fluidic-transformers",
-        ingredients ={{type="fluid", name="fluidic-10-megajoules", amount=1}},
+        ingredients ={{type="fluid", name="fluidic-megajoules", amount=10}},
         energy_required = 0.2,
         results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         scale_entity_info_icon = true,
@@ -78,14 +85,14 @@ data:extend
     },
     {
         type = "recipe",
-        name = "fluidic-giga-to-10-megajoule",        
+        name = "fluidic-100-mega-to-megajoule",        
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-down-icon.png",
         category = "fluidic-transformers",
         order = "a[d]-a[megajoules]",
-        ingredients ={{type="fluid", name="fluidic-gigajoules", amount=1}},
-        energy_required = 0.2,
-        results={{type="fluid", name="fluidic-10-megajoules", amount=100}},
+        ingredients ={{type="fluid", name="fluidic-100-megajoules", amount=1}},
+        results={{type="fluid", name="fluidic-megajoules", amount=100}},
+        energy_required = 0.2,  -- This limits power throughput
         scale_entity_info_icon = true,
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
     }
@@ -99,14 +106,15 @@ data:extend({util.merge{
     {
         type = "assembling-machine",
         name = "fluidic-transformer",
+        icon = "__FluidicPower__/graphics/icons/transformer-icon.png",
+        icon_size = 32,
         mode = "output-to-separate-pipe",
         crafting_categories = {"fluidic-transformers"},
-        minable = {result = "fluidic-transformer"},
-        energy_usage = "10kW",
+        minable = {result = "fluidic-transformer"},        
         allowed_effects = {},
-        energy_source = nil,
         module_specification = {module_slots=0},
         crafting_speed = 1,        
+        energy_usage = "1W",    -- Not used
         energy_source = {
             type = "void",        
             drain = "0kW"    
