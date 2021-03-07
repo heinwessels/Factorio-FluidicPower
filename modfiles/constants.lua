@@ -4,5 +4,8 @@ return {
 
 
     -- DEBUG OPTIONS 
-    expose_fluid_boxes = false
+
+    -- This will place the fluidbox above the electical entity
+    -- Currently breaks the build mechanism.
+    expose_fluid_boxes = false  
 }

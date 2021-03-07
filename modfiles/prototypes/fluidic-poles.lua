@@ -338,6 +338,15 @@ function create_transmit_variant(base_name, name)
                     {type = "input-output", position = {1.5, -0.5}, max_underground_distance = wire_reach},
                     {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = wire_reach},
                     {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = wire_reach},
+
+
+                    -- These connections are only for energy sensors.
+                    -- Will not connect to other poles (unless placed directly adjacent)
+                    -- and thus not influence fluid flow
+                    {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 1},
+                    {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 1},
+                    {type = "input-output", position = {0.5, -1.5,}, max_underground_distance = 1},
+                    {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 1},
                 },
             },
             pictures = {
@@ -463,6 +472,14 @@ for _, machine in pairs{"fluidic-substation-in", "fluidic-substation-in-place"} 
                 {type = "output", position = {1.5,  -0.5}, max_underground_distance = new_wire_length},
                 {type = "output", position = {-0.5, -1.5}, max_underground_distance = new_wire_length},
                 {type = "output", position = { -0.5, 1.5}, max_underground_distance = new_wire_length},
+
+                -- These connections are only for energy sensors.
+                -- Will not connect to other poles (unless placed directly adjacent)
+                -- and thus not influence fluid flow
+                {type = "output", position = {-1.5, 0.5}, max_underground_distance = 1},
+                {type = "output", position = {1.5, 0.5}, max_underground_distance = 1},
+                {type = "output", position = {0.5, -1.5,}, max_underground_distance = 1},
+                {type = "output", position = {0.5, 1.5}, max_underground_distance = 1},
             },
             secondary_draw_orders = { north = -1 },
             filter = "fluidic-10-kilojoules"
@@ -480,6 +497,14 @@ for _, generator in pairs{"fluidic-substation-out", "fluidic-substation-out-plac
             {type = "input-output", position = {1.5,  -0.5}, max_underground_distance = new_wire_length},
             {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = new_wire_length},
             {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = new_wire_length},
+
+            -- These connections are only for energy sensors.
+            -- Will not connect to other poles (unless placed directly adjacent)
+            -- and thus not influence fluid flow
+            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 1},
+            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 1},
+            {type = "input-output", position = {0.5, -1.5,}, max_underground_distance = 1},
+            {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 1},
         },
         production_type = "input-output",        
         minimum_temperature = 10,

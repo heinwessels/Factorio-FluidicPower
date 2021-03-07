@@ -15,7 +15,7 @@ This mod simulates power as a fluid using the `Joules` unit. This means that if 
 
 ### Two Types of Power poles 
 
-Power poles are similar to pipes. This means they need to be placed inline with one another, and not diagonally. When placing down a power pole you will see similar markings as when placing a underground pipe.
+Power poles are similar to pipes. This means they need to be placed inline with one another, and cannot be placed diagonally like vanilla power poles. When placing a power pole you will know it's connected to another pole, similar to how a connection between underground pipes are shown.
 
 There are `two` types of `power poles`. The first is most of the normal power poles, i.e. the small and medium power poles and the substation. These you will use to distribute your power and supply power to your buildings as you would usually. However, each tier pole can only supply a limited amount of power, for example, the small pole can only supply 5MW, but can transmit more.
  
@@ -51,7 +51,7 @@ With Fluidic Power it's necessary to better manage your flow of power, even more
 
 - **Power Switch:** This is what it says, allows or stops the flow of power. It needs to be built inline between power poles. This switch acts as a pump, which means it also acts as a `one-way` valve, and is `on` by default. The network `overlay` will show a connection regardless of if the switch is `on` or `off`. Unfortunately, the switch won't visually disconnect as it does in vanilla, but the sparks do move.
 
-- **Energy Sensor:** This is a little sensor that measures the power level of a power pole - or more accurately - the amount of energy currently in the pole. It needs to be placed adjacent to a power pole to connect. This entity also has another useful feature, it has a `Flush` button to clean all the connected power poles of any power (be careful). 
+- **Energy Sensor:** This is a little sensor that measures the power level of a power pole - or more accurately - the amount of energy currently in the pole. This entity also has another useful feature, it has a `Flush` button to clean all the connected power poles of any power (be careful). It needs to be placed directly adjacent to a power pole.
 
 ---
 
