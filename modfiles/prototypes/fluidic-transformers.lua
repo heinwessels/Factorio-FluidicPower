@@ -112,7 +112,10 @@ data:extend({util.merge{
             drain = "0kW"    
         },
         fluid_boxes =
-        { 
+        {
+            -- Would like to have less fluid connections here, 
+            -- similar to big poles, substations and accumulators
+            -- But, needs to be rotatable without issues.
             {
                 production_type = "input",        
                 base_area = 10,

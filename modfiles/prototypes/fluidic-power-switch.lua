@@ -40,8 +40,11 @@ data:extend({util.merge{
         pipe_connections =
         {
           { position = {-0.5, -1.5}, type="output", max_underground_distance = 10 },
-          { position = {0.5, -1.5}, type="output", max_underground_distance = 10 },
           { position = {-0.5, 1.5}, type="input", max_underground_distance = 10 },
+
+          -- Want to delete these two as well for consistency
+          -- But, needs to be rotatable without issues
+          { position = {0.5, -1.5}, type="output", max_underground_distance = 10 },
           { position = {0.5, 1.5}, type="input", max_underground_distance = 10 },
         }
       },

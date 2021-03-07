@@ -66,7 +66,7 @@ function create_in_variant(base_name)
             minable = {result = name},  -- It will return the normal item
             icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
             next_upgrade = nil,             -- Upgrading done through electric item
-            flags = {"not-upgradable"}, 
+            flags = {"not-upgradable", "not-rotatable"}, 
             fast_replaceable_group = nil,
             crafting_speed = 1,
             energy_usage = "1W",   -- Default maximum power input
@@ -198,7 +198,7 @@ function create_out_variant(base_name, name)
             name = name_place,
             minable = {result = name},  -- Should return the normal item
             next_upgrade = nil,             -- Upgrading done through electric item
-            flags = {"not-upgradable"}, 
+            flags = {"not-upgradable", "not-rotatable",}, 
             effectivity = 1,
             maximum_temperature = 15,
             fluid_usage_per_tick = 1,  -- Default energy output. value = P / 60
@@ -259,7 +259,7 @@ function create_out_variant(base_name, name)
             name = name_electric,
             minable = {result = name},
             placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
-            maximum_wire_distance = wire_reach  -- Make sure we can reach the extended length
+            maximum_wire_distance = wire_reach,  -- Make sure we can reach the extended length            
         }
     }})
 
@@ -327,20 +327,17 @@ function create_transmit_variant(base_name, name)
             minable = {result = name},
             horizontal_window_bounding_box = {{0,0},{0,0}},
             vertical_window_bounding_box = {{0,0},{0,0}},
+            flags = {"not-rotatable"},
             fluid_box =
             {
                 base_area = 1,
+                height = 1,
                 pipe_connections =
                 {
-                    {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = wire_reach},        
                     {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = wire_reach},
-                    {type = "input-output", position = {1.5, 0.5}, max_underground_distance = wire_reach},
                     {type = "input-output", position = {1.5, -0.5}, max_underground_distance = wire_reach},
-
-                    {type = "input-output", position = { 0.5, -1.5,}, max_underground_distance = wire_reach},        
-                    {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = wire_reach},
-                    {type = "input-output", position = { 0.5, 1.5}, max_underground_distance = wire_reach},
-                    {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = wire_reach},
                 },
             },
             pictures = {
@@ -461,17 +458,11 @@ for _, machine in pairs{"fluidic-substation-in", "fluidic-substation-in-place"} 
             production_type = "output",        
             base_area = 1,
             base_level = 1,
-            pipe_connections = {
-                {type = "output", position = {-1.5, 0.5}, max_underground_distance = new_wire_length},
-                {type = "output", position = {1.5, 0.5}, max_underground_distance = new_wire_length},
-                {type = "output", position = {-0.5, 1.5}, max_underground_distance = new_wire_length},
-                {type = "output", position = {-0.5, -1.5}, max_underground_distance = new_wire_length},
-
-                -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
+            pipe_connections = {               
                 {type = "output", position = {-1.5, -0.5}, max_underground_distance = new_wire_length},
-                {type = "output", position = {1.5, -0.5}, max_underground_distance = new_wire_length},
-                {type = "output", position = {0.5, 1.5}, max_underground_distance = new_wire_length},
-                {type = "output", position = {0.5, -1.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = {1.5,  -0.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = {-0.5, -1.5}, max_underground_distance = new_wire_length},
+                {type = "output", position = { -0.5, 1.5}, max_underground_distance = new_wire_length},
             },
             secondary_draw_orders = { north = -1 },
             filter = "fluidic-10-kilojoules"
@@ -485,16 +476,10 @@ for _, generator in pairs{"fluidic-substation-out", "fluidic-substation-out-plac
         base_area = 1,
         pipe_connections =
         {
-            {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = new_wire_length},
-            {type = "input-output", position = {1.5, 0.5}, max_underground_distance = new_wire_length},
-            {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = new_wire_length},
-            {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = new_wire_length},
-
-            -- TODO Tunnel rotations through electric entity so that there can be less fluidboxes
             {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = new_wire_length},
-            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = new_wire_length},
-            {type = "input-output", position = {0.5, 1.5}, max_underground_distance = new_wire_length},
-            {type = "input-output", position = {0.5, -1.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = {1.5,  -0.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = new_wire_length},
+            {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = new_wire_length},
         },
         production_type = "input-output",        
         minimum_temperature = 10,

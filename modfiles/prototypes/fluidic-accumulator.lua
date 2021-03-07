@@ -33,18 +33,10 @@ override = {
       filter = "fluidic-10-kilojoules",      
       pipe_connections =
       {
-        {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 1},
-        {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 1},
-        {type = "input-output", position = {-0.5, 1.5}, max_underground_distance = 1},
-        {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = 1},
-
-        -- TODO Remove these connections so it looks like the substation
-        -- Need to solve the issue of not showing pipe connections
-        -- And need storage tank for circuit network
         {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 1},
         {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 1},
-        {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 1},
-        {type = "input-output", position = {0.5, -1.5}, max_underground_distance = 1},
+        {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = 1},
+        {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = 1},
       }
     },
     window_bounding_box = {{-0.2, 0.3}, {-0.4, 0.7}},

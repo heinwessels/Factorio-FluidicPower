@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: ??. 03. 2021
+  Changes:
+    - Halved amount of fluidbox connections to increase flow speed. Perfect alignment now necessary.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.0
-Date: ?. 03. 2021
+Date: 06. 03. 2021
   Changes:
     - Removed side inputs of transformers.
     - Accumulators now only accepts low voltages (10kJ fluid units) as it should have.
