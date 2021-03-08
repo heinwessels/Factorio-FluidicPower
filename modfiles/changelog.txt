@@ -4,6 +4,7 @@ Date: ??. 03. 2021
   Changes:
     - Improved fluidbox connections for increased power flow. Perfect alignment now necessary.
     - Reduced fluid units to 10kJ, 1MJ, and 100MJ to reduce internal pole buffer.
+    - Much nicer icons. (Still WIP though).
   Bugfixes:
     - Fixed overlay not drawing all connections.
     - Fixed likely multiplayer bug in overlay drawing.

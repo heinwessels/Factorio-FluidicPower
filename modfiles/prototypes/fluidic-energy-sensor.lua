@@ -47,7 +47,7 @@ data:extend({
         selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
         flow_length_in_ticks = 360,
         vehicle_impact_sound = table.deepcopy(data.raw["container"]["iron-chest"].vehicle_impact_sound),
-        two_direction_only = true,  -- TODO What does this even do?        
+        two_direction_only = true,
         window_bounding_box = {{-0.3, -0.45}, {0.1, -0.1}},
         fluid_box =
         {
