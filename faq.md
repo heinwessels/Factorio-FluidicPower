@@ -62,12 +62,6 @@ This is as designed. The `Big Electric Pole` does not consume or supply power, o
 
 ---
 
-## The Power Network Overlay doesn't show my power poles are connected when they should be?
-
-This is normal. The overlay algorithm is still under development, and sometimes it doesn't draw a connection to all connected power poles. This effect is more noticeable at increased drawing `depth`. If you want to make sure your power poles are connected set the `depth` settings to something lower, e.g. `2`, and it will likely draw the connection. This will be fixed.
-
----
-
 ## My accumulators aren't supplying power through the source power pole?
 
 That is because accumulators don't work as it does in vanilla where they supply power. They simply store power as a fluid, which means they act as storage tanks. The accumulators connect to one another and you simply transfer the power to and from the accumulators using `normal power poles`.

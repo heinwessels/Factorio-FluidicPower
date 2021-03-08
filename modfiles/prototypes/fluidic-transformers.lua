@@ -98,7 +98,7 @@ data:extend
     }
 })
 
--- Creat the entities
+-- Create the entities
 data:extend({util.merge{
     -- This is a weird legacy hack where we use the accumulator shape, but create
     -- a furnace with fluid inputs, using old beacon graphics. Don't judge me.
@@ -110,7 +110,7 @@ data:extend({util.merge{
         icon_size = 32,
         mode = "output-to-separate-pipe",
         crafting_categories = {"fluidic-transformers"},
-        minable = {result = "fluidic-transformer"},        
+        minable = {result = "fluidic-transformer"},
         allowed_effects = {},
         module_specification = {module_slots=0},
         crafting_speed = 1,        

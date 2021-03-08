@@ -20,6 +20,15 @@ data:extend({util.merge{
 data.raw["recipe"]["accumulator"].enabled = false
 
 -- Create the entity
+local circuit_connections = circuit_connector_definitions.create(
+    universal_connector_template,
+    {
+        { variation = 26, main_offset = util.by_pixel(18.5, 19), shadow_offset = util.by_pixel(20.5, 25.5), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(18.5, 19), shadow_offset = util.by_pixel(20.5, 25.5), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(18.5, 19), shadow_offset = util.by_pixel(20.5, 25.5), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(18.5, 19), shadow_offset = util.by_pixel(20.5, 25.5), show_shadow = true },
+    }
+)
 local entity = table.deepcopy(data.raw["accumulator"]["accumulator"])
 local tank = table.deepcopy(data.raw["storage-tank"]["storage-tank"])
 override = {
@@ -39,6 +48,7 @@ override = {
         {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = 1},
       }
     },
+    rotatable = false,
     window_bounding_box = {{-0.2, 0.3}, {-0.4, 0.7}},
     pictures = {
         picture = table.deepcopy(entity.picture),
@@ -46,10 +56,9 @@ override = {
         window_background = table.deepcopy(tank.pictures.window_background),
         flow_sprite = table.deepcopy(tank.pictures.flow_sprite),
         gas_flow = table.deepcopy(tank.pictures.gas_flow),
-    },
-    -- Use Accumulator's sprites and such.
-    circuit_wire_connection_points = circuit_connector_definitions["offshore-pump"].points,
-    circuit_connector_sprites = circuit_connector_definitions["offshore-pump"].sprites,
+    },    
+    circuit_wire_connection_points = circuit_connections.points,
+    circuit_connector_sprites = circuit_connections.sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance,   
 }
 override.pictures.picture.layers[1].filename = "__FluidicPower__/graphics/entities/accumulator/accumulator.png"

@@ -1,3 +1,13 @@
+local circuit_connections = circuit_connector_definitions.create(
+    universal_connector_template,
+    {
+        { variation = 26, main_offset = util.by_pixel(3, 5.5), shadow_offset = util.by_pixel(7.5, 7.5), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(3, 5.5), shadow_offset = util.by_pixel(7.5, 7.5), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(3, 5.5), shadow_offset = util.by_pixel(7.5, 7.5), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(3, 5.5), shadow_offset = util.by_pixel(7.5, 7.5), show_shadow = true },
+    }
+)
+
 data:extend({
     {
         type = "item",
@@ -28,15 +38,16 @@ data:extend({
         name = "fluidic-energy-sensor",
         icon = "__FluidicPower__/graphics/icons/energy-sensor-icon.png",
         icon_size = 64, icon_mipmaps = 4,
-        flags = {"placeable-player", "player-creation"},
+        flags = {"placeable-player", "player-creation", "not-rotatable"},
         minable = {mining_time = 0.2, result = "fluidic-energy-sensor"},
         max_health = 100,
         corpse = "iron-chest-remnants",
-        dying_explosion = "iron-chest-explosion",
+        dying_explosion = "iron-chest-explosion",        
         collision_box = {{-0.35, -0.35}, {0.35, 0.35}},
         selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
         flow_length_in_ticks = 360,
-        two_direction_only = true,  -- TODO What does this even do?
+        vehicle_impact_sound = table.deepcopy(data.raw["container"]["iron-chest"].vehicle_impact_sound),
+        two_direction_only = true,  -- TODO What does this even do?        
         window_bounding_box = {{-0.3, -0.45}, {0.1, -0.1}},
         fluid_box =
         {
@@ -70,7 +81,7 @@ data:extend({
                             scale = 0.5
                         }
                     },
-                    table.deepcopy(data.raw["container"]["iron-chest"].picture.layers[2])                    
+                    table.deepcopy(data.raw["container"]["iron-chest"].picture.layers[2])   -- These are the shadows
                 }
             },
             fluid_background = table.deepcopy(data.raw["storage-tank"]["storage-tank"].pictures.fluid_background),
@@ -89,13 +100,8 @@ data:extend({
           audible_distance_modifier = 0.5,
           max_sounds_per_type = 3
         },
-        -- TODO Fix stupid circuit wires
-        circuit_wire_connection_points = {
-            circuit_connector_definitions["chest"].points,
-            circuit_connector_definitions["chest"].points,
-        },
-        circuit_wire_connection_points = circuit_connector_definitions["offshore-pump"].points,
-        circuit_connector_sprites = circuit_connector_definitions["offshore-pump"].sprites,
+        circuit_wire_connection_points = circuit_connections.points,
+        circuit_connector_sprites = circuit_connections.sprites,
         circuit_wire_max_distance = default_circuit_wire_max_distance
     }
 })
