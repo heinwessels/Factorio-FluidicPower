@@ -53,4 +53,16 @@ function utils.entity_exists_at(entity_name, surface, position)
     return false
 end
 
+function utils.drop_items_with_decon(surface, force, items, position)
+    -- Drops an item at the position and mark it with the
+	-- decontruction planner so that a robot would pick it up.
+	surface.spill_item_stack(
+		position,
+		items,
+		true, 	-- will automatically be picked up by player force
+		force,
+		false	-- Allow belts is false
+	)
+end
+
 return utils

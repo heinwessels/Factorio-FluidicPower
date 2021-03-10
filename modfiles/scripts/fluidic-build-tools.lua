@@ -1,4 +1,5 @@
 fluidic_utils = require("scripts.fluidic-utils")
+util = require("util")
 
 build_tools = {}
 
@@ -18,27 +19,31 @@ function build_tools.on_entity_created(event)
     if not entity then return end
     if entity.name == "entity-ghost" then return end
     
-    -- Something has been built. Make sure there are no unwanted connections
-    -- TODO check big poles aren't connected to little ones
+    -- Something has been built. Make sure there are no unwanted connections    
     for _, neighbour in pairs(get_fluid_neighbours(entity)) do
-        if is_isvalid_fluid_connection(entity, neighbour) then
+        if not is_valid_fluid_connection(entity, neighbour) then
             -- Invalid connection!
             -- User is trying to connect a normal fluid to
             -- a power fluid!
             
-            -- Notify the player
-            -- TODO Get better way to get player. Not MP save maybe?
-            game.players[1].create_local_flying_text{
+            -- Notify the player (or all the players actually)
+            entity.surface.create_entity{
+                name = "flying-text",
+                type = "flying-text",
                 text = "Can't connect Fluidic Power with normal fluids",
-                position = entity.position
+                position  = entity.position
             }
             
             if settings.global["fluidic-enable-build-limitations"].value then
-                -- Prevent player from placing this entity                
-                for _, product in pairs(entity.prototype.mineable_properties.products) do
-                    entity.last_user.insert{name=product.name or product[1], count=product.amount or product[2]}
-                end                
-                entity.destroy()                
+
+                -- Keep local copy to return an item to the player
+                local entity_copy = util.copy(entity)
+                return_item_from_entity(event, entity_copy) -- The <entity> will be invalid by now
+
+                -- Destroy the entity
+                entity.destroy{
+                    raise_destroy=true -- TODO Is this required?
+                }
             end
 
             -- Don't look at other neighbours, already destroyed this entity.
@@ -64,30 +69,37 @@ function build_tools.on_entity_removed(event)
             local his_neighbours = get_fluid_neighbours(neighbour)
             for _, his_neighbour in ipairs(his_neighbours) do
 
-                if is_isvalid_fluid_connection(neighbour, his_neighbour) then
+                if not is_valid_fluid_connection(neighbour, his_neighbour) then
                     -- Invalid connection with the neighbour's neighbour!
                     -- It might connect a normal pipe to a fluidic pipe!
 
-                    -- Notify the player
-                    game.players[1].create_local_flying_text{
+                    -- Decide which entity is wrong
+                    local entity_to_destroy = his_neighbour
+                    if string.match(his_neighbour.name, "fluidic") then entity_to_destroy = neighbour end
+
+                    -- Notify the player. (Or all the players actually)
+                    neighbour.surface.create_entity{
+                        name = "flying-text",
+                        type = "flying-text",
                         text = "Can't connect Fluidic Power with normal fluids",
-                        position  = neighbour.position
+                        position  = entity_to_destroy.position
                     }
                     
                     if settings.global["fluidic-enable-build-limitations"].value then
                         -- Destroy the non-fluidic entiry to avoid this connection.
-                        -- And give the player the item back
-                        local entity_to_destroy = his_neighbour
-                        if string.match(his_neighbour.name, "fluidic") then entity_to_destroy = neighbour end
-                        for _, product in pairs(entity_to_destroy.prototype.mineable_properties.products) do
-                            entity_to_destroy.last_user.insert{name=product.name or product[1], count=product.amount or product[2]}
-                        end
+                        -- And give the player the item back                        
+
+                        -- Keep local copy to return an item to the player
+                        local entity_copy = util.table.deepcopy(entity_to_destroy)
+                        return_item_from_entity(event, entity_copy) -- The <entity> will be invalid by now
+
                         entity_to_destroy.destroy{
                             -- If allowed, raise another event on the destroid entity, 
                             -- because it might cause yet another incorrect connection.
                             -- Can be disabled, cause it can cause chain reactions
                             raise_destroy=settings.global["fluidic-allow-chained-destruction"].value
                         }
+
                     end
                     break                        
                 end
@@ -96,14 +108,55 @@ function build_tools.on_entity_removed(event)
     end    
 end
 
-function is_isvalid_fluid_connection(this, that)
+function return_item_from_entity(event, entity)
+    -- Returns the required <item> back to the player.
+    -- Either to his inventory or it's dropped on the floor
+    -- with a deconstruction planner, depending on the <event>
+    -- This function does not destroy the entity.
+    
+    -- Should we drop items on the floor?    
+    local drop_item = false
+    if event.robot then drop_item = true end
+
+    if not drop_item then 
+        -- It wasn't a robot action. Can we give it to the player?
+
+        local player = 
+            (event.player_index and game.get_player(event.player_index)) or nil
+        if player then
+            -- We know what player did the action. Try give it to him
+            for _, product in pairs(entity.prototype.mineable_properties.products) do
+                if not player.insert{name=product.name or product[1], count=product.amount or product[2]} then
+                    -- Player inventory was full.
+                    drop_item = true
+                end
+            end              
+        else
+            -- We don't know who the player was.
+            drop_item = true
+        end
+    end
+
+    if drop_item then
+        -- We couldn't give the item back to the player. Drop it on the floor
+        fluidic_utils.drop_items_with_decon(
+            entity.surface,
+            "player",
+            entity.prototype.mineable_properties.products[1],
+            entity.position
+        )
+    end
+end
+
+function is_valid_fluid_connection(this, that)
     -- Checks if the fluid connection between this entity 
-    -- and that entity is invalid
+    -- and that entity is invalid. Returns true if
+    -- it's valid
     if string.match(this.name, "fluidic") and 
-            not string.match(that.name, "fluidic") then
+            string.match(that.name, "fluidic") then
         return true
     elseif not string.match(this.name, "fluidic") and 
-            string.match(that.name, "fluidic") then
+            not string.match(that.name, "fluidic") then
         return true
     else
         return false

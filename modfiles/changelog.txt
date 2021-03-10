@@ -7,8 +7,9 @@ Date: ??. 03. 2021
     - Much nicer icons. (Still WIP though).
   Bugfixes:
     - Fixed overlay not drawing all connections.
-    - Fixed likely multiplayer bug in overlay drawing.
+    - Fixed likely multiplayer bugs.
     - Fixed Accumulator and Energy Sensor circuit connections.
+    - Fixed cases where fluids could be mixed accidentally.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 06. 03. 2021

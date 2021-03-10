@@ -1,13 +1,15 @@
 build_tools = require("scripts.fluidic-build-tools")
 poles = require("scripts.fluidic-handle-poles")
 
-function creation_event (event)
+function creation_event (event)        
+    
     build_tools.on_entity_created(event)
 
-    -- This need to happen after build tools so that
-    -- build limitations can kick in
+    -- First need build tools to make sure
+    -- the placer we placed is valid.
     poles.on_entity_created(event)
 end
+
 
 script.on_event(defines.events.on_built_entity, creation_event)
 script.on_event(defines.events.on_robot_built_entity, creation_event)
