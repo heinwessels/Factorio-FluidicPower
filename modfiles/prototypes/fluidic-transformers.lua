@@ -15,7 +15,7 @@ data:extend({
 data:extend
 ({ 
     ------------------------
-    -- Transformer recipes
+    -- Item recipes
     ------------------------
     {
         type = "recipe",
@@ -44,12 +44,25 @@ data:extend
         name = "fluidic-transformers"
     },
     {
+        type = "item-subgroup",
+        name = "fluidic-transformer-up",
+        group = "fluids",
+        order = "a"
+    },
+    {
+        type = "item-subgroup",
+        name = "fluidic-transformer-down",
+        group = "fluids",
+        order = "b"
+    },
+    {
         type = "recipe",
         name = "fluidic-10-kilo-to-megajoules",        
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-up-icon.png",
         icon_size = 64,
         category = "fluidic-transformers",
         order = "a[a]-a[a]",
+        subgroup = "fluidic-transformer-up",
         scale_entity_info_icon = true,        
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
 
@@ -64,6 +77,7 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-3-up-icon.png",
         order = "a[c]-a[100-megajoules]",
         category = "fluidic-transformers",
+        subgroup = "fluidic-transformer-up",
         ingredients ={{type="fluid", name="fluidic-megajoules", amount=100}},
         energy_required = 0.2,
         results={{type="fluid", name="fluidic-100-megajoules", amount=1}},
@@ -77,6 +91,7 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-1-down-icon.png",
         order = "a[b]-a[b]",
         category = "fluidic-transformers",
+        subgroup = "fluidic-transformer-down",
         ingredients ={{type="fluid", name="fluidic-megajoules", amount=10}},
         energy_required = 0.2,
         results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
@@ -89,6 +104,7 @@ data:extend
         icon_size = 64,
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-down-icon.png",
         category = "fluidic-transformers",
+        subgroup = "fluidic-transformer-down",
         order = "a[d]-a[megajoules]",
         ingredients ={{type="fluid", name="fluidic-100-megajoules", amount=1}},
         results={{type="fluid", name="fluidic-megajoules", amount=100}},

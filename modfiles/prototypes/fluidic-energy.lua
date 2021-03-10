@@ -5,6 +5,12 @@ data:extend
         name = "fluidic-generate"
     },
     {
+        type = "item-subgroup",
+        name = "fluidic-energy",
+        group = "fluids",
+        order = "z"
+    },
+    {
         type = "fluid",
         name = "fluidic-10-kilojoules",
         default_temperature = 15,
@@ -16,6 +22,7 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "z[a]",
+        subgroup = "fluidic-energy",
         auto_barrel = false -- That would be fun
     },
     {
@@ -30,6 +37,7 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-2-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "z[b]",
+        subgroup = "fluidic-energy",
         auto_barrel = false -- That would be fun
     },
     {
@@ -44,6 +52,7 @@ data:extend
         icon = "__FluidicPower__/graphics/icons/fluidic-level-3-icon.png",
         icon_size = 64, icon_mipmaps = 4,
         order = "z[c]",
+        subgroup = "fluidic-energy",
         auto_barrel = false -- That would be fun
     },
 
