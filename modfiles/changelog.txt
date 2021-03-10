@@ -8,7 +8,7 @@ Date: ??. 03. 2021
   Bugfixes:
     - Fixed overlay not drawing all connections.
     - Fixed likely multiplayer bugs.
-    - Fixed Accumulator and Energy Sensor circuit connections.
+    - Fixed Accumulator and Energy Sensor circuit connection visuals.
     - Fixed cases where fluids could be mixed accidentally.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0

@@ -4,8 +4,10 @@ util = require("util")
 build_tools = {}
 
 local script_data =
-{
-    current_overlay_target = nil,   -- This is currently a global. All players will see the overlay if alt-mode
+{   
+    -- Remember when we draw overlays
+    -- Each player will have an entry containing the entity unit number
+    current_overlay_target = { },
 }
 
 function build_tools.on_entity_created(event)    
@@ -163,19 +165,23 @@ function is_valid_fluid_connection(this, that)
     end
 end
 
-script.on_event(defines.events.on_tick, function (event)
+function build_tools.ontick (event)
     -- This functions only occationally draws an overlay.
     -- NOTE: No on_tick fluid calculations are done!
 
     for _, player in pairs(game.players) do
-        local uid = player.name -- This should be unique enough
+        local uid = player.index -- Unique key for player
         if player.selected and string.match(player.selected.name, "fluidic") then        
             local entity = player.selected        
             -- The player currently has his mouse over a fluidic entity
             
-            if entity ~= script_data.current_overlay_target then
-                -- It's a new target!            
-                reset_rendering()   -- Make sure we don't have any left-over overlays
+            if not script_data.current_overlay_target[uid] or
+                script_data.current_overlay_target[uid] ~= entity.unit_number
+            then
+                -- It's a new target!
+
+                reset_rendering()   -- Make sure we don't have any left-over overlays                
+                script_data.current_overlay_target[uid] = entity.unit_number    -- Remember this entity
 
                 if string.sub(entity.name, -8, -1) == "electric" then
                     -- At the moment power pole is selected, not fluid entity.
@@ -193,7 +199,6 @@ script.on_event(defines.events.on_tick, function (event)
                 end
                 
                 -- Now recursively draw connections from this entity
-                script_data.current_overlay_target = entity -- and remember that we did
                 show_fluidic_entity_connections(player, entity, settings.global["fluidic-electric-overlay-depth"].value)
             
             else
@@ -201,12 +206,12 @@ script.on_event(defines.events.on_tick, function (event)
             end
         else
             -- Not looking at anything important
-            if script_data.current_overlay_target ~= nil then            
+            if script_data.current_overlay_target[uid] ~= nil then
                 reset_rendering()
             end
         end
     end
-end)
+end
 
 
 function show_fluidic_entity_connections(
@@ -277,7 +282,7 @@ end
 function reset_rendering()
     -- TODO Make this specific to the lines I draw?
     rendering.clear('FluidicPower')
-    script_data.current_overlay_target = nil
+    script_data.current_overlay_target = { }    -- Everybody redraw
 end
 
 function get_fluid_neighbours(entity)
