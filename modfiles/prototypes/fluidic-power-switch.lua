@@ -20,6 +20,15 @@ data:extend({util.merge{
 data.raw["recipe"]["power-switch"].enabled = false
 
 -- Create entity
+local circuit_connections = circuit_connector_definitions.create(
+    universal_connector_template,
+    {
+        { variation = 26, main_offset = util.by_pixel(-22, 16), shadow_offset = util.by_pixel(-22, 22), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(-22, 16), shadow_offset = util.by_pixel(-22, 22), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(-22, 16), shadow_offset = util.by_pixel(-22, 22), show_shadow = true },
+        { variation = 26, main_offset = util.by_pixel(-22, 16), shadow_offset = util.by_pixel(-22, 22), show_shadow = true },
+    }
+)
 data:extend({util.merge{
     data.raw["power-switch"]["power-switch"],
     {
@@ -73,8 +82,8 @@ data:extend({util.merge{
       },
 
       -- TODO Fix the circuit wire locations    
-      circuit_wire_connection_points = circuit_connector_definitions["pump"].points,
-      circuit_connector_sprites = circuit_connector_definitions["pump"].sprites,
+      circuit_wire_connection_points = circuit_connections.points,
+      circuit_connector_sprites = circuit_connections.sprites,
       circuit_wire_max_distance = default_circuit_wire_max_distance      
     }
 }})
