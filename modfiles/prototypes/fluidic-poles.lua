@@ -66,7 +66,6 @@ function create_in_variant(base_name)
             minable = {result = name},  -- It will return the normal item
             icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
             next_upgrade = nil,             -- Upgrading done through electric item
-            flags = {"not-upgradable", "not-rotatable"}, 
             fast_replaceable_group = nil,
             crafting_speed = 1,
             energy_usage = "1W",   -- Default maximum power input
@@ -100,6 +99,7 @@ function create_in_variant(base_name)
             animation = data.raw["electric-pole"][base_name].pictures,
         }
     }})
+    table.insert(data.raw["assembling-machine"][name_place].flags, "not-rotatable")
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
@@ -197,8 +197,7 @@ function create_out_variant(base_name, name)
             type = "generator",
             name = name_place,
             minable = {result = name},  -- Should return the normal item
-            next_upgrade = nil,             -- Upgrading done through electric item
-            flags = {"not-upgradable", "not-rotatable",}, 
+            next_upgrade = nil,             -- Upgrading done through electric item            
             effectivity = 1,
             maximum_temperature = 15,
             fluid_usage_per_tick = 1,  -- Default energy output. value = P / 60
@@ -232,6 +231,7 @@ function create_out_variant(base_name, name)
             horizontal_animation = data.raw["electric-pole"][base_name].pictures,
         }
     }})
+    table.insert(data.raw["generator"][name_place].flags, "not-rotatable")
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
@@ -326,8 +326,7 @@ function create_transmit_variant(base_name, name)
             name = name_place,
             minable = {result = name},
             horizontal_window_bounding_box = {{0,0},{0,0}},
-            vertical_window_bounding_box = {{0,0},{0,0}},
-            flags = {"not-rotatable"},
+            vertical_window_bounding_box = {{0,0},{0,0}},            
             fluid_box =
             {
                 base_area = 1,               
@@ -378,6 +377,7 @@ function create_transmit_variant(base_name, name)
             }
         }
     }})
+    table.insert(data.raw["pipe"][name_place].flags, "not-rotatable")
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
