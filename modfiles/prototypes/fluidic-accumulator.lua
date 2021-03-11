@@ -38,15 +38,18 @@ override = {
     flow_length_in_ticks = 360,
     fluid_box =
     {
-      base_area = 50,
-      filter = "fluidic-10-kilojoules",      
-      pipe_connections =
-      {
-        {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 1},
-        {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 1},
-        {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = 1},
-        {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = 1},
-      }
+        -- Energy Storage = base_area x fluid_unit x 100 = 5000 kJ
+        -- So basically it's the contents of 5 poles in a 2x2 area.
+        -- Not very efficient, but how vanilla works.
+        base_area = 5,
+        filter = "fluidic-10-kilojoules",      
+        pipe_connections =
+        {
+            {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = 1},
+            {type = "input-output", position = {1.5, -0.5}, max_underground_distance = 1},
+            {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = 1},
+            {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = 1},
+        }
     },
     rotatable = false,
     window_bounding_box = {{-0.2, 0.3}, {-0.4, 0.7}},

@@ -5,12 +5,13 @@ Date: ??. 03. 2021
     - Improved fluidbox connections for increased power flow. Perfect alignment now necessary.
     - Reduced fluid units to 10kJ, 1MJ, and 100MJ to reduce internal pole buffer.
     - Much nicer icons. (Still WIP though).
+    - Rearanged recipe/fluid categories.
   Bugfixes:
-    - Fixed overlay not drawing all connections.
+    - Accumulators now actuallly store 5MJ.
+    - Overlay now draws all connections.
     - Fixed likely multiplayer bugs.
     - Fixed Accumulator, Energy Sensor and Power Switch circuit connection visuals.
     - Fixed cases where fluids could be mixed accidentally.
-    - Added better recipe/fluid categories.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 06. 03. 2021
