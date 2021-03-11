@@ -45,9 +45,9 @@ All power generation and consumption are done at a low voltage More specifically
 
 Transformers will increase the voltage of your power and allow you to distribute your power through the big power poles. For example, a `Transformer` can turn `1000 10kJ` fluid units into a single `10MJ` fluid. This higher voltage should distribute further and more balanced through your network. However, remember you need to bring the voltage down again using another transformer. 
 
-![](https://github.com/heinwessels/Factorio-FluidicPower/blob/main/images/transformers-alt.png?raw=true)
+![](https://github.com/heinwessels/Factorio-FluidicPower/blob/main/images/transformer-alt.png?raw=true)
 
-Currently, there are 3 voltage levels, or different fluid concentrations, namely `10kJ`, `10MJ`, and `1GJ`. It's recommended to not use the highest voltage (`1GJ`) at all, except when necessary (See FAQ: `My generators runs full speed while it shouldn't?`). You need to set the voltage to step-up or step-down to, similar to an assembler.
+Currently, there are 3 voltage levels, or different fluid concentrations, namely `10kJ`, `1MJ`, and `100MJ`. It's recommended to not use the highest voltage (`100MJ`), except when necessary (See FAQ: `My generators runs full speed while it shouldn't?`). You need to set the voltage to step-up or step-down to, similar to an assembler.
 
 ### Other Important Components
 

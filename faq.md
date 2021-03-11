@@ -10,7 +10,7 @@ Your UPS will be fine. Factorio is a *very optimized game*, even when this mod i
 
 How big though? The limits are not well known yet, but it's better than you might think. The worst use-case is a large spread apart factory which with many power poles. Therefore, I made an almost-worst-case 90SPM base as benchmark. It's a very spread-apart 45 SPM base using no beacons or mudules - which is duplicated. All powered from a single location. This base runs at more than 200 UPS on my six year old `i7-4770K` CPU.
 
-Here are some timing information:
+Here are some timing information using Fluidic Power V0.1:
 
 ```
 Update: 4.7 / 3.7 / 9.2
@@ -85,9 +85,9 @@ This is normal in sub-optimal power generation designs. This happens when a norm
 
 ## My generators run full speed while they shouldn't?
 
-If you're using `transformers` then it will definitely run full speed for a while to fill up the buffers inside the transformer. Each power pole also has a tiny buffer that needs to fill up. Don't worry, the power isn't disappearing, it's just stored.
+If you're using `transformers` then it will definitely run full speed for a while to fill up the buffers inside the transformer. Each power pole also has a tiny buffer that needs to fill up. Don't worry, the power isn't disappearing, it's just stored, similar to how items are stored on a belt.
 
-If you're transforming your power into `gigajoules` using two `step-up transformers` in series then your powerplant will take a while to fill up the buffers in the transformers. Remember, each unit of `gigajoule` fluid in the transformer buffer is equivalent to 200 vanilla accumulators, and a transformer can easily buffer up to 100. Don't step up the power so high unless you have the means to supply it.
+If you're transforming your power into `100MJ` units using two `step-up transformers` in series then your powerplant will take a while to fill up the buffers in the transformers. Remember, each unit of `100MJ` fluid in the transformer buffer is equivalent to 20 vanilla accumulators. Don't step up the power so high unless you have the means to supply it.
 
 ---
 
