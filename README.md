@@ -45,7 +45,7 @@ All power generation and consumption are done at a low voltage More specifically
 
 Transformers will increase the voltage of your power and allow you to distribute your power through the big power poles. For example, a `Transformer` can turn `1000 10kJ` fluid units into a single `10MJ` fluid. This higher voltage should distribute further and more balanced through your network. However, remember you need to bring the voltage down again using another transformer. 
 
-![](https://github.com/heinwessels/Factorio-FluidicPower/blob/main/images/transformers-overlay.png?raw=true)
+![](https://github.com/heinwessels/Factorio-FluidicPower/blob/main/images/transformers-alt.png?raw=true)
 
 Currently, there are 3 voltage levels, or different fluid concentrations, namely `10kJ`, `10MJ`, and `1GJ`. It's recommended to not use the highest voltage (`1GJ`) at all, except when necessary (See FAQ: `My generators runs full speed while it shouldn't?`). You need to set the voltage to step-up or step-down to, similar to an assembler.
 
@@ -68,7 +68,3 @@ This mod will create all kind of new power distribution challenges! For example,
 Here you can see an example of how such an accumulator power storage could look like, showing some of the different components. The two transformers ensure the accumulators function at the required voltage, but the voltage is increased as it connects to the Big Electric Poles. The power switches control the flow (the bottom one is enabled in the picture).
 
 ![](https://github.com/heinwessels/Factorio-FluidicPower/blob/main/images/example-accumulator.png?raw=true)
-
----
-
-*Note: If you're curious about the performance of this mod, or what kind of UPS you will be able to get, see the [FAQ](https://mods.factorio.com/mod/FluidicPower/faq).*
