@@ -70,6 +70,7 @@ for k,v in pairs(override) do
     entity[k]=v
 end
 data:extend({entity})
+table.insert(data.raw["storage-tank"]["fluidic-accumulator"].flags, "not-rotatable")
 
 -- Fix the satellite recipe to use this mod's accumulator
 for _, ingredient in pairs(data.raw.recipe["satellite"].ingredients) do

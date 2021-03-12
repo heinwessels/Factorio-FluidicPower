@@ -6,27 +6,49 @@ Please let me know! You can do this either in the modpage discussion, or find me
 
 ## What about my precious UPS?
 
-Your UPS will be fine. Factorio is a *very optimized game*, even when this mod is hacking systems to do something it wasn't really designed for. This mod will require more processing which means you won't be able to build as big as you usually could, similar to other performance heavy mods (e.g. [Rampant](https://mods.factorio.com/mod/Rampant)). But, you can still build a decently sized factory.
+Your UPS will be fine. Factorio is a *very optimized game*, even when this mod is hacking systems to do something it wasn't really designed for. This mod will require more processing which means you won't be able to build as big as you usually could, similar to other performance heavy mods (e.g. [Rampant](https://mods.factorio.com/mod/Rampant)). But, you can still build a fairly big factory, depending on your hardware and factory layout.
 
-How big though? The limits are not well known yet, but it's better than you might think. The worst use-case is a large spread apart factory which with many power poles. Therefore, I made an almost-worst-case 90SPM base as benchmark. It's a very spread-apart 45 SPM base using no beacons or mudules - which is duplicated. All powered from a single location. This base runs at more than 200 UPS on my six year old `i7-4770K` CPU.
+In `Fluidic Power` the main `bottleneck` is the `Electric Network` calculations - by a very big margin. This is because each pole creates its own electric network. The game is designed to handle a handful of very large electric networks, but now it needs to manage hundreds of very small ones. Therefore, the most UPS efficient base with Fluidic Power will be the base with the least amount of poles. You're likely wondering about the fluids calculations? Well, the `Fluid Manager`, which does all fluid calculations, has an almost negligible impact on performance in a normal factory.
 
-Here are some timing information using Fluidic Power V0.1:
+I built two benchmark bases to get some idea how big a performance hit this mod is and ran the bases until steady state. One base is steam-powered, and the other is solar-powered.  They are both `90 SPM` bases. They are both using a very spread-out main bus, with no modules and also no electric furnaces. It consumes around `280MW` at full pace. My trusty old computer has a 7-year-old `i7-4770k 3.5GHz` CPU.
 
+**Steam Powered: 220+ UPS**
 ```
-Update: 4.7 / 3.7 / 9.2
-    Game update:    4.6 / 3.6 / 9
-        Transport lines:    0.71    / 0.49  / 1.21
-        Fluid Manager:      0.03    / 0.01  / 0.15
-        Entity Update:      1.48    / 1.08  / 2.79
-        Electric Network:   2.35    / 1.87  / 6.19
+Update: 4.38 / 3.02 / 8.81
+    Game update:    4.29 / 2.86 / 8.73
+        Transport Lines:    0.65    / 0.34  / 1.06
+        Fluid Manager:      0.02    / 0.01  / 0.09
+        Entity Update:      1.32    / 0.66  / 2.69
+        Electric Network:   2.21    / 1.47  / 6.55
 
-    Script Update:  0.03 / 0.02 / 0.7
-        mod-FluidicPower:   0.03 / 0.02 / 0.06
+    Script Update:  0.04 / 0.01 / 0.08
+        mod-FluidicPower:   0.04 / 0.01 / 0.08
 ```
 
-Interesting enough, it's not the `Fluid Manager` that takes the most time. Rather, it's the `Electric Network` update. This is understandable, since each and every pole is it's own seperate electric network, which could introduce a lot of extra calculations. Also note that the transport belts in my main bus still use `more than 8 times` as much processing than the fluids in the mod's power poles!
+**Solar Powered: 140+ UPS**
+```
+Update: 6.25 / 5.16 / 15.18
+    Game update:    6.16 / 5.12 / 15
+        Transport Lines:    0.70    / 0.44  / 1.26
+        Fluid Manager:      0.03    / 0.01  / 0.38
+        Entity Update:      1.53    / 1.10  / 2.48
+        Electric Network:   3.35    / 2.82  / 12.8
 
-It's impossible to predict how exactly large you can build. It depends on your PC specs and Factorio layout. But if you have an average CPU, you can definitely finish the game, and *likely* even scale up production to at least 60 SPM, all while still running at 60 UPS. And if you have a beefy CPU, you might even be able to reach a few hundred SPM if built correctly!
+    Script Update:  0.04 / 0.02 / 0.10
+        mod-FluidicPower:   0.03 / 0.02 / 0.10
+```
+
+Here you can see the clear effect bottleneck of the `Electric Network`. The solar farm requires over 400 more power poles than using steam, which causes the `Electric Network`'s effect to increase drastically. This also means that with Fluidic Power power generation through steam is UPS king. The `Fluid Manager`'s effect on UPS is negligible. For reference, the `Transport Lines` in the main bus is more than 5 times more performance heavy than the fluids. 
+
+Therefore, Fluidic Power is `not too performance heavy`. You can definitely finish the game on average hardware and likely reach 100SPM. And if you build efficiently and/or if you have a beefy CPU, you can even reach a few hundred SPM. 
+
+
+If you want to maximize UPS, remember:
+
+- The fewer power poles the better.
+- Compact bases are better.
+- Use big poles as far as you can.
+- Steam is better than solar.
 
 ---
 
@@ -93,4 +115,4 @@ If you're transforming your power into `100MJ` units using two `step-up transfor
 
 ## Solar farm not exporting all it's power.
 
-Solar farms work best using only source poles and big poles. If the electric network on a source pole still doesn't show the full output then the network cannot handle the power flow. Use less poles or step-up the voltage using a transformer.
+Solar farms work best using only source poles and big poles. If the electric network on a source pole still doesn't show the full output then the network cannot handle the power flow. Use fewer poles or step-up the voltage using a transformer.

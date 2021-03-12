@@ -1,6 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 12. 03. 2021
+  Bugfixes:
+    - Mining resources by hand will no longer instantly deplete. (Thanks Redaun!)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 11. 03. 2021
+  Bugfixes:
+    - Ninja fixing accumulators being rotatable and so disconnecting from their neighbours.
+---------------------------------------------------------------------------------------------------
 Version: 0.3.0
-Date: ??. 03. 2021
+Date: 11. 03. 2021
   Changes:
     - Improved fluidbox connections for increased power flow. Perfect alignment now necessary.
     - Reduced fluid units to 10kJ, 1MJ, and 100MJ to reduce internal pole buffer.

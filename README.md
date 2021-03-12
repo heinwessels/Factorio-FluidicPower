@@ -68,3 +68,11 @@ This mod will create all kind of new power distribution challenges! For example,
 Here you can see an example of how such an accumulator power storage could look like, showing some of the different components. The two transformers ensure the accumulators function at the required voltage, but the voltage is increased as it connects to the Big Electric Poles. The power switches control the flow (the bottom one is enabled in the picture).
 
 ![](https://github.com/heinwessels/Factorio-FluidicPower/blob/main/images/example-accumulator.png?raw=true)
+
+
+---
+
+### Credits
+
+- **justarandomgeek:** He didn't directly help develop this mod, but it would not have been possible without his [Factorio Mod Debugger](https://marketplace.visualstudio.com/items?itemName=justarandomgeek.factoriomod-debug).
+- **Multyino:** For the German and Hebruw translations.

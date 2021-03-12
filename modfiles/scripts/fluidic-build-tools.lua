@@ -60,6 +60,9 @@ function build_tools.on_entity_removed(event)
         local entity = event.entity
         -- Something has been removed. Make sure there are no unwanted connections
 
+        -- We don't care when you are mining resources.
+        if entity.type == "resource" then return end
+
         -- Remember entity's neighbours and then destroy him as user wants
         local neighbours = get_fluid_neighbours(entity)
         entity.destroy()
