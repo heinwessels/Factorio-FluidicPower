@@ -3,10 +3,10 @@ poles = require("scripts.fluidic-handle-poles")
 
 function creation_event (event)        
     
+    -- First need build tools to check connections
+    -- before the creation event is triggered
     build_tools.on_entity_created(event)
 
-    -- First need build tools to make sure
-    -- the placer we placed is valid.
     poles.on_entity_created(event)
 end
 
@@ -17,8 +17,11 @@ script.on_event(defines.events.script_raised_revive, creation_event)
 script.on_event(defines.events.on_robot_built_entity, creation_event)
 
 function removal_event (event)
-    poles.on_entity_removed(event)
+    -- First need build tools to check connections
+    -- before the removal event is triggered
     build_tools.on_entity_removed(event)
+
+    poles.on_entity_removed(event)   
 end
 
 script.on_event(defines.events.on_player_mined_entity, removal_event)

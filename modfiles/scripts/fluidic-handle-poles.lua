@@ -3,55 +3,6 @@ util = require("util")
 
 poles = {}
 
--- Which entity should be created on the following occations
-local lu_on_created = {}
-lu_on_created[
-    "fluidic-small-electric-pole-in"
-] = "fluidic-small-electric-pole-in-electric"
-lu_on_created[
-    "fluidic-small-electric-pole-out"
-] = "fluidic-small-electric-pole-out-electric"
-lu_on_created[
-    "fluidic-medium-electric-pole-in"
-] = "fluidic-medium-electric-pole-in-electric"
-lu_on_created[
-    "fluidic-medium-electric-pole-out"
-] = "fluidic-medium-electric-pole-out-electric"
-lu_on_created[
-    "fluidic-substation-in"
-] = "fluidic-substation-in-electric"
-lu_on_created[
-    "fluidic-substation-out"
-] = "fluidic-substation-out-electric"
-lu_on_created[
-    "fluidic-big-electric-pole"
-] = "fluidic-big-electric-pole-electric"
-
--- On entity destroyed connections lookup table
-local lu_on_destroyed = {}
-lu_on_destroyed[
-    "fluidic-small-electric-pole-in-electric"
-] = "fluidic-small-electric-pole-in"
-lu_on_destroyed[
-    "fluidic-small-electric-pole-out-electric"
-] = "fluidic-small-electric-pole-out"
-lu_on_destroyed[
-    "fluidic-medium-electric-pole-in-electric"
-] = "fluidic-medium-electric-pole-in"
-lu_on_destroyed[
-    "fluidic-medium-electric-pole-out-electric"
-] = "fluidic-medium-electric-pole-out"
-lu_on_destroyed[
-    "fluidic-substation-in-electric"
-] = "fluidic-substation-in"
-lu_on_destroyed[
-    "fluidic-substation-out-electric"
-] = "fluidic-substation-out"
-lu_on_destroyed[
-    "fluidic-big-electric-pole-electric"
-] = "fluidic-big-electric-pole"
-
-
 -------------------------
 -- HANDLERS
 -------------------------
@@ -81,17 +32,18 @@ function poles.on_entity_created(event)
     end
 
     -- Now create whatever is needed to assist this entity
-    if lu_on_created[entity.name] then
+    local fluid_name = fluidic_utils.entity_fluid_to_electric_lu[entity.name]
+    if fluid_name then
 
         -- Place the electronic entity on the fluid entity
         -- But only if it doesn't exist already
         if not fluidic_utils.entity_exists_at(
-            lu_on_created[entity.name], 
+            fluid_name, 
             entity.surface, 
             entity.position
         ) then
             local pole = entity.surface.create_entity{
-                name = lu_on_created[entity.name],
+                name = fluid_name,
                 position = {x = entity.position.x, y = entity.position.y},
                 direction = entity.direction,                
                 force = entity.force,
@@ -110,15 +62,16 @@ function poles.on_entity_created(event)
     -- part, and we want the fluidy part. So I add it here if it wasn't
     -- placed.
     -- TODO Why though?
-    if lu_on_destroyed[entity.name] then
+    local electric_name = fluidic_utils.entity_electric_to_fluid_lu[entity.name]
+    if electric_name then
         -- It could be an occation like this. Does the fluidy part exist?
         if not fluidic_utils.entity_exists_at(
-            lu_on_destroyed[entity.name], 
+            electric_name, 
             entity.surface, entity.position
         ) then
             -- Entity is not there.
             entity.surface.create_entity{
-                name = lu_on_destroyed[entity.name],
+                name = electric_name,
                 position = {x = entity.position.x, y = entity.position.y},
                 direction = entity.direction,                
                 force = entity.force,
@@ -154,23 +107,19 @@ function poles.on_entity_removed(event)
     -- This simply destroys the fluid entity undeneath the electric entity
     if event.entity and event.entity.valid then
         local surface = event.entity.surface
-        if lu_on_destroyed[event.entity.name] then
+        local fluid_name = fluidic_utils.entity_fluid_to_electric_lu[event.entity.name]
+        local electric_name = fluidic_utils.entity_electric_to_fluid_lu[event.entity.name]
+        if fluid_name then
             -- This entity was one of our special entities.
-
-            -- -- Make sure the correct item is mined
-            -- if fluidic_utils.table_has_attribute(event, "buffer") then
-            --     event.buffer.clear()
-            --     event.buffer.insert{name=lu_on_destroyed[event.entity.name]}
-            -- end
 
             -- Destroy the fluidic component beneath
             local e = event.entity.surface.find_entity(
-                lu_on_destroyed[event.entity.name], 
+                fluid_name, 
                 event.entity.position
             )
             if e then e.destroy{raise_destroy=false} end
 
-        elseif lu_on_created[event.entity.name] then
+        elseif electric_name then
             -- When placing blueprint with wrong connection
             -- the electric entity will already be there, which
             -- means we need to add this hack to delete it.
@@ -178,7 +127,7 @@ function poles.on_entity_removed(event)
 
             -- Destroy the electric component on top
             local e = event.entity.surface.find_entity(
-                lu_on_created[event.entity.name], 
+                electric_name,
                 event.entity.position
             )
             if e then e.destroy{raise_destroy=false} end

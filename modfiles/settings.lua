@@ -13,10 +13,4 @@ data:extend({
         setting_type = "runtime-global",
         default_value = true
     },
-    {
-        type = "bool-setting",
-        name = "fluidic-allow-chained-destruction",
-        setting_type = "runtime-global",
-        default_value = true
-    },
 })

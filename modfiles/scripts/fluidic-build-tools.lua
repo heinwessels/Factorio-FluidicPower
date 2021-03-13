@@ -8,6 +8,11 @@ local script_data =
     -- Remember when we draw overlays
     -- Each player will have an entry containing the entity unit number
     current_overlay_target = { },
+
+    -- Here a list is kept of fluid connections to check for
+    -- illegal building. It contains a list of {entity, neighbours, event}
+    -- where we expect the entity to have been destroyed already.
+    neigbours_to_check = { },
 }
 
 function build_tools.on_entity_created(event)    
@@ -44,7 +49,9 @@ function build_tools.on_entity_created(event)
 
                 -- Destroy the entity
                 entity.destroy{
-                    raise_destroy=true -- TODO Is this required?
+                    -- It's requried (I believe) to raise this event incase
+                    -- the other entity is modded and needs the event.
+                    raise_destroy=true
                 }
             end
 
@@ -58,59 +65,99 @@ function build_tools.on_entity_removed(event)
     
     if event.entity and event.entity.valid then
         local entity = event.entity
-        -- Something has been removed. Make sure there are no unwanted connections
+        
+        -- Something has been removed. We need to make sure it creates no
+        -- new unwanted connections. We can't check it now though, since
+        -- the entity that's being removed is still in the way. So we will
+        -- see if it *could* interfere, and if it could, we will check it again
+        -- in the next tick.
 
-        -- We don't care when you are mining resources.
-        if entity.type == "resource" then return end
+        -- If it's one of our poles we need to get the fluid component.
+        -- Otherwise, just check the normal entity
+        local entity_to_check = fluidic_utils.get_fluidic_entity_from_electric(entity)
+        if not entity_to_check then entity_to_check = entity end
+        
+        -- Now check if it has fluidboxes
+        if has_underground_fluidbox(entity_to_check) then
+            -- This entity could have underground neighbours.
 
-        -- Remember entity's neighbours and then destroy him as user wants
-        local neighbours = get_fluid_neighbours(entity)
-        entity.destroy()
+            local neighbours = get_fluid_neighbours(entity_to_check)
+            if neighbours then
+                -- And it has neighbours. We will check it next tick
 
-        -- Now make sure this didn't create any unwanted connections
-        for _, neighbour in ipairs(neighbours) do
-            
-            -- Between this neighbour and his neighbours
-            local his_neighbours = get_fluid_neighbours(neighbour)
-            for _, his_neighbour in ipairs(his_neighbours) do
-
-                if not is_valid_fluid_connection(neighbour, his_neighbour) then
-                    -- Invalid connection with the neighbour's neighbour!
-                    -- It might connect a normal pipe to a fluidic pipe!
-
-                    -- Decide which entity is wrong
-                    local entity_to_destroy = his_neighbour
-                    if string.match(his_neighbour.name, "fluidic") then entity_to_destroy = neighbour end
-
-                    -- Notify the player. (Or all the players actually)
-                    neighbour.surface.create_entity{
-                        name = "flying-text",
-                        type = "flying-text",
-                        text = "Can't connect Fluidic Power with normal fluids",
-                        position  = entity_to_destroy.position
+                table.insert(
+                    script_data.neigbours_to_check,
+                    {
+                        entity = entity_to_check,
+                        neighbours = neighbours,
+                        event = event
                     }
-                    
-                    if settings.global["fluidic-enable-build-limitations"].value then
-                        -- Destroy the non-fluidic entiry to avoid this connection.
-                        -- And give the player the item back                        
-
-                        -- Keep local copy to return an item to the player
-                        local entity_copy = util.table.deepcopy(entity_to_destroy)
-                        return_item_from_entity(event, entity_copy) -- The <entity> will be invalid by now
-
-                        entity_to_destroy.destroy{
-                            -- If allowed, raise another event on the destroid entity, 
-                            -- because it might cause yet another incorrect connection.
-                            -- Can be disabled, cause it can cause chain reactions
-                            raise_destroy=settings.global["fluidic-allow-chained-destruction"].value
-                        }
-
-                    end
-                    break                        
-                end
+                )
             end
         end
     end    
+end
+
+function check_fluid_connection_backlog()
+    -- During <on_entity_removed> we cannot check for 
+    -- any new connections that might be wrong because
+    -- the original entity is still in the way.
+
+    for key, entry in pairs(script_data.neigbours_to_check) do
+
+        -- If entry is not valid then it was removed
+        if not entry.entity.valid then
+            
+            local neighbours = entry.neighbours
+
+            -- Now make sure this didn't create any unwanted connections
+            for _, neighbour in ipairs(neighbours) do
+                
+                -- Make sure this entity wasn't removed in the mean time
+                if not neighbour.valid then break end
+
+                -- Between this neighbour and his neighbours
+                local his_neighbours = get_fluid_neighbours(neighbour)
+                for _, his_neighbour in ipairs(his_neighbours) do
+
+                    if not is_valid_fluid_connection(neighbour, his_neighbour) then
+                        -- Invalid connection with the neighbour's neighbour!
+                        -- It might connect a normal pipe to a fluidic pipe!
+
+                        -- Decide which entity is wrong
+                        local entity_to_destroy = his_neighbour
+                        if string.match(his_neighbour.name, "fluidic") then entity_to_destroy = neighbour end
+
+                        -- Notify the player. (Or all the players actually)
+                        neighbour.surface.create_entity{
+                            name = "flying-text",
+                            type = "flying-text",
+                            text = "Can't connect Fluidic Power with normal fluids",
+                            position  = entity_to_destroy.position
+                        }
+                        
+                        if settings.global["fluidic-enable-build-limitations"].value then
+                            -- Destroy the non-fluidic entiry to avoid this connection.
+                            -- And give the player the item back                        
+
+                            -- Keep local copy to return an item to the player
+                            local entity_copy = util.table.deepcopy(entity_to_destroy)
+                            return_item_from_entity(entry.event, entity_copy) -- The <entity> will be invalid by now
+
+                            entity_to_destroy.destroy{
+                                -- We must allways raise an destroy event on other entities. 
+                                --- It could be a modded entity and need the destroy event.
+                                raise_destroy=true
+                            }
+                        end
+                    end
+                end
+            end
+        end
+
+        -- Now delete the entry
+        script_data.neigbours_to_check[key] = nil
+    end
 end
 
 function return_item_from_entity(event, entity)
@@ -153,6 +200,27 @@ function return_item_from_entity(event, entity)
     end
 end
 
+function has_underground_fluidbox(entity)
+    -- Returns true if this entity has an underground 
+    -- fluidbox connection that can connect to one
+    -- of our poles.
+
+    if not entity.prototype.fluidbox_prototypes then return false end
+    for _, fluidbox in pairs(entity.prototype.fluidbox_prototypes) do
+        for _, connection in pairs(fluidbox.pipe_connections) do
+            if connection.max_underground_distance then
+                -- It has an max underground distance field,
+                -- meaning it can interact with fluidic power
+                -- poles, or is an fluidic power pole.
+                return true
+            end
+        end
+    end
+    
+    -- Has fluid connections, but no underground ones
+    return false
+end
+
 function is_valid_fluid_connection(this, that)
     -- Checks if the fluid connection between this entity 
     -- and that entity is invalid. Returns true if
@@ -172,6 +240,11 @@ function build_tools.ontick (event)
     -- This functions only occationally draws an overlay.
     -- NOTE: No on_tick fluid calculations are done!
 
+    -- If there was a destroy event, make sure it didn't
+    -- create any unwanted fluid connections
+    check_fluid_connection_backlog()
+
+    -- Now draw the overlay if requried
     for _, player in pairs(game.players) do
         local uid = player.index -- Unique key for player
         if player.selected and string.match(player.selected.name, "fluidic") then        
@@ -215,7 +288,6 @@ function build_tools.ontick (event)
         end
     end
 end
-
 
 function show_fluidic_entity_connections(
     player, entity, depth, black_list
