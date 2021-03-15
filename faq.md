@@ -40,7 +40,7 @@ Update: 6.25 / 5.16 / 15.18
 
 Here you can see the clear effect bottleneck of the `Electric Network`. The solar farm requires over 400 more power poles than using steam, which causes the `Electric Network`'s effect to increase drastically. This also means that with Fluidic Power power generation through steam is UPS king. The `Fluid Manager`'s effect on UPS is negligible. For reference, the `Transport Lines` in the main bus is more than 5 times more performance heavy than the fluids. 
 
-Therefore, Fluidic Power is `not too performance heavy`. You can definitely finish the game on average hardware and likely reach 100SPM. And if you build efficiently and/or if you have a beefy CPU, you can even reach a few hundred SPM. 
+Therefore, Fluidic Power is `not too performance heavy`. You can definitely finish the game on average hardware and likely reach 100SPM. And if you build efficiently and/or if you have a beefy CPU, you can even reach a few hundred SPM. All while running at a smooth 60 UPS.
 
 
 If you want to maximize UPS, remember:
@@ -60,7 +60,13 @@ Yes. At the moment there's no automatic migration from vanilla to Fluidic Power.
 
 ## Does it work with other mods?
 
-It should work out of the box if the other mod doesn't touch power poles or create any new power poles. Contact me if you want to make sure that it works with your mods. This also means that overhaul mods like Krastorio or Space Exploration will definitely not work.
+It *should* work out of the box if the other mod doesn't touch power poles or create any new power poles. Contact me if you want to make sure that it works with your mods. This also means that overhaul mods like Krastorio or Space Exploration will definitely not work.
+
+---
+
+## Can I add it to my mod?
+
+Yes. It's just important to remember that Fluidic Power creates all new power poles (all prefixed with ``fluidic-...``), but leaves the vanilla power poles in the game. So you need to be careful to not give players access to the vanilla poles by accident. I've added a tag in the vanilla item and entity description to not use them if you have access to them by accident.
 
 ---
 

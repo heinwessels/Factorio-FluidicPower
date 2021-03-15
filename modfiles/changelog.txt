@@ -2,7 +2,8 @@
 Version: 0.3.3
 Date: ??. 03. 2021
   Changes:
-    - Plays nicer with other mods by not destroying their entities without notice/
+    - Plays nicer with other mods by not destroying their entities without notice.
+    - Added warning in description to remnent vanilla poles to not use them. (Thanks FireDuck!)
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.2
 Date: 12. 03. 2021
