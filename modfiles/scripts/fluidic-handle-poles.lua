@@ -91,14 +91,7 @@ function disconnect_entity_and_neighbours(entity)
 
     -- Have we deleted this entity? Then do nothing.
     if not entity.valid then return end
-
-    -- First disconnect his neighbours
-    for _, neighbour in ipairs(entity.neighbours["copper"]) do
-        if neighbour.name ~= "entity-ghost" then
-            neighbour.disconnect_neighbour()
-        end
-    end
-
+    
     -- Now disconnect the entity itself from any remaining poles
     entity.disconnect_neighbour()
 end
