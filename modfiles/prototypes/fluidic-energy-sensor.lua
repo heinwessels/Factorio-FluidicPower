@@ -27,7 +27,7 @@ data:extend({
         ingredients =
         {
             -- Similar to power switch
-            {"steel-plate", 2},
+            {"iron-plate", 2},
             {"copper-cable", 5},
             {"electronic-circuit", 2}
         },

@@ -32,8 +32,18 @@ script.on_event(defines.events.script_raised_destroy, removal_event)
 function ontick_event (event)
     build_tools.ontick(event)
 end
-
 script.on_event(defines.events.on_tick, ontick_event)
+
+
+-- Hack this in here for now. TODO Move somewhere else
+script.on_configuration_changed(function()
+    for index, force in pairs(game.forces) do
+        local technologies = force.technologies
+        local recipes = force.recipes        
+        recipes["fluidic-energy-sensor"].enabled = technologies["circuit-network"].researched
+    end
+end)
+
 
 
 -- Nice command ingame to see which entities are underneath the pointer
