@@ -75,4 +75,3 @@ Here you can see an example of how such an accumulator power storage could look 
 ### Credits
 
 - **justarandomgeek:** He didn't directly help develop this mod, but it would not have been possible without his [Factorio Mod Debugger](https://marketplace.visualstudio.com/items?itemName=justarandomgeek.factoriomod-debug).
-- **Multyino:** For the German and Hebruw translations.

@@ -207,6 +207,7 @@ function create_out_variant(base_name, name)
             fluid_box =
             {
                 base_area = 1,
+                -- base_level = 0,
                 pipe_connections =
                 {
                     {type = "input-output", position = {-1, 0}, max_underground_distance = wire_reach},

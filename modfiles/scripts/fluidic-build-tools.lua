@@ -298,15 +298,18 @@ function show_fluidic_entity_connections(
             
         local should_draw_connection = true
 
-        -- If both of these are <in> entities then this connection
-        -- isn't valid. Check for keyword
-        if string.sub(entity.name, -2, -1)=='in' and string.sub(neighbour.name, -2, -1)=='in' then
+        --| Do some checks |--
+
+        -- An in entity cannot be connected from an out enetity
+        if string.sub(entity.name, -2, -1)~='in' and string.sub(neighbour.name, -2, -1)=='in' then
             should_draw_connection = false
         end
 
         -- Draw the connection to this neighbour
         -- Regardless if it's on the blacklist or not
-        draw_connection(player, entity, entity.position, neighbour.position)
+        if should_draw_connection then
+            draw_connection(player, entity, entity.position, neighbour.position)
+        end
         
         -- Are we coming from this neighbour?
         if black_list ~= nil then

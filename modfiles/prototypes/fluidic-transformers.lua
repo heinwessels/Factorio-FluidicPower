@@ -146,9 +146,9 @@ data:extend({util.merge{
             -- But, needs to be rotatable without issues.
             {
                 production_type = "input",        
-                base_area = 10,
+                base_area = 1,
                 base_level = -1,
-                height = 2,
+                height = 1,
                 pipe_connections = {
                     {type = "input", position = {-1.5, 0.5}, max_underground_distance = 3},
                     {type = "input", position = {-1.5, -0.5}, max_underground_distance = 3},
