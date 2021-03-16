@@ -48,7 +48,9 @@ function poles.on_entity_created(event)
                 direction = entity.direction,                
                 force = entity.force,
                 
-                raise_built = true -- Trigger the builder limitations.
+                -- Building limitation has already been triggered. 
+                -- No need to raise the event
+                raise_built = false -- TODO SHOULD BE FALSE
             }
 
             -- Now remove the copper wires.
@@ -92,6 +94,11 @@ function disconnect_entity_and_neighbours(entity)
     -- Have we deleted this entity? Then do nothing.
     if not entity.valid then return end
     
+    -- Don't do it unnecessarily. 
+    local count = 0
+    for _ in pairs(entity.neighbours.copper) do count = count + 1 end
+    if count == 0 then return end
+
     -- Now disconnect the entity itself from any remaining poles
     entity.disconnect_neighbour()
 end

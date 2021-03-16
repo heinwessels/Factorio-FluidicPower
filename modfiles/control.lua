@@ -34,7 +34,6 @@ function ontick_event (event)
 end
 script.on_event(defines.events.on_tick, ontick_event)
 
-
 -- Hack this in here for now. TODO Move somewhere else
 script.on_configuration_changed(function()
     for index, force in pairs(game.forces) do
@@ -51,3 +50,7 @@ end)
 
 -- Destroy specific entity
 -- /c game.player.surface.find_entity("fluidic-medium-electric-pole-electric", game.player.selected.position).destroy()
+
+-- TO USE DEBUGGER LOG
+-- require('__debugadapter__/debugadapter.lua')
+-- __DebugAdapter.print(expr,alsoLookIn)

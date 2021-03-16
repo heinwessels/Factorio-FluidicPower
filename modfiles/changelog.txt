@@ -6,6 +6,7 @@ Date: ??. 03. 2021
     - Added warning in description to remnent vanilla poles to not use them. (Thanks FireDuck!)
     - Energy Sensor now unlocked with Circuit Network.
     - Energy Sensor no longer requires steel.
+    - Transformer recipes no longer visible in crafting menu.
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.2
 Date: 12. 03. 2021
