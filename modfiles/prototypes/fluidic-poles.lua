@@ -101,6 +101,9 @@ function create_in_variant(base_name)
     }})
     table.insert(data.raw["assembling-machine"][name_place].flags, "not-rotatable")
     table.insert(data.raw["assembling-machine"][name_place].flags, "hide-alt-info")
+    data.raw["assembling-machine"][name_place].animation.layers[1].filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
+    data.raw["assembling-machine"][name_place].animation.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
+    
 
     -- Now create the main entity without graphics
     data:extend({util.merge{

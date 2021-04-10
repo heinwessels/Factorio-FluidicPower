@@ -255,8 +255,14 @@ function build_tools.ontick (event)
                 script_data.current_overlay_target[uid] ~= entity.unit_number
             then
                 -- It's a new target!
+                
+                if script_data.current_overlay_target[uid] ~= entity.unit_number then
+                    -- If moved to a new entity reset the rendering.
+                    -- This means it will have to redraw for other players. But for them
+                    -- the reset_rendering will not be called.
+                    reset_rendering()
+                end
 
-                reset_rendering()   -- Make sure we don't have any left-over overlays                
                 script_data.current_overlay_target[uid] = entity.unit_number    -- Remember this entity
 
                 if string.sub(entity.name, -8, -1) == "electric" then
@@ -300,8 +306,9 @@ function show_fluidic_entity_connections(
 
         --| Do some checks |--
 
-        -- An in entity cannot be connected from an out enetity
-        if string.sub(entity.name, -2, -1)~='in' and string.sub(neighbour.name, -2, -1)=='in' then
+        -- If both of these are <in> entities then this connection
+        -- isn't valid. Check for keyword
+        if string.sub(entity.name, -2, -1)=='in' and string.sub(neighbour.name, -2, -1)=='in' then
             should_draw_connection = false
         end
 
@@ -357,8 +364,7 @@ function draw_connection(player, entity, here, there)
     end
 end
 
-function reset_rendering()
-    -- TODO Make this specific to the lines I draw?
+function reset_rendering()    
     rendering.clear('FluidicPower')
     script_data.current_overlay_target = { }    -- Everybody redraw
 end
