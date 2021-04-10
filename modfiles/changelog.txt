@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.4
 Date: ??. 03. 2021
+  Changes:
+    - Now hiding annoying fluid box markers.
   Bugfixes:
     - Overlay now draws correctly, showing power access as if flowing from selected pole.
 ---------------------------------------------------------------------------------------------------

@@ -100,6 +100,7 @@ function create_in_variant(base_name)
         }
     }})
     table.insert(data.raw["assembling-machine"][name_place].flags, "not-rotatable")
+    table.insert(data.raw["assembling-machine"][name_place].flags, "hide-alt-info")
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
@@ -233,6 +234,7 @@ function create_out_variant(base_name, name)
         }
     }})
     table.insert(data.raw["generator"][name_place].flags, "not-rotatable")
+    table.insert(data.raw["generator"][name_place].flags, "hide-alt-info")
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
