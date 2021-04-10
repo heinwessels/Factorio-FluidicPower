@@ -71,6 +71,9 @@ for k,v in pairs(override) do
 end
 data:extend({entity})
 table.insert(data.raw["storage-tank"]["fluidic-accumulator"].flags, "not-rotatable")
+if settings.startup["fluidic-disable-accumulator-alt-info"].value then
+    table.insert(data.raw["storage-tank"]["fluidic-accumulator"].flags, "hide-alt-info")
+end
 
 -- Fix the satellite recipe to use this mod's accumulator
 for _, ingredient in pairs(data.raw.recipe["satellite"].ingredients) do
