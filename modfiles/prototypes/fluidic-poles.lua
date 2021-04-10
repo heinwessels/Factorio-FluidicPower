@@ -131,6 +131,8 @@ function create_in_variant(base_name)
             fast_replaceable_group = nil,
         }
     }})
+    data.raw["electric-pole"][name_electric].pictures.layers[1].filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
+    data.raw["electric-pole"][name_electric].pictures.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
 
     -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
     if not constants.expose_fluid_boxes then
