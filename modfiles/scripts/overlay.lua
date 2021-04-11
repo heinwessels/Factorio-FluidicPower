@@ -168,7 +168,7 @@ function overlay.draw_connection(player, entity, here, there)
         to = there,
         surface = entity.surface,
         players = {player},
-        only_in_alt_mode = true
+        only_in_alt_mode = false
     }
     for _, point in ipairs{here, there} do
         rendering.draw_circle{
@@ -178,7 +178,7 @@ function overlay.draw_connection(player, entity, here, there)
             target = point,
             surface = entity.surface,
             players = {player},
-            only_in_alt_mode = true
+            only_in_alt_mode = false
         }
     end
 end
