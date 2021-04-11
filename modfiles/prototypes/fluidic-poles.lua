@@ -102,7 +102,7 @@ function create_in_variant(base_name)
     table.insert(data.raw["assembling-machine"][name_place].flags, "not-rotatable")
     table.insert(data.raw["assembling-machine"][name_place].flags, "hide-alt-info")
     data.raw["assembling-machine"][name_place].animation.layers[1].filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
-    data.raw["assembling-machine"][name_place].animation.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
+    data.raw["assembling-machine"][name_place].animation.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/electric-poles/hr-"..base_name..".png"
     
 
     -- Now create the main entity without graphics
@@ -135,7 +135,7 @@ function create_in_variant(base_name)
         }
     }})
     data.raw["electric-pole"][name_electric].pictures.layers[1].filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
-    data.raw["electric-pole"][name_electric].pictures.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
+    data.raw["electric-pole"][name_electric].pictures.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/electric-poles/hr-"..base_name..".png"
 
     -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
     if not constants.expose_fluid_boxes then

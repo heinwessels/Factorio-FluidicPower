@@ -25,11 +25,11 @@ Power poles are similar to pipes. This means they need to be placed inline with 
 
 There are `two` types of `power poles`. The first is most of the normal power poles, i.e. the small and medium power poles and the substation. These you will use to distribute your power and supply power to your buildings as you would usually. However, each tier pole can only supply a limited amount of power, for example, the small pole can only supply 5MW, but can transmit more.
  
-Then there is a new type, the **Power Pole Source**. These are used *only* where you generate your power. You will place these next to steam engines, turbines, solar panels, or any modded power generation building (not accumulators). Currently, these poles cannot connect to one another directly, so you would need to transfer the generated power away by connecting each source pole *directly* to a normal pole (or transformer!). Each tier can only source a limited amount of power to your network. For example, the small electric pole can only source 5MW.
+Then there is a new type, the **Power Pole Source**, which has a yellow tint. These are used *only* where you generate your power. You will place these next to steam engines, turbines, solar panels, or any modded power generation building (not accumulators). Currently, these poles cannot connect to one another directly, so you would need to transfer the generated power away by connecting each source pole *directly* to a normal pole (or transformer!). Each tier can only source a limited amount of power to your network. For example, the small electric pole can only source 5MW.
 
 ![](https://github.com/heinwessels/Factorio-FluidicPower/blob/main/images/pole-types.png?raw=true)
 
-*Here a source pole (left) transfers the power to the normal pole (right) to power the radar. They look the same but have different icons in `Alt-Mode`. The lack of visual wire will be explained later.*
+*Here a source pole (left) transfers the power to the normal pole (right) to power the radar. Notice the yellow tint of the Source Pole. The lack of visual wire will be explained later.*
 
 The big power pole is different in that it can *only* transmit power. It cannot source power from generators or supply any buildings. It's also the only power pole that can transmit higher "voltages", but for that, you would need transformers. More on that next.
 
