@@ -36,7 +36,7 @@ Date: 11. 03. 2021
     - Much nicer icons. (Still WIP though).
     - Rearanged recipe/fluid categories.
   Bugfixes:
-    - Accumulators now actuallly store 5MJ.
+    - Accumulators now actually store 5MJ.
     - Overlay now draws all connections.
     - Fixed likely multiplayer bugs.
     - Fixed Accumulator, Energy Sensor and Power Switch circuit connection visuals.

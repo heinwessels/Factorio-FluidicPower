@@ -58,7 +58,9 @@ function overlay.ontick (event)
                         {
                             this_node = entity,
                             prev_node = nil,
-                            depth = settings.global["fluidic-electric-overlay-depth"].value,
+
+                            -- Need to add one here, because the first neighbour is already one deep
+                            depth = settings.global["fluidic-electric-overlay-depth"].value + 1,
                         }
                     },
                     black_list = { },
