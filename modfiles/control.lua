@@ -1,5 +1,6 @@
-build_tools = require("scripts.fluidic-build-tools")
-poles = require("scripts.fluidic-handle-poles")
+local build_tools = require("scripts.fluidic-build-tools")
+local poles = require("scripts.fluidic-handle-poles")
+local overlay = require("scripts.overlay")
 
 function creation_event (event)        
     
@@ -31,6 +32,7 @@ script.on_event(defines.events.script_raised_destroy, removal_event)
 
 function ontick_event (event)
     build_tools.ontick(event)
+    overlay.ontick(event)
 end
 script.on_event(defines.events.on_tick, ontick_event)
 

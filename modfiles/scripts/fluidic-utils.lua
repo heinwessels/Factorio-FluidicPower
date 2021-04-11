@@ -128,4 +128,23 @@ function utils.drop_items_with_decon(surface, force, items, position)
 	)
 end
 
+function utils.get_fluid_neighbours(entity)
+    -- Returns all fluid neighbours of this entity    
+    local neighbours = {}
+
+    -- Is this a valid entity with neighbours we want?
+    if not fluidic_utils.table_has_attribute(entity, "neighbours") then return neighbours end
+    if #entity.fluidbox == 0 then return neighbours end
+    if not entity.neighbours then return neighbours end
+
+    -- It does. Look at it's neighbours
+    for _, neighbours_section in pairs(entity.neighbours) do
+        if next(neighbours_section) == nil then break end    -- Table is empty
+        for _, neighbour in ipairs(neighbours_section) do            
+            table.insert(neighbours, neighbour)
+        end 
+    end
+    return neighbours
+end
+
 return utils

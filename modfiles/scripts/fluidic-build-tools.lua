@@ -5,10 +5,6 @@ build_tools = {}
 
 local script_data =
 {   
-    -- Remember when we draw overlays
-    -- Each player will have an entry containing the entity unit number
-    current_overlay_target = { },
-
     -- Here a list is kept of fluid connections to check for
     -- illegal building. It contains a list of {entity, neighbours, event}
     -- where we expect the entity to have been destroyed already.
@@ -27,7 +23,7 @@ function build_tools.on_entity_created(event)
     if entity.name == "entity-ghost" then return end
     
     -- Something has been built. Make sure there are no unwanted connections    
-    for _, neighbour in pairs(get_fluid_neighbours(entity)) do
+    for _, neighbour in pairs(fluidic_utils.get_fluid_neighbours(entity)) do
         if not is_valid_fluid_connection(entity, neighbour) then
             -- Invalid connection!
             -- User is trying to connect a normal fluid to
@@ -81,7 +77,7 @@ function build_tools.on_entity_removed(event)
         if has_underground_fluidbox(entity_to_check) then
             -- This entity could have underground neighbours.
 
-            local neighbours = get_fluid_neighbours(entity_to_check)
+            local neighbours = fluidic_utils.get_fluid_neighbours(entity_to_check)
             if neighbours then
                 -- And it has neighbours. We will check it next tick
 
@@ -96,6 +92,15 @@ function build_tools.on_entity_removed(event)
             end
         end
     end    
+end
+
+function build_tools.ontick (event)
+    -- This functions only occationally draws an overlay.
+    -- NOTE: No on_tick fluid calculations are done!
+
+    -- If there was a destroy event, make sure it didn't
+    -- create any unwanted fluid connections
+    check_fluid_connection_backlog()
 end
 
 function check_fluid_connection_backlog()
@@ -117,7 +122,7 @@ function check_fluid_connection_backlog()
                 if not neighbour.valid then break end
 
                 -- Between this neighbour and his neighbours
-                local his_neighbours = get_fluid_neighbours(neighbour)
+                local his_neighbours = fluidic_utils.get_fluid_neighbours(neighbour)
                 for _, his_neighbour in ipairs(his_neighbours) do
 
                     if not is_valid_fluid_connection(neighbour, his_neighbour) then
@@ -234,158 +239,6 @@ function is_valid_fluid_connection(this, that)
     else
         return false
     end
-end
-
-function build_tools.ontick (event)
-    -- This functions only occationally draws an overlay.
-    -- NOTE: No on_tick fluid calculations are done!
-
-    -- If there was a destroy event, make sure it didn't
-    -- create any unwanted fluid connections
-    check_fluid_connection_backlog()
-
-    -- Now draw the overlay if requried
-    for _, player in pairs(game.players) do
-        local uid = player.index -- Unique key for player
-        if player.selected and string.match(player.selected.name, "fluidic") then        
-            local entity = player.selected        
-            -- The player currently has his mouse over a fluidic entity
-            
-            if not script_data.current_overlay_target[uid] or
-                script_data.current_overlay_target[uid] ~= entity.unit_number
-            then
-                -- It's a new target!
-                
-                if script_data.current_overlay_target[uid] ~= entity.unit_number then
-                    -- If moved to a new entity reset the rendering.
-                    -- This means it will have to redraw for other players. But for them
-                    -- the reset_rendering will not be called.
-                    reset_rendering()
-                end
-
-                script_data.current_overlay_target[uid] = entity.unit_number    -- Remember this entity
-
-                if string.sub(entity.name, -8, -1) == "electric" then
-                    -- At the moment power pole is selected, not fluid entity.
-                    -- Get the fluid entity
-                    local e = entity.surface.find_entity(
-                        string.sub(entity.name, 1, -10),  -- Remove '-electric' keyword
-                        entity.position
-                    )
-                    if not e then error(
-                        [[There should be a fluidic fluid entity here. Bug report the developer please.
-                        Original: <]]..entity.name..[[>.
-                        Searched: <]]..string.sub(entity.name, 1, -10)..[[>]]
-                    ) end                
-                    entity = e  -- This should exist. If not, there's a problem.
-                end
-                
-                -- Now recursively draw connections from this entity
-                show_fluidic_entity_connections(player, entity, settings.global["fluidic-electric-overlay-depth"].value)
-            
-            else
-                -- We've already drawn the overlay for this target. Do nothing but wait.
-            end
-        else
-            -- Not looking at anything important
-            if script_data.current_overlay_target[uid] ~= nil then
-                reset_rendering()
-            end
-        end
-    end
-end
-
-function show_fluidic_entity_connections(
-    player, entity, depth, black_list
-)   
-    if depth == 0 then return end   -- Recursion stop
-    if black_list == nil then black_list = {} end
-    for _, neighbour in ipairs(get_fluid_neighbours(entity)) do
-            
-        local should_draw_connection = true
-
-        --| Do some checks |--
-
-        -- If both of these are <in> entities then this connection
-        -- isn't valid. Check for keyword
-        if string.sub(entity.name, -2, -1)=='in' and string.sub(neighbour.name, -2, -1)=='in' then
-            should_draw_connection = false
-        end
-
-        -- Draw the connection to this neighbour
-        -- Regardless if it's on the blacklist or not
-        if should_draw_connection then
-            draw_connection(player, entity, entity.position, neighbour.position)
-        end
-        
-        -- Are we coming from this neighbour?
-        if black_list ~= nil then
-            -- if neighbour == black_list then should_draw_connection = false end
-            if black_list[neighbour.unit_number] ~= nil then
-                -- We've already drawn towards this entity before
-
-                if depth <= black_list[neighbour.unit_number] then
-                    -- The previous time we drew further. Can skip now
-                    should_draw_connection = false
-                end
-            end
-        end            
-        
-        if should_draw_connection then
-            -- This is a new neighbour
-            
-            -- Recursively draw neighbours' neighbours after blacklisting the current entity
-            black_list[entity.unit_number] = depth
-            show_fluidic_entity_connections(player, neighbour, depth - 1, black_list)
-        end 
-    end
-end
-
-function draw_connection(player, entity, here, there)
-    rendering.draw_line{
-        color = {r = 0,  g = 0.6, b = 0, a = 0},
-        width = 3,
-        from = here,
-        to = there,
-        surface = entity.surface,
-        players = {player},
-        only_in_alt_mode = true
-    }
-    for _, point in ipairs{here, there} do
-        rendering.draw_circle{
-            color = {r = 0,  g = 0.5, b = 0, a = 0},
-            radius = 0.25,
-            width = 3,
-            target = point,
-            surface = entity.surface,
-            players = {player},
-            only_in_alt_mode = true
-        }
-    end
-end
-
-function reset_rendering()    
-    rendering.clear('FluidicPower')
-    script_data.current_overlay_target = { }    -- Everybody redraw
-end
-
-function get_fluid_neighbours(entity)
-    -- Returns all fluid neighbours of this entity    
-    local neighbours = {}
-
-    -- Is this a valid entity with neighbours we want?
-    if not fluidic_utils.table_has_attribute(entity, "neighbours") then return neighbours end
-    if #entity.fluidbox == 0 then return neighbours end
-    if not entity.neighbours then return neighbours end
-
-    -- It does. Look at it's neighbours
-    for _, neighbours_section in pairs(entity.neighbours) do
-        if next(neighbours_section) == nil then break end    -- Table is empty
-        for _, neighbour in ipairs(neighbours_section) do            
-            table.insert(neighbours, neighbour)
-        end 
-    end
-    return neighbours
 end
 
 return build_tools

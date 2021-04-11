@@ -142,12 +142,10 @@ function create_in_variant(base_name)
         -- Default fluid is not exposed
         data.raw["assembling-machine"][name].selection_box = {{0,0}, {0,0}}
         data.raw["assembling-machine"][name].drawing_box = {{0,0}, {0,0}}
-        -- data.raw["assembling-machine"][name].selection_priority = 0
     else
         -- Debug option
         data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
         data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
-        -- data.raw["electric-pole"][name].selection_priority = 0
     end
 end
 

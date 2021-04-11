@@ -1,9 +1,12 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.3.4
-Date: 10. 04. 2021
+Version: 0.4.0
+Date: 11. 04. 2021
   Changes:
     - Now hiding annoying fluid box markers.
     - Changed Source Power Poles to be yellow.
+
+  Optimizations:
+    - Overlay now draw per-tick, allowing greater coverage without slow-down.
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.3
 Date: 16. 03. 2021
