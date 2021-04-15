@@ -6,9 +6,7 @@ More realistic power distribution has been requested from players for years. Ess
 
 ---
 
-*Note: This mod is still in Alpha. This means there will be no automatic migration from one version to the next. It won't break your save, but you might need to set new transformer recipes for example.*
-
-*Another note: If you're curious about the performance of this mod, or what kind of UPS you will be able to get, see the [FAQ](https://mods.factorio.com/mod/FluidicPower/faq).*
+*If you're curious about the performance of this mod, or what kind of UPS you will be able to get, see the [FAQ](https://mods.factorio.com/mod/FluidicPower/faq).*
 
 ---
 

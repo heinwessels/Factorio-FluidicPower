@@ -123,37 +123,55 @@ function overlay.iterate_fluidbox_connections(player, iterator)
     local prev_node = this_iteration.prev_node
     local depth = this_iteration.depth
 
-    if depth <= 0 then
-        -- I'm in too deep!
-        return
-    end
-
     -- Draw the connection if there is a previous node to draw to
-    if prev_node and (prev_node.valid or false) then        
-        if not (string.sub(node.name, -2, -1)=='in' and string.sub(prev_node.name, -2, -1)=='in') then
-            -- Shouldn't draw connection between two source poles
-            overlay.draw_connection(player, node, node.position, prev_node.position)
-        end
+    if prev_node and (prev_node.valid or false) then
+        overlay.draw_connection(player, node, node.position, prev_node.position)
     end
     
     -- Determine any new nodes
-    for _, new_node in pairs(fluidic_utils.get_fluid_neighbours(node)) do
-        local valid_new_node = true
-        if iterator.black_list[new_node.unit_number] then
-            -- This neighbour is on the blacklist, but does it have sufficient depth?
-            if iterator.black_list[new_node.unit_number] >= depth then
-                -- Yes. Shouldn't draw to it again.
+    if depth > 0 then
+        -- But only we're not already deep enough
+
+        -- Keep track of new nodes added this iteration to 
+        -- make sure we don't add the same one twice
+        -- (there's double fluidboxes sometimes that can connect)
+        local added_nodes = {}  -- table with entity unit_numbers as keys
+
+        -- Actually look for new nodes
+        for _, new_node in pairs(fluidic_utils.get_fluid_neighbours(node)) do
+            local valid_new_node = true
+            
+            -- Have we already added this neighbour?
+            if added_nodes[new_node.unit_number] then
+                -- Yes.
                 valid_new_node = false
             end
-        end
-        
-        -- This node can be added to the white_list
-        if valid_new_node then
-            table.insert(iterator.white_list, {
-                this_node = new_node,
-                prev_node = node,
-                depth = depth - 1
-            })
+
+            -- Is this node on the blacklist?
+            if iterator.black_list[new_node.unit_number] then
+                -- This neighbour is on the blacklist, but does it have sufficient depth?
+                if iterator.black_list[new_node.unit_number] >= depth then
+                    -- Yes. Shouldn't draw to it again.
+                    valid_new_node = false
+                end
+            end
+            
+            -- Should not travel between source poles
+            if string.sub(node.name, -2, -1)=='in' and string.sub(new_node.name, -2, -1)=='in' then
+                valid_new_node = false
+            end
+            
+            -- This node can be added to the white_list
+            if valid_new_node then
+                table.insert(iterator.white_list, {
+                    this_node = new_node,
+                    prev_node = node,
+                    depth = depth - 1
+                })
+
+                -- Remember we added it this round
+                added_nodes[new_node.unit_number] = true;
+            end
         end
     end
     
