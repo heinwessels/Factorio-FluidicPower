@@ -101,7 +101,7 @@ function overlay.iterate_fluidbox_connections(player, iterator)
     --          },
     --      } -- list of references to entities that needs iteration with node that called them
     --      black_list = { .. 
-    --          unit_number : depth,
+    --          unit_number : { ... table of unit_numbers this connected to with unit_number as key ... },
     --          ...
     --      } -- list of unit numbers with the depth at which they were drawn
     -- }
@@ -125,7 +125,32 @@ function overlay.iterate_fluidbox_connections(player, iterator)
 
     -- Draw the connection if there is a previous node to draw to
     if prev_node and (prev_node.valid or false) then
-        overlay.draw_connection(player, node, node.position, prev_node.position)
+
+        -- Has this connection been drawn since it's been put on the white list?
+        local been_drawn_before = false
+        if iterator.black_list[prev_node.unit_number] then
+            if iterator.black_list[prev_node.unit_number][node.unit_number] then
+                -- A connection has already been drawn from the prev_node to node
+                been_drawn_before = true
+            end
+        end
+        if iterator.black_list[node.unit_number] then
+            if iterator.black_list[node.unit_number][prev_node.unit_number] then
+                -- A connection has already been drawn from this node to prev_node
+                been_drawn_before = true
+            end
+        end
+
+        if not been_drawn_before then
+            -- Okay draw it yo!
+            overlay.draw_connection(player, node, node.position, prev_node.position)
+        end
+
+        -- But, remember we've drawn this connection.
+        if not iterator.black_list[node.unit_number] then
+            iterator.black_list[node.unit_number] = { }
+        end
+        iterator.black_list[node.unit_number][prev_node.unit_number] = depth
     end
     
     -- Determine any new nodes
@@ -146,12 +171,17 @@ function overlay.iterate_fluidbox_connections(player, iterator)
                 -- Yes.
                 valid_new_node = false
             end
-
-            -- Is this node on the blacklist?
+            
+            -- Has this connection been drawn Before?
             if iterator.black_list[new_node.unit_number] then
-                -- This neighbour is on the blacklist, but does it have sufficient depth?
-                if iterator.black_list[new_node.unit_number] >= depth then
-                    -- Yes. Shouldn't draw to it again.
+                if iterator.black_list[new_node.unit_number][node.unit_number] then
+                    -- A connection has already been drawn from the new node to this one
+                    valid_new_node = false
+                end
+            end
+            if iterator.black_list[node.unit_number] then
+                if iterator.black_list[node.unit_number][new_node.unit_number] then
+                    -- A connection has already been drawn from this node to new_node
                     valid_new_node = false
                 end
             end
@@ -174,10 +204,6 @@ function overlay.iterate_fluidbox_connections(player, iterator)
             end
         end
     end
-    
-    -- Add this node to the blacklist
-    iterator.black_list[node.unit_number] = depth
-
 end
 
 function overlay.draw_connection(player, entity, here, there)
