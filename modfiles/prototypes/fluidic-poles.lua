@@ -440,12 +440,14 @@ end
 create_in_variant("small-electric-pole")
 for _, machine in pairs{"fluidic-small-electric-pole-in", "fluidic-small-electric-pole-in-place"} do
     data.raw["assembling-machine"][machine].fixed_recipe = "fluidic-10-kilojoules-generate-small"
-    data.raw["assembling-machine"][machine].energy_usage = "5MW"    
+    data.raw["assembling-machine"][machine].energy_usage = "5MW"
+    data.raw["assembling-machine"][machine].fluid_boxes[1].base_area = 0.5
 end
 data.raw["electric-pole"]["fluidic-small-electric-pole-in-electric"].next_upgrade = "fluidic-medium-electric-pole-in-place"
 create_out_variant("small-electric-pole")
 for _, generator in pairs{"fluidic-small-electric-pole-out", "fluidic-small-electric-pole-out-place"} do
     data.raw["generator"][generator].fluid_usage_per_tick = 8.333333 -- P = 5MW
+    data.raw["generator"][generator].fluid_box.base_area = 0.5
 end
 data.raw["electric-pole"]["fluidic-small-electric-pole-out-electric"].next_upgrade = "fluidic-medium-electric-pole-out-place"
 
@@ -454,10 +456,12 @@ create_in_variant("medium-electric-pole")
 for _, machine in pairs{"fluidic-medium-electric-pole-in", "fluidic-medium-electric-pole-in-place"} do
     data.raw["assembling-machine"][machine].fixed_recipe = "fluidic-10-kilojoules-generate-medium"
     data.raw["assembling-machine"][machine].energy_usage = "30MW"
+    -- data.raw["assembling-machine"][machine].fluid_boxes[1].base_area = 0.8
 end
 create_out_variant("medium-electric-pole")
 for _, generator in pairs{"fluidic-medium-electric-pole-out", "fluidic-medium-electric-pole-out-place"} do
     data.raw["generator"][generator].fluid_usage_per_tick = 50 -- P = 30MW
+    -- data.raw["generator"][generator].fluid_box.base_area = 0.8
 end
 
 -- Create substations
