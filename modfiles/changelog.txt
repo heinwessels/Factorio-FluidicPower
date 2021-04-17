@@ -2,7 +2,9 @@
 Version: 0.5.0
 Date: ?. ?. 2021
   Changes:
-    - Small Poles's fluid poles fluidbox sized halved to incentivize using medium poles.
+    - Small Poles's fluidbox size halved to incentivize using medium poles.
+    - Transformers now take 3 seconds to craft.
+    - Transformers now have nice accumulator sounds.
   Optimizations:
     - Significantly optimized overlay drawing.
 ---------------------------------------------------------------------------------------------------
