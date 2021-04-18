@@ -143,7 +143,7 @@ function overlay.iterate_fluidbox_connections(player, iterator)
 
         if not been_drawn_before then
             -- Okay draw it yo!
-            overlay.draw_connection(player, node, node.position, prev_node.position)
+            overlay.draw_connection(player, node, prev_node)
         end
 
         -- But, remember we've drawn this connection.
@@ -206,27 +206,44 @@ function overlay.iterate_fluidbox_connections(player, iterator)
     end
 end
 
-function overlay.draw_connection(player, entity, here, there)
-    rendering.draw_line{
-        color = {r = 0,  g = 0.6, b = 0, a = 0},
+function overlay.draw_connection(player, this_entity, that_entity)
+    -- First determine line colour
+    local high_voltage = {    -- Or line that can carry high voltage at least
+        colour = {r = 0,  g = 0.6, b = 0, a = 0},
+        width = 5,
+        gap_length = 0,
+        dash_length = 0,
+    }
+    local low_voltage = {    -- Or line that cannot carry high voltage at least
+        colour = {r = 0,  g = 0.6, b = 0, a = 0},
         width = 3,
-        from = here,
-        to = there,
-        surface = entity.surface,
+        gap_length = 0.2,
+        dash_length = 0.5,
+    }
+    local format = low_voltage
+    if this_entity.name == "fluidic-big-electric-pole" and 
+            that_entity.name == "fluidic-big-electric-pole" then
+        format = high_voltage
+    elseif (this_entity.name == "fluidic-big-electric-pole" and 
+            that_entity.name == "fluidic-transformer") or
+            (this_entity.name == "fluidic-transformer" and 
+            that_entity.name == "fluidic-big-electric-pole")
+            then
+        format = high_voltage
+    end
+
+    -- Draw the line between the entities
+    rendering.draw_line{
+        color = format.colour,
+        width = format.width,
+        gap_length = format.gap_length,
+        dash_length = format.dash_length,
+        from = this_entity.position,
+        to = that_entity.position,
+        surface = this_entity.surface,
         players = {player},
         only_in_alt_mode = false
     }
-    for _, point in ipairs{here, there} do
-        rendering.draw_circle{
-            color = {r = 0,  g = 0.5, b = 0, a = 0},
-            radius = 0.25,
-            width = 3,
-            target = point,
-            surface = entity.surface,
-            players = {player},
-            only_in_alt_mode = false
-        }
-    end
 end
 
 function overlay.reset_rendering()    

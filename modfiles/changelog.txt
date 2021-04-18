@@ -5,6 +5,7 @@ Date: ?. ?. 2021
     - Small Poles's fluidbox size halved to incentivize using medium poles.
     - Transformers now take 3 seconds to craft.
     - Transformers now have nice accumulator sounds.
+    - Overlay now shows which connections could contain higher voltages.
   Optimizations:
     - Significantly optimized overlay drawing.
 ---------------------------------------------------------------------------------------------------
