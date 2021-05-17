@@ -8,13 +8,13 @@
             "type": "factoriomod",
             "request": "launch",
             "name": "Factorio Mod Debug",
-            "factorioPath": "D:/Games/Factorio/Factorio_x64_1.1.27/Factorio_1.1.27/bin/x64/factorio.exe"
+            "factorioPath": "D:/Games/Factorio/Factorio_1.1.33/bin/x64/factorio.exe"
         },
         {
             "type": "factoriomod",
             "request": "launch",
             "name": "Factorio Mod Debug (Profile)",
-            "factorioPath": "D:/Games/Factorio/Factorio_x64_1.1.27/Factorio_1.1.27/bin/x64/factorio.exe",
+            "factorioPath": "D:/Games/Factorio/Factorio_1.1.33/bin/x64/factorio.exe",
             "hookMode": "profile"
         }
     ]
