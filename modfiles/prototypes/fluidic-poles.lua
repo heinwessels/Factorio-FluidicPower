@@ -63,7 +63,6 @@ function create_in_variant(base_name)
         {
             type = "assembling-machine",
             name = name_place,
-            minable = {result = name},  -- It will return the normal item
             icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
             next_upgrade = nil,             -- Upgrading done through electric item
             fast_replaceable_group = nil,
@@ -103,18 +102,15 @@ function create_in_variant(base_name)
     table.insert(data.raw["assembling-machine"][name_place].flags, "hide-alt-info")
     data.raw["assembling-machine"][name_place].animation.layers[1].filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
     data.raw["assembling-machine"][name_place].animation.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/electric-poles/hr-"..base_name..".png"
-    
+    data.raw["assembling-machine"][name_place].minable.result = nil
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
         data.raw["assembling-machine"][name_place],
         {
             name = name,
-            minable = {result = name},  -- It will return the normal item
-
-            flags = {}, -- Clear the upgradable flag. (Maybe)
         }
-    }})
+    }})    
     data.raw["assembling-machine"][name].animation = {
         filename = "__FluidicPower__/graphics/entities/empty.png",                
         width = 32,
@@ -130,10 +126,10 @@ function create_in_variant(base_name)
             minable = {result = name},            
             placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
             maximum_wire_distance = wire_reach,  -- Make sure we can reach the extended length
-
             fast_replaceable_group = nil,
         }
     }})
+    table.insert(data.raw["electric-pole"][name_electric].flags, "not-upgradable")
     data.raw["electric-pole"][name_electric].pictures.layers[1].filename = "__FluidicPower__/graphics/entities/electric-poles/"..base_name..".png"
     data.raw["electric-pole"][name_electric].pictures.layers[1].hr_version.filename = "__FluidicPower__/graphics/entities/electric-poles/hr-"..base_name..".png"
 
@@ -200,7 +196,6 @@ function create_out_variant(base_name, name)
         {
             type = "generator",
             name = name_place,
-            minable = {result = name},  -- Should return the normal item
             next_upgrade = nil,             -- Upgrading done through electric item            
             effectivity = 1,
             maximum_temperature = 15,
@@ -238,13 +233,13 @@ function create_out_variant(base_name, name)
     }})
     table.insert(data.raw["generator"][name_place].flags, "not-rotatable")
     table.insert(data.raw["generator"][name_place].flags, "hide-alt-info")
+    data.raw["generator"][name_place].minable.result = nil
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
         data.raw["generator"][name_place],
         {
             name = name,
-            minable = {result = name},  -- It will return the normal item
         }
     }})
     data.raw["generator"][name].vertical_animation = {
@@ -268,16 +263,15 @@ function create_out_variant(base_name, name)
             maximum_wire_distance = wire_reach,  -- Make sure we can reach the extended length            
         }
     }})
+    table.insert(data.raw["electric-pole"][name_electric].flags, "not-upgradable")
 
     -- Depending on debug option, choose which entity is exposed
     if not constants.expose_fluid_boxes then
         -- Default
         data.raw["generator"][name].selection_box = {{0,0}, {0,0}}
-        data.raw["generator"][name].drawing_box = {{0,0}, {0,0}}
     else
         -- Debug option
         data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
-        data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
     end
 end
 
@@ -443,13 +437,13 @@ for _, machine in pairs{"fluidic-small-electric-pole-in", "fluidic-small-electri
     data.raw["assembling-machine"][machine].energy_usage = "5MW"
     data.raw["assembling-machine"][machine].fluid_boxes[1].base_area = 0.5
 end
-data.raw["electric-pole"]["fluidic-small-electric-pole-in-electric"].next_upgrade = "fluidic-medium-electric-pole-in-place"
+data.raw["assembling-machine"]["fluidic-small-electric-pole-in"].next_upgrade = "fluidic-medium-electric-pole-in-place"
 create_out_variant("small-electric-pole")
 for _, generator in pairs{"fluidic-small-electric-pole-out", "fluidic-small-electric-pole-out-place"} do
     data.raw["generator"][generator].fluid_usage_per_tick = 8.333333 -- P = 5MW
     data.raw["generator"][generator].fluid_box.base_area = 0.5
 end
-data.raw["electric-pole"]["fluidic-small-electric-pole-out-electric"].next_upgrade = "fluidic-medium-electric-pole-out-place"
+data.raw["generator"]["fluidic-small-electric-pole-out"].next_upgrade = "fluidic-medium-electric-pole-out-place"
 
 -- Create Medium poles
 create_in_variant("medium-electric-pole")

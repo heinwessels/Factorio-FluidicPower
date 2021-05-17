@@ -55,4 +55,4 @@ end)
 
 -- TO USE DEBUGGER LOG
 -- require('__debugadapter__/debugadapter.lua')
--- __DebugAdapter.print(expr,alsoLookIn)
+-- __DebugAdapter.print(expr,alsoLookIn)\

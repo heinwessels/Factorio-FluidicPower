@@ -4,6 +4,8 @@ Date: ??. ??. 2021
   Features:
     - Mixed power fluid connections now show red in overlay.
     - Added alert when mixing of different voltages detected.
+  Bugfixes:
+    - Upgrade Planner can now upgrade Small Power Poles (only when not setting filters).
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 18. 04. 2021
