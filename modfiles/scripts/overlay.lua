@@ -232,7 +232,7 @@ function overlay.draw_connection(player, this_entity, that_entity)
         format = high_voltage
     end
 
-    if overlay.is_connection_compromised(this_entity, that_entity) then
+    if overlay.is_connection_fluids_mixed(this_entity, that_entity) then
         -- Draw red circle around compromised entity
         format.colour = {r = 1,  g = 0, b = 0, a = 0}
         for _,entity in pairs{this_entity, that_entity} do
@@ -246,6 +246,8 @@ function overlay.draw_connection(player, this_entity, that_entity)
                 only_in_alt_mode = false
             }
         end
+
+        overlay.create_alert_for_mixed_fluids(player, this_entity)
     end
 
     -- Draw the line between the entities
@@ -262,7 +264,31 @@ function overlay.draw_connection(player, this_entity, that_entity)
     }
 end
 
-function overlay.is_connection_compromised(this_entity, that_entity)
+function overlay.create_alert_for_mixed_fluids(player, entity)
+    local alerts = player.get_alerts{
+        type = defines.alert_type.custom,
+        -- icon = {"fluidic-text.fluidic-mixed-fluid-alert"},
+    }
+    local too_close = false
+    for _, alert in pairs(alerts[player.surface.index][defines.alert_type.custom]) do
+        -- If this alert is too close we will assume that it's the same broken connection
+        local range = 10
+        if (entity.position.x > alert.position.x - range) and (entity.position.x < alert.position.x + range)
+            and (entity.position.y > alert.position.y - range) and (entity.position.y < alert.position.y + range)
+        then
+            -- It's too close. Don't trigger.
+            return
+        end
+    end
+    player.add_custom_alert(
+        entity,
+        {type="fluid", name = "fluidic-megajoules"},
+        {"fluidic-text.fluidic-mixed-fluid-alert"},
+        true
+    )
+end
+
+function overlay.is_connection_fluids_mixed(this_entity, that_entity)
     if not this_entity.neighbours or 
             not that_entity.neighbours then return false end
     for this_index = 1, #this_entity.fluidbox do
