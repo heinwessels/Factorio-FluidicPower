@@ -283,7 +283,7 @@ function overlay.create_alert_for_mixed_fluids(player, entity)
     player.add_custom_alert(
         entity,
         {type="fluid", name = "fluidic-megajoules"},
-        {"fluidic-text.fluidic-mixed-fluid-alert"},
+        {"fluidic-text.fluidic-mixed-voltage-alert"},
         true
     )
 end

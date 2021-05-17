@@ -33,7 +33,7 @@ function build_tools.on_entity_created(event)
             entity.surface.create_entity{
                 name = "flying-text",
                 type = "flying-text",
-                text = "Can't connect Fluidic Power with normal fluids",
+                text = {"fluidic-text.fluidic-cant-connect-to-romal-fluids"},
                 position  = entity.position
             }
             
@@ -137,7 +137,7 @@ function check_fluid_connection_backlog()
                         neighbour.surface.create_entity{
                             name = "flying-text",
                             type = "flying-text",
-                            text = "Can't connect Fluidic Power with normal fluids",
+                            text = {"fluidic-text.fluidic-cant-connect-to-romal-fluids"},
                             position  = entity_to_destroy.position
                         }
                         
