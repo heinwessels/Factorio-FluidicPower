@@ -1,15 +1,14 @@
 fluidic_utils = require("scripts.fluidic-utils")
 overlay = {}
 
-local script_data =
-{   
-    -- Remember when we draw overlays
-    -- Each player will have an entry containing the entity unit number
-    overlay_iterators = { },
-}
-
 function overlay.ontick (event)
     
+    if not global.overlay_iterators then
+        -- Remember when we draw overlays
+        -- Each player will have an entry containing the entity unit number
+        global.overlay_iterators = { } 
+    end
+
     -- Iterate for each player
     for _, player in pairs(game.players) do
         local uid = player.index -- Unique key for player
@@ -35,15 +34,16 @@ function overlay.ontick (event)
                 entity = e  -- This should exist. If not, there's a problem.
             end
             
+            local iterator = global.overlay_iterators[uid]
+            
+
             -- Now check if we are already handling this entity
-            if not script_data.overlay_iterators[uid] or
-                script_data.overlay_iterators[uid].base.unit_number ~= entity.unit_number
-            then
+            if not iterator or iterator.base.unit_number ~= entity.unit_number then
                 -- It's a new entity! (and not a previously looked at entity)
 
                 -- Were we already looking at this entity? We're lo
-                if script_data.overlay_iterators[uid] then
-                    if script_data.overlay_iterators[uid].base.unit_number ~= entity.unit_number then
+                if iterator then
+                    if iterator.base.unit_number ~= entity.unit_number then
                         -- If moved to a new entity reset the rendering.
                         -- This means it will have to redraw for other players. But for them
                         -- the reset_rendering will not be called.
@@ -52,7 +52,7 @@ function overlay.ontick (event)
                 end  
 
                 -- Setup a new iterator
-                script_data.overlay_iterators[uid] = {
+                iterator = {
                     base = entity,
                     white_list = {
                         {
@@ -65,21 +65,24 @@ function overlay.ontick (event)
                     },
                     black_list = { },
                 }
+
+                -- Make sure the iterator is saved
+                global.overlay_iterators[uid] = iterator
             else
                 -- We're already handling the overlay for this target
             end
         else
             -- Not looking at anything important
-            if script_data.overlay_iterators[uid] ~= nil then
+            if global.overlay_iterators[uid] ~= nil then
                 overlay.reset_rendering()
             end
         end
 
         -- Now iterate for this player
-        if script_data.overlay_iterators[uid] then
-            if script_data.overlay_iterators[uid].base.valid then
+        if global.overlay_iterators[uid] then
+            if global.overlay_iterators[uid].base.valid then
                 -- Iterate!
-                overlay.iterate_fluidbox_connections(player, script_data.overlay_iterators[uid])
+                overlay.iterate_fluidbox_connections(player, global.overlay_iterators[uid])
             else
                 -- The base entity doesn't exist anymore for some reason
                 overlay.reset_rendering()
@@ -320,7 +323,7 @@ end
 
 function overlay.reset_rendering()    
     rendering.clear('FluidicPower')
-    script_data.overlay_iterators = { }    -- Everybody redraw
+    global.overlay_iterators = { }    -- Everybody redraw
 end
 
 return overlay

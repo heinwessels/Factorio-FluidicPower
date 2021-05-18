@@ -3,13 +3,21 @@ util = require("util")
 
 build_tools = {}
 
-local script_data =
-{   
-    -- Here a list is kept of fluid connections to check for
-    -- illegal building. It contains a list of {entity, neighbours, event}
-    -- where we expect the entity to have been destroyed already.
-    neigbours_to_check = { },
-}
+function build_tools.ontick (event)
+    -- This functions only occationally draws an overlay.
+    -- NOTE: No on_tick fluid calculations are done!
+
+    if not global.neigbours_to_check then
+        -- Here a list is kept of fluid connections to check for
+        -- illegal building. It contains a list of {entity, neighbours, event}
+        -- where we expect the entity to have been destroyed already.
+        global.neigbours_to_check = { }
+    end
+
+    -- If there was a destroy event, make sure it didn't
+    -- create any unwanted fluid connections
+    check_fluid_connection_backlog()
+end
 
 function build_tools.on_entity_created(event)    
     local entity
@@ -82,7 +90,7 @@ function build_tools.on_entity_removed(event)
                 -- And it has neighbours. We will check it next tick
 
                 table.insert(
-                    script_data.neigbours_to_check,
+                    global.neigbours_to_check,
                     {
                         entity = entity_to_check,
                         neighbours = neighbours,
@@ -94,21 +102,12 @@ function build_tools.on_entity_removed(event)
     end    
 end
 
-function build_tools.ontick (event)
-    -- This functions only occationally draws an overlay.
-    -- NOTE: No on_tick fluid calculations are done!
-
-    -- If there was a destroy event, make sure it didn't
-    -- create any unwanted fluid connections
-    check_fluid_connection_backlog()
-end
-
 function check_fluid_connection_backlog()
     -- During <on_entity_removed> we cannot check for 
     -- any new connections that might be wrong because
     -- the original entity is still in the way.
 
-    for key, entry in pairs(script_data.neigbours_to_check) do
+    for key, entry in pairs(global.neigbours_to_check) do
 
         -- If entry is not valid then it was removed
         if not entry.entity.valid then
@@ -161,7 +160,7 @@ function check_fluid_connection_backlog()
         end
 
         -- Now delete the entry
-        script_data.neigbours_to_check[key] = nil
+        global.neigbours_to_check[key] = nil
     end
 end
 
