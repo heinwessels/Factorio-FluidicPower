@@ -96,16 +96,6 @@ That is because accumulators don't work as it does in vanilla where they supply 
 
 ---
 
-## My accumulators don't charge only when I have excess power?
-This is as designed. As mentioned in the previous question, accumulators are simple storage tanks, and not as smart as they are in vanilla. You need to control the flow of power to and from the accumulators yourself using power switches and circuits. See Interesting Challenges on the main mod page.
-
----
-
-## My accumulators supply power even though I have enough power generation?
-See the previous question's answer. 
-
----
-
 ## The Source Pole Seems to draw power from the normal power pole?
 This is normal in sub-optimal power generation designs. This happens when a normal pole is right next to a source pole, which creates a feedback loop and will saturate the source pole. Due to the limited amount of electricity usage priorities in Factorio there is currently no way around it. However, it has an easy workaround. Ensure that no normal pole's supply coverage overlaps with a source pole. This is also the perfect location for Big Power Poles, which have no supply coverage at all.
 
@@ -122,3 +112,9 @@ If you're transforming your power into `100MJ` units using two `step-up transfor
 ## Solar farm not exporting all it's power.
 
 Solar farms work best using only source poles and big poles. If the electric network on a source pole still doesn't show the full output then the network cannot handle the power flow. Use fewer poles or step-up the voltage using a transformer.
+
+-- 
+
+## Upgrade Planner is broken
+
+Yes, sort off. It's possible to upgrade small poles to medium poles using the Upgrade Planner when adding no custom filters to it. Further compatibility is still under development, such as downgrading power poles, although that isn't used often.
