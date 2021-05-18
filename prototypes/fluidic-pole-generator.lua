@@ -285,11 +285,6 @@ function Generator.create_transmit_variant(config)
     local name_place = name.."-place"
     local name_electric = name.."-electric"
 
-    -- How far should we make the "underground pipes"
-    local wire_reach = calculate_wire_reach(
-        data.raw["electric-pole"][config.base_name].maximum_wire_distance
-    )
-
     -- ITEM
     data:extend({
         util.merge{
@@ -325,10 +320,10 @@ function Generator.create_transmit_variant(config)
                 base_area = 1,               
                 pipe_connections =
                 {
-                    {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = wire_reach},
-                    {type = "input-output", position = {1.5, -0.5}, max_underground_distance = wire_reach},
-                    {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = wire_reach},
-                    {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = wire_reach},
+                    {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = config.wire_reach},
+                    {type = "input-output", position = {1.5, -0.5}, max_underground_distance = config.wire_reach},
+                    {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = config.wire_reach},
+                    {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach},
 
 
                     -- These connections are only for energy sensors.
@@ -396,7 +391,8 @@ function Generator.create_transmit_variant(config)
             minable = {result = name},
             placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
             supply_area_distance = 0,
-            next_upgrade = nil                  -- Upgrade should be done through base entity
+            next_upgrade = nil,                  -- Upgrade should be done through base entity
+            maximum_wire_distance = config.wire_reach
         }
     }})    
 

@@ -19,9 +19,7 @@ end
 --      P = u * s * 60
 
 -- Create small poles
-local wire_reach = calculate_wire_reach(
-    data.raw["electric-pole"]["small-electric-pole"].maximum_wire_distance
-)
+local wire_reach = 10
 Generator.create_in_variant{
     base_name = "small-electric-pole",
     fixed_recipe = "fluidic-10-kilojoules-generate-small",
@@ -39,9 +37,7 @@ Generator.create_out_variant{
 }
 
 -- Create Medium poles
-wire_reach = calculate_wire_reach(
-    data.raw["electric-pole"]["medium-electric-pole"].maximum_wire_distance
-)
+wire_reach = 12
 Generator.create_in_variant{
     base_name = "medium-electric-pole",
     fixed_recipe = "fluidic-10-kilojoules-generate-medium",
@@ -55,7 +51,7 @@ Generator.create_out_variant{
 }
 
 -- Create substations
-wire_reach = 2 * data.raw["electric-pole"]["substation"].supply_area_distance
+wire_reach = 18
 Generator.create_in_variant{
     base_name = "substation",
     fixed_recipe = "fluidic-10-kilojoules-generate-substation",
@@ -119,9 +115,11 @@ end
 
 
 -- Create big pole
-Generator.create_transmit_variant{base_name = "big-electric-pole"}
-data.raw["electric-pole"]["fluidic-big-electric-pole-electric"].maximum_wire_distance =
-    data.raw["pipe"]["fluidic-big-electric-pole"].fluid_box.pipe_connections[1].max_underground_distance + 2
+wire_reach = 35
+Generator.create_transmit_variant{
+    base_name = "big-electric-pole",
+    wire_reach = wire_reach,
+}
 
 -- Finally hide the vanilla poles
 for _, recipe in pairs{
