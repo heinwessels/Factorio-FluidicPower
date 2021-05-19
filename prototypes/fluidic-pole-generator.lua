@@ -45,6 +45,49 @@ function Generator.create_in_variant(config)
     }})
 
     -- ENTITY
+    local fluid_boxes
+    if not config.size or config.size == nil or config.size == 1 then
+        fluid_boxes = { 
+            {
+                production_type = "output",
+                base_area = config.fluid_box_base_area or 1,
+                filter = "fluidic-10-kilojoules",
+                pipe_connections = {
+                    { type="input-output", position = {0, 1}, max_underground_distance = config.wire_reach},
+                    { type="input-output", position = {0, -1}, max_underground_distance = config.wire_reach},
+                    { type="input-output", position = {1, 0}, max_underground_distance = config.wire_reach},
+                    { type="input-output", position = {-1, 0}, max_underground_distance = config.wire_reach}
+                },
+                secondary_draw_orders = { north = -1 },
+            },
+        }  -- Default 1x1 sized fluidbox. Won't work for substation
+    elseif config.size and config.size == 2 then
+        fluid_boxes = { 
+            {
+                production_type = "output",        
+                base_area = config.fluid_box_base_area or 1,
+                filter = "fluidic-10-kilojoules",
+                pipe_connections = {               
+                    {type = "output", position = {-1.5, -0.5}, max_underground_distance = config.wire_reach},
+                    {type = "output", position = {1.5,  -0.5}, max_underground_distance = config.wire_reach},
+                    {type = "output", position = {-0.5, -1.5}, max_underground_distance = config.wire_reach},
+                    {type = "output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach},
+    
+                    -- These connections are only for energy sensors.
+                    -- Will not connect to other poles (unless placed directly adjacent)
+                    -- and thus not influence fluid flow
+                    {type = "output", position = {-1.5, 0.5}, max_underground_distance = 1},
+                    {type = "output", position = {1.5, 0.5}, max_underground_distance = 1},
+                    {type = "output", position = {0.5, -1.5,}, max_underground_distance = 1},
+                    {type = "output", position = {0.5, 1.5}, max_underground_distance = 1},
+                },
+                secondary_draw_orders = { north = -1 },
+            },
+        }
+    else
+        error("Invalid pole size specified: "..config.size)
+    end
+
     -- First create the PLACE entity
     data:extend({util.merge{
         data.raw["electric-pole"][config.base_name],
@@ -70,20 +113,7 @@ function Generator.create_in_variant(config)
             open_sound = nil,
             close_sound = nil,            
             crafting_categories = {"fluidic-generate"},
-            fluid_boxes =
-            { 
-              {
-                production_type = "output",
-                base_area = config.fluid_box_base_area or 1,
-                pipe_connections = {
-                    { type="input-output", position = {0, 1}, max_underground_distance = config.wire_reach},
-                    { type="input-output", position = {0, -1}, max_underground_distance = config.wire_reach},
-                    { type="input-output", position = {1, 0}, max_underground_distance = config.wire_reach},
-                    { type="input-output", position = {-1, 0}, max_underground_distance = config.wire_reach}
-                },
-                secondary_draw_orders = { north = -1 },
-              },
-            },  -- Default 1x1 sized fluidbox. Won't work for substation
+            fluid_boxes = fluid_boxes,            
             animation = data.raw["electric-pole"][config.base_name].pictures,
         }
     }})
@@ -117,7 +147,7 @@ function Generator.create_in_variant(config)
             icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
             minable = {result = name},            
             placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
-            maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
+            maximum_wire_distance = config.wire_reach + (config.size or 0),  -- Make sure we can reach the extended length
             fast_replaceable_group = nil,
         }
     }})
@@ -158,11 +188,6 @@ function Generator.create_out_variant(config)
     local name_place = name.."-place"
     local name_electric = name.."-electric"
 
-    -- How far should we make the "underground pipes"
-    local wire_reach = calculate_wire_reach(
-        data.raw["electric-pole"][config.base_name].maximum_wire_distance
-    )
-
     -- ITEM
     data:extend({
         util.merge{
@@ -185,6 +210,47 @@ function Generator.create_out_variant(config)
 
     -- ENTITY
     -- First create the entity that will be placed
+    local fluid_boxes
+    if not config.size or config.size == nil or config.size == 1 then
+        fluid_boxes = {
+            base_area = config.fluid_box_base_area or 1,
+            pipe_connections =
+            {
+                {type = "input-output", position = {-1, 0}, max_underground_distance =config.wire_reach},
+                {type = "input-output", position = {1, 0}, max_underground_distance = config.wire_reach},
+                {type = "input-output", position = {0, -1}, max_underground_distance = config.wire_reach},
+                {type = "input-output", position = {0, 1}, max_underground_distance = config.wire_reach},
+            },
+            production_type = "input-output",
+            minimum_temperature = 10,
+            filter = "fluidic-10-kilojoules"
+        }
+    elseif config.size and config.size == 2 then
+        fluid_boxes = {
+            base_area = 1,
+            pipe_connections =
+            {
+                {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = config.wire_reach},
+                {type = "input-output", position = {1.5,  -0.5}, max_underground_distance = config.wire_reach},
+                {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = config.wire_reach},
+                {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach},
+    
+                -- These connections are only for energy sensors.
+                -- Will not connect to other poles (unless placed directly adjacent)
+                -- and thus not influence fluid flow
+                {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 1},
+                {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 1},
+                {type = "input-output", position = {0.5, -1.5,}, max_underground_distance = 1},
+                {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 1},
+            },
+            production_type = "input-output",        
+            minimum_temperature = 10,
+            filter = "fluidic-10-kilojoules"
+        }
+    else
+        error("Invalid pole size specified: "..config.size)
+    end
+
     data:extend({util.merge{
         data.raw["electric-pole"][config.base_name],
         {
@@ -197,20 +263,7 @@ function Generator.create_out_variant(config)
             flow_length_in_ticks = 360,
             burns_fluid = true,
             two_direction_only = true,                        
-            fluid_box =
-            {
-                base_area = config.fluid_box_base_area or 1,
-                pipe_connections =
-                {
-                    {type = "input-output", position = {-1, 0}, max_underground_distance =config.wire_reach},
-                    {type = "input-output", position = {1, 0}, max_underground_distance = config.wire_reach},
-                    {type = "input-output", position = {0, -1}, max_underground_distance = config.wire_reach},
-                    {type = "input-output", position = {0, 1}, max_underground_distance = config.wire_reach},
-                },
-                production_type = "input-output",
-                minimum_temperature = 10,
-                filter = "fluidic-10-kilojoules"
-            },  -- Default 1x1 sized fluidbox. Won't work for substation
+            fluid_box = fluid_boxes,
             energy_source =
             {
                 type = "electric",
@@ -253,7 +306,7 @@ function Generator.create_out_variant(config)
             name = name_electric,
             minable = {result = name},
             placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
-            maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length            
+            maximum_wire_distance = config.wire_reach + (config.size or 0),  -- Make sure we can reach the extended length            
         }
     }})
     table.insert(data.raw["electric-pole"][name_electric].flags, "not-upgradable")
@@ -392,7 +445,11 @@ function Generator.create_transmit_variant(config)
             placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
             supply_area_distance = 0,
             next_upgrade = nil,                  -- Upgrade should be done through base entity
-            maximum_wire_distance = config.wire_reach
+
+            -- Because the wires come from the middle of the entity, and the 
+            -- pipes from the side, the max_wire_dist needs to be slightly longer
+            -- If it's a 2x2 entity
+            maximum_wire_distance = config.wire_reach + (config.size or 0)
         }
     }})    
 
