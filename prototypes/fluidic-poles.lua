@@ -13,7 +13,7 @@ Generator = require("prototypes.fluidic-pole-generator")
 
 -- Create small poles
 -------------------------------------------------------
-local small_wire_reach = 10  -- (vanilla is 7.5)
+local small_wire_reach = 9  -- (vanilla is 7.5)
 Generator.create_in_variant{
     base_name = "small-electric-pole",
     fixed_recipe = "fluidic-10-kilojoules-generate-small",
@@ -32,7 +32,7 @@ Generator.create_out_variant{
 
 -- Create Medium poles
 -------------------------------------------------------
-local medium_wire_reach = 12 -- (Vanilla is 9)
+local medium_wire_reach = 11 -- (Vanilla is 9)
 Generator.create_in_variant{
     base_name = "medium-electric-pole",
     fixed_recipe = "fluidic-10-kilojoules-generate-medium",
