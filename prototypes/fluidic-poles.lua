@@ -47,7 +47,7 @@ Generator.create_out_variant{
 
 -- Create substations
 -------------------------------------------------------
-local substation_wire_reach = 18 -- vanilla is 18
+local substation_wire_reach = 20 -- vanilla is 18
 Generator.create_in_variant{
     base_name = "substation",
     fixed_recipe = "fluidic-10-kilojoules-generate-substation",
@@ -64,16 +64,15 @@ Generator.create_out_variant{
 
 -- Create big pole
 -------------------------------------------------------
-local big_wire_reach = 35 -- vanilla reach is 30
+local big_wire_reach = 34 -- vanilla reach is 30
 Generator.create_transmit_variant{
     base_name = "big-electric-pole",
     wire_reach = big_wire_reach,
     size = 2,   -- This is a 2x2 entity
 }
 
-
-
 -- Finally hide the vanilla poles
+-------------------------------------------------------
 for _, recipe in pairs{
     data.raw["recipe"]["small-electric-pole"],
     data.raw["recipe"]["medium-electric-pole"],
