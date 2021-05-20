@@ -135,7 +135,7 @@ function Generator.create_in_variant(config)
             name = name,
         }
     }})    
-    data.raw["assembling-machine"][name].next_upgrade = config.next_upgrade or nil
+    data.raw["assembling-machine"][name].next_upgrade = config.next_upgrade or nil    
     data.raw["assembling-machine"][name].animation = {
         filename = "__FluidicPower__/graphics/entities/empty.png",                
         width = 32,
@@ -294,6 +294,7 @@ function Generator.create_out_variant(config)
             name = name,
         }
     }})
+    data.raw["generator"][name].next_upgrade = config.next_upgrade or nil    
     data.raw["generator"][name].vertical_animation = {
         filename = "__FluidicPower__/graphics/entities/empty.png",                
         width = 32,
@@ -437,6 +438,7 @@ function Generator.create_transmit_variant(config)
             minable = {result = name},  -- It will return the normal item            
         }
     }})
+    data.raw["pipe"][name].next_upgrade = config.next_upgrade or nil    
     for key, _ in pairs(data.raw["pipe"][name].pictures) do       
         data.raw["pipe"][name].pictures[key] = {
             filename = "__FluidicPower__/graphics/entities/empty.png",                
