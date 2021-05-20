@@ -173,6 +173,7 @@ function return_item_from_entity(event, entity)
     -- Should we drop items on the floor?    
     local drop_item = false
     if event.robot then drop_item = true end
+    if not entity.prototype.mineable_properties.products then return end -- This entity has nothing to drop
 
     if not drop_item then 
         -- It wasn't a robot action. Can we give it to the player?

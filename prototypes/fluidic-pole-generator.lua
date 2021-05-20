@@ -98,6 +98,10 @@ function Generator.create_in_variant(config)
             type = "assembling-machine",
             name = name_place,
             icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
+            
+            -- This is required for when the item may not be placed due to fluids-mixing
+            -- Crash in 0.6.1
+            minable = {result = name},
             next_upgrade = nil,             -- Upgrading done through electric item
             fast_replaceable_group = nil,
             crafting_speed = 1,
@@ -126,7 +130,6 @@ function Generator.create_in_variant(config)
             "__FluidicPower__/graphics/entities/electric-poles/"..config.base_name..".png"
     data.raw["assembling-machine"][name_place].animation.layers[1].hr_version.filename = 
             "__FluidicPower__/graphics/entities/electric-poles/hr-"..config.base_name..".png"
-    data.raw["assembling-machine"][name_place].minable.result = nil
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
@@ -262,6 +265,10 @@ function Generator.create_out_variant(config)
         {
             type = "generator",
             name = name_place,
+            
+            -- This is required for when the item may not be placed due to fluids-mixing
+            -- Crash in 0.6.1
+            minable = {result = name},
             next_upgrade = nil,             -- Upgrading done through electric item            
             effectivity = 1,
             maximum_temperature = 15,
@@ -285,7 +292,6 @@ function Generator.create_out_variant(config)
     }})
     table.insert(data.raw["generator"][name_place].flags, "not-rotatable")
     table.insert(data.raw["generator"][name_place].flags, "hide-alt-info")
-    data.raw["generator"][name_place].minable.result = nil
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
