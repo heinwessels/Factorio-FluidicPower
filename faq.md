@@ -113,7 +113,7 @@ If you're transforming your power into `100MJ` units using two `step-up transfor
 
 Solar farms work best using only source poles and big poles. If the electric network on a source pole still doesn't show the full output then the network cannot handle the power flow. Use fewer poles or step-up the voltage using a transformer.
 
--- 
+---
 
 ## Upgrade Planner is broken
 
