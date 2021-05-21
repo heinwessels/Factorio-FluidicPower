@@ -249,8 +249,22 @@ function overlay.draw_connection(player, this_entity, that_entity)
                 only_in_alt_mode = false
             }
         end
-
         overlay.create_alert_for_mixed_fluids(player, this_entity)
+    end
+
+    -- Draw orange circles over empty power poles
+    for _, entity in pairs{this_entity, that_entity} do
+        if overlay.is_pole_empty(entity) == true then
+            rendering.draw_circle{
+                color = {r = 1, g = 0, b = 0, a = 0},
+                width = 3,
+                radius = 0.25,
+                target = entity.position,
+                surface = entity.surface,
+                players = {player},
+                only_in_alt_mode = false
+            }
+        end
     end
 
     -- Draw the line between the entities
@@ -320,6 +334,20 @@ function overlay.is_connection_fluids_mixed(this_entity, that_entity)
     end
     return false
 end
+
+function overlay.is_pole_empty(entity)
+    -- Ignore anything that is not a pole
+    if not (string.match(entity.name, "electric") or string.match(entity.name, "substation")) then
+        return 
+    end
+    for this_index = 1, #entity.fluidbox do
+        if not entity.fluidbox[this_index] then
+            return true
+        end
+    end
+    return false
+end
+
 
 function overlay.reset_rendering()    
     rendering.clear('FluidicPower')
