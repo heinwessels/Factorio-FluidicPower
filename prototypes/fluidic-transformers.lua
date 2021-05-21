@@ -9,6 +9,7 @@ data:extend({
             name = "fluidic-transformer",
             place_result = "fluidic-transformer",
             icon = "__FluidicPower__/graphics/icons/transformer-icon.png",
+            stack_size = 20,
             icon_size = 32,
         }
     },    
@@ -26,9 +27,9 @@ data:extend
         enabled = false,
         ingredients =
         {
-            {"steel-plate", 10},
-            {"advanced-circuit", 5},
-            {"copper-cable", 20}
+            {"steel-plate", 20},
+            {"advanced-circuit", 20},
+            {"copper-cable", 30}
         },
         energy_required = 3,
         result = "fluidic-transformer"

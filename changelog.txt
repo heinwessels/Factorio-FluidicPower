@@ -3,6 +3,9 @@ Version: 0.6.3
 Date: ??. ??. 2021
   Features:
     - Overlay now shows "empty" power poles with small red circle.
+  Changes:
+    - Decrease transformer stack size to 20.
+    - Transformer recipe is now more expensive.
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.2
 Date: 20. 05. 2021
