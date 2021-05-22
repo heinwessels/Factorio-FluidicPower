@@ -3,16 +3,15 @@ util = require("util")
 
 build_tools = {}
 
+-- IN GLOBAL
+--  Here a list is kept of fluid connections to check for
+--  illegal building. It contains a list of {entity, neighbours, event}
+--  where we expect the entity to have been destroyed already.
+--      global.neigbours_to_check = { }
+
 function build_tools.ontick (event)
     -- This functions only occationally draws an overlay.
     -- NOTE: No on_tick fluid calculations are done!
-
-    if not global.neigbours_to_check then
-        -- Here a list is kept of fluid connections to check for
-        -- illegal building. It contains a list of {entity, neighbours, event}
-        -- where we expect the entity to have been destroyed already.
-        global.neigbours_to_check = { }
-    end
 
     -- If there was a destroy event, make sure it didn't
     -- create any unwanted fluid connections

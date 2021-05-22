@@ -1,13 +1,13 @@
 fluidic_utils = require("scripts.fluidic-utils")
 overlay = {}
 
-function overlay.ontick (event)
-    
-    if not global.overlay_iterators then
-        -- Remember when we draw overlays
-        -- Each player will have an entry containing the entity unit number
-        global.overlay_iterators = { } 
-    end
+-- IN GLOBAL
+--  Remember when we draw overlays
+--  Each player will have an entry containing the entity unit number
+--      global.overlay_iterators = { } 
+
+
+function overlay.ontick (event)   
 
     -- Iterate for each player
     for _, player in pairs(game.players) do

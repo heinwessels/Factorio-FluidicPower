@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.3
-Date: ??. ??. 2021
+Date: 22. 06. 2021
   Features:
     - Overlay now shows "empty" power poles with small red circle.
   Changes:
