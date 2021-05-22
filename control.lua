@@ -36,8 +36,21 @@ function ontick_event (event)
 end
 script.on_event(defines.events.on_tick, ontick_event)
 
+script.on_init(function()
+    -- Previous versions might not have this initiated.
+    -- It's fine to reset them.
+    global.neigbours_to_check = { }
+    global.overlay_iterators = { }
+end)
+
 -- Hack this in here for now. TODO Move somewhere else
 script.on_configuration_changed(function()
+
+    -- Previous versions might not have this initiated.
+    -- It's fine to reset them.
+    global.neigbours_to_check = { }
+    global.overlay_iterators = { }
+
     for index, force in pairs(game.forces) do
         local technologies = force.technologies
         local recipes = force.recipes        

@@ -6,6 +6,9 @@ Date: ??. ??. 2021
   Changes:
     - Decrease transformer stack size to 20.
     - Transformer recipe is now more expensive.
+    - Increased Transformer connect distance to 4.
+  Bugfixes:
+    - Fixed likely crash when checking build rules.
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.2
 Date: 20. 05. 2021

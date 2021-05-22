@@ -166,8 +166,8 @@ data:extend({
                 base_level = -1,
                 height = 1,
                 pipe_connections = {
-                    {type = "input", position = {-1.5, 0.5}, max_underground_distance = 3},
-                    {type = "input", position = {-1.5, -0.5}, max_underground_distance = 3},
+                    {type = "input", position = {-1.5, 0.5}, max_underground_distance = 4},
+                    {type = "input", position = {-1.5, -0.5}, max_underground_distance = 4},
                 },        
             },
             {
@@ -175,8 +175,8 @@ data:extend({
                 base_area = 1,
                 base_level = 1,
                 pipe_connections = {
-                    {type = "output", position = {1.5, 0.5}, max_underground_distance = 3},        
-                    {type = "output", position = {1.5, -0.5}, max_underground_distance = 3},
+                    {type = "output", position = {1.5, 0.5}, max_underground_distance = 4},        
+                    {type = "output", position = {1.5, -0.5}, max_underground_distance = 4},
                 },        
             },
         }, 

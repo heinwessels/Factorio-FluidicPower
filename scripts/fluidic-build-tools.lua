@@ -89,6 +89,7 @@ function build_tools.on_entity_removed(event)
             if neighbours then
                 -- And it has neighbours. We will check it next tick
 
+                if not global.neigbours_to_check then global.neigbours_to_check = { } end
                 table.insert(
                     global.neigbours_to_check,
                     {
