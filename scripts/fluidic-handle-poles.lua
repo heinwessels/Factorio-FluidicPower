@@ -108,16 +108,19 @@ end
 function poles.on_entity_removed(event)
     -- This simply destroys the fluid entity undeneath the electric entity
     if event.entity and event.entity.valid then
-        local surface = event.entity.surface
-        local fluid_name = fluidic_utils.entity_fluid_to_electric_lu[event.entity.name]
-        local electric_name = fluidic_utils.entity_electric_to_fluid_lu[event.entity.name]
+        local entity = event.entity
+        if string.sub(entity.name, 1, 7) ~= "fluidic" then return end
+
+        local surface = entity.surface
+        local fluid_name = fluidic_utils.entity_fluid_to_electric_lu[entity.name]
+        local electric_name = fluidic_utils.entity_electric_to_fluid_lu[entity.name]
         if fluid_name then
             -- This entity was one of our special entities.
 
             -- Destroy the fluidic component beneath
-            local e = event.entity.surface.find_entity(
+            local e = surface.find_entity(
                 fluid_name, 
-                event.entity.position
+                entity.position
             )
             if e then e.destroy{raise_destroy=false} end
 
@@ -128,9 +131,9 @@ function poles.on_entity_removed(event)
             -- TODO Fix blueprinting
 
             -- Destroy the electric component on top
-            local e = event.entity.surface.find_entity(
+            local e = surface.find_entity(
                 electric_name,
-                event.entity.position
+                entity.position
             )
             if e then e.destroy{raise_destroy=false} end
         end

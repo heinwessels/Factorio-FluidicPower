@@ -35,10 +35,13 @@ function overlay.ontick (event)
             end
             
             local iterator = global.overlay_iterators[uid]
-            
+            if iterator and not iterator.base.valid then
+                iterator = nil
+                overlay.reset_rendering() 
+            end -- Reset if something went wrong
 
             -- Now check if we are already handling this entity
-            if not iterator or iterator.base.unit_number ~= entity.unit_number then
+            if not iterator or not iterator.base.valid or iterator.base.unit_number ~= entity.unit_number then
                 -- It's a new entity! (and not a previously looked at entity)
 
                 -- Were we already looking at this entity? We're lo
@@ -79,10 +82,11 @@ function overlay.ontick (event)
         end
 
         -- Now iterate for this player
-        if global.overlay_iterators[uid] then
-            if global.overlay_iterators[uid].base.valid then
+        local iterator = global.overlay_iterators[uid]        
+        if iterator then
+            if iterator.base.valid then
                 -- Iterate!
-                overlay.iterate_fluidbox_connections(player, global.overlay_iterators[uid])
+                overlay.iterate_fluidbox_connections(player, iterator)
             else
                 -- The base entity doesn't exist anymore for some reason
                 overlay.reset_rendering()
