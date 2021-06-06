@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.4
+Date: 06. 06. 2021  
+  Bugfixes:
+    - Fixed compatibility issue (thanks TalDoMula!)
+---------------------------------------------------------------------------------------------------
 Version: 0.6.3
-Date: 22. 06. 2021
+Date: 22. 05. 2021
   Features:
     - Overlay now shows "empty" power poles with small red circle.
   Changes:

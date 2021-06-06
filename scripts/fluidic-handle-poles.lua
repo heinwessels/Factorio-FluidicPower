@@ -16,6 +16,8 @@ function poles.on_entity_created(event)
         entity = event.created_entity
     end
     if not entity then return end
+    if not entity.valid then return end
+    if string.sub(entity.name, 1, 7) ~= "fluidic" then return end
         
     -- First check if a temporary "-place" entity was placed
     if string.match(entity.name, "-place") then
