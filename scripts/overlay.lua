@@ -129,6 +129,11 @@ function overlay.iterate_fluidbox_connections(player, iterator)
     local node = this_iteration.this_node
     local prev_node = this_iteration.prev_node
     local depth = this_iteration.depth
+    
+    if not node.valid then
+        overlay.reset_rendering()
+        return
+    end
 
     -- Draw the connection if there is a previous node to draw to
     if prev_node and (prev_node.valid or false) then
