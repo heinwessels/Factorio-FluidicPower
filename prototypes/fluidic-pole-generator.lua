@@ -99,6 +99,8 @@ function Generator.create_in_variant(config)
             name = name_place,
             icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
             
+            bottleneck_ignore = true,   -- For BottleNeck Lit
+            
             -- This is required for when the item may not be placed due to fluids-mixing
             -- Crash in 0.6.1
             minable = {result = name},
@@ -266,6 +268,8 @@ function Generator.create_out_variant(config)
             type = "generator",
             name = name_place,
             
+            bottleneck_ignore = true,   -- For BottleNeck Lite
+
             -- This is required for when the item may not be placed due to fluids-mixing
             -- Crash in 0.6.1
             minable = {result = name},
@@ -383,7 +387,8 @@ function Generator.create_transmit_variant(config)
             name = name_place,
             minable = {result = name},
             horizontal_window_bounding_box = {{0,0},{0,0}},
-            vertical_window_bounding_box = {{0,0},{0,0}},            
+            vertical_window_bounding_box = {{0,0},{0,0}},
+            bottleneck_ignore = true,   -- For BottleNeck Lit
             fluid_box =
             {
                 base_area = 1,               
