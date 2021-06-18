@@ -1,0 +1,10 @@
+{
+    "item":
+    [
+        ["fluidic-accumulator", "accumulator"]
+    ],
+    "recipe":
+    [
+        ["fluidic-accumulator", "accumulator"]
+    ]
+}

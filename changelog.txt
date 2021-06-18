@@ -3,6 +3,8 @@ Version: 0.6.5
 Date: ??. ??. 2021  
   Features:
     - Bottleneck Lite will not draw indicators on power poles (does on transformers).
+  Changes:
+    - Accumulator now uses vanilla item for better compatability.
   Bugfixes:
     - Fixed overlay crash.
 ---------------------------------------------------------------------------------------------------

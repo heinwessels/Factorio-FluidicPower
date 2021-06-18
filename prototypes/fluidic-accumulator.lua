@@ -1,23 +1,6 @@
--- Create the items
-local item = table.deepcopy(data.raw["item"]["accumulator"])
-override = {
-    name = "fluidic-accumulator",
-    place_result = "fluidic-accumulator",
-}
-for k,v in pairs(override) do
-    item[k]=v
-end
-data:extend({item})
-
--- Recipe
-data:extend({util.merge{
-    data.raw["recipe"]["accumulator"],
-    {
-        name = "fluidic-accumulator",
-        result = "fluidic-accumulator",
-    }
-}})
-data.raw["recipe"]["accumulator"].enabled = false
+-- Item will be the vanilla accumulator item (for compatability)
+data.raw.item.accumulator.place_result = "fluidic-accumulator"
+-- Recipe will be the vanilla accumulator recipe
 
 -- Create the entity
 local circuit_connections = circuit_connector_definitions.create(
@@ -34,7 +17,7 @@ local tank = table.deepcopy(data.raw["storage-tank"]["storage-tank"])
 override = {
     name = "fluidic-accumulator",
     type = "storage-tank",
-    minable = {mining_time = 0.5, result = "fluidic-accumulator"},
+    minable = {mining_time = 0.5, result = "accumulator"},
     flow_length_in_ticks = 360,
     fluid_box =
     {
@@ -73,11 +56,4 @@ data:extend({entity})
 table.insert(data.raw["storage-tank"]["fluidic-accumulator"].flags, "not-rotatable")
 if settings.startup["fluidic-disable-accumulator-alt-info"].value then
     table.insert(data.raw["storage-tank"]["fluidic-accumulator"].flags, "hide-alt-info")
-end
-
--- Fix the satellite recipe to use this mod's accumulator
-for _, ingredient in pairs(data.raw.recipe["satellite"].ingredients) do
-    if ingredient[1] == "accumulator" then
-        ingredient[1] = "fluidic-accumulator"
-    end
 end
