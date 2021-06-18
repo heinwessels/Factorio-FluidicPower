@@ -106,6 +106,19 @@ function Generator.create_in_variant(config)
             minable = {result = name},
             next_upgrade = nil,             -- Upgrading done through electric item
             fast_replaceable_group = nil,
+
+            -- Overwrite flags so that this hidden component has barely any functionality
+            -- and most imporantly not "player-creation" so that biters won't attack it
+            -- but it might still happen that the entity dies and will not create the correct
+            -- ghost. Therefore handle the die callback correctly.
+            flags = {
+                "not-rotatable", 
+                "hide-alt-info", 
+                "placeable-neutral", 
+                "fast-replaceable-no-build-while-moving", 
+                "not-flammable",
+            },          
+
             crafting_speed = 1,
             fixed_recipe = config.fixed_recipe,
             energy_usage = config.energy_usage,
@@ -125,9 +138,8 @@ function Generator.create_in_variant(config)
             fluid_boxes = fluid_boxes,            
             animation = data.raw["electric-pole"][config.base_name].pictures,
         }
-    }})
-    table.insert(data.raw["assembling-machine"][name_place].flags, "not-rotatable")
-    table.insert(data.raw["assembling-machine"][name_place].flags, "hide-alt-info")
+    }})    
+    data.raw["assembling-machine"][name_place].corpse = nil -- Ensure this has no corpse
     data.raw["assembling-machine"][name_place].animation.layers[1].filename = 
             "__FluidicPower__/graphics/entities/electric-poles/"..config.base_name..".png"
     data.raw["assembling-machine"][name_place].animation.layers[1].hr_version.filename = 
@@ -241,18 +253,18 @@ function Generator.create_out_variant(config)
             base_area = 1,
             pipe_connections =
             {
-                {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                {type = "input-output", position = {1.5,  -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                {type = "input-output", position = {-0.5, -1.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                {type = "input-output", position = {-1.4, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                {type = "input-output", position = {1.4,  -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                {type = "input-output", position = {-0.5, -1.4}, max_underground_distance = config.wire_reach + pipe_offset},
+                {type = "input-output", position = { -0.5, 1.4}, max_underground_distance = config.wire_reach + pipe_offset},
     
                 -- These connections are only for energy sensors.
                 -- Will not connect to other poles (unless placed directly adjacent)
                 -- and thus not influence fluid flow
-                {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 1},
-                {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 1},
-                {type = "input-output", position = {0.5, -1.5,}, max_underground_distance = 1},
-                {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 1},
+                {type = "input-output", position = {-1.4, 0.5}, max_underground_distance = 1},
+                {type = "input-output", position = {1.4, 0.5}, max_underground_distance = 1},
+                {type = "input-output", position = {0.5, -1.4,}, max_underground_distance = 1},
+                {type = "input-output", position = {0.5, 1.4}, max_underground_distance = 1},
             },
             production_type = "input-output",        
             minimum_temperature = 10,
@@ -273,7 +285,20 @@ function Generator.create_out_variant(config)
             -- This is required for when the item may not be placed due to fluids-mixing
             -- Crash in 0.6.1
             minable = {result = name},
-            next_upgrade = nil,             -- Upgrading done through electric item            
+            next_upgrade = nil,             -- Upgrading done through electric item
+
+            -- Overwrite flags so that this hidden component has barely any functionality
+            -- and most imporantly not "player-creation" so that biters won't attack it
+            -- but it might still happen that the entity dies and will not create the correct
+            -- ghost. Therefore handle the die callback correctly.
+            flags = {
+                "not-rotatable", 
+                "hide-alt-info", 
+                "placeable-neutral", 
+                "fast-replaceable-no-build-while-moving", 
+                "not-flammable",
+            },
+
             effectivity = 1,
             maximum_temperature = 15,
             fluid_usage_per_tick = config.fluid_usage_per_tick,  -- Default energy output. value = P / 60
@@ -294,8 +319,7 @@ function Generator.create_out_variant(config)
             horizontal_animation = data.raw["electric-pole"][config.base_name].pictures,
         }
     }})
-    table.insert(data.raw["generator"][name_place].flags, "not-rotatable")
-    table.insert(data.raw["generator"][name_place].flags, "hide-alt-info")
+    data.raw.generator[name_place].corpse = nil -- Ensure this has no corpse
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
@@ -331,7 +355,7 @@ function Generator.create_out_variant(config)
     -- Depending on debug option, choose which entity is exposed
     if not constants.expose_fluid_boxes then
         -- Default
-        data.raw["generator"][name].selection_box = {{0,0}, {0,0}}
+        data.raw["generator"][name].selection_box = {{0,0}, {0,0}}        
     else
         -- Debug option
         data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
@@ -388,7 +412,20 @@ function Generator.create_transmit_variant(config)
             minable = {result = name},
             horizontal_window_bounding_box = {{0,0},{0,0}},
             vertical_window_bounding_box = {{0,0},{0,0}},
-            bottleneck_ignore = true,   -- For BottleNeck Lit
+            bottleneck_ignore = true,   -- For BottleNeck Lite
+
+            -- Overwrite flags so that this hidden component has barely any functionality
+            -- and most imporantly not "player-creation" so that biters won't attack it
+            -- but it might still happen that the entity dies and will not create the correct
+            -- ghost. Therefore handle the die callback correctly.
+            flags = {
+                "not-rotatable", 
+                "hide-alt-info", 
+                "placeable-neutral", 
+                "fast-replaceable-no-build-while-moving", 
+                "not-flammable",
+            },
+
             fluid_box =
             {
                 base_area = 1,               
@@ -439,7 +476,6 @@ function Generator.create_transmit_variant(config)
             }
         }
     }})
-    table.insert(data.raw["pipe"][name_place].flags, "not-rotatable")
 
     -- Now create the main entity without graphics
     data:extend({util.merge{

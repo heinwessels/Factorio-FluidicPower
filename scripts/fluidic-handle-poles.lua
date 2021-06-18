@@ -105,7 +105,7 @@ function disconnect_entity_and_neighbours(entity)
     entity.disconnect_neighbour()
 end
 
-function poles.on_entity_removed(event)
+function poles.on_entity_removed(event, die)
     -- This simply destroys the fluid entity undeneath the electric entity
     if event.entity and event.entity.valid then
         local entity = event.entity
@@ -115,20 +115,31 @@ function poles.on_entity_removed(event)
         local fluid_name = fluidic_utils.entity_fluid_to_electric_lu[entity.name]
         local electric_name = fluidic_utils.entity_electric_to_fluid_lu[entity.name]
         if fluid_name then
-            -- This entity was one of our special entities.
+            -- The removed/died entity is the fluidic component.
+            -- This should ideally not happen, so it needs to be
+            -- handled carefully if it's a death
 
             -- Destroy the fluidic component beneath
             local e = surface.find_entity(
                 fluid_name, 
                 entity.position
-            )
-            if e then e.destroy{raise_destroy=false} end
+            )            
+            if e then 
+                -- Need to handle it correctly
+                if not die then 
+                    e.destroy{raise_destroy=false} 
+                else 
+                    e.die(event.force, event.cause)
+                end
+            end
 
         elseif electric_name then
+            -- The removed entity is the electric entity on top.
             -- When placing blueprint with wrong connection
             -- the electric entity will already be there, which
             -- means we need to add this hack to delete it.
             -- TODO Fix blueprinting
+            -- TODO What?
 
             -- Destroy the electric component on top
             local e = surface.find_entity(
