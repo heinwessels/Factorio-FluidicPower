@@ -89,7 +89,7 @@ data:extend
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
         hide_from_player_crafting = true,
         
-        -- Currently 50MW
+        -- Currently 500MW
         ingredients ={{type="fluid", name="fluidic-megajoules", amount=100}},
         results={{type="fluid", name="fluidic-100-megajoules", amount=1}},
         energy_required = 0.2,
@@ -102,12 +102,14 @@ data:extend
         order = "a[b]-a[b]",
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
-        ingredients ={{type="fluid", name="fluidic-megajoules", amount=10}},
-        energy_required = 0.2,
-        results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
         scale_entity_info_icon = true,
         hide_from_stats = true, -- Hide stats to not influence production/consumption 
         hide_from_player_crafting = true,
+        
+        -- Currently 50MW
+        ingredients ={{type="fluid", name="fluidic-megajoules", amount=10}},
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},
+        energy_required = 0.2,
     },
     {
         type = "recipe",
@@ -117,12 +119,14 @@ data:extend
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
         order = "a[d]-a[megajoules]",
-        ingredients ={{type="fluid", name="fluidic-100-megajoules", amount=1}},
-        results={{type="fluid", name="fluidic-megajoules", amount=100}},
-        energy_required = 0.2,  -- This limits power throughput
         scale_entity_info_icon = true,
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
         hide_from_player_crafting = true,
+        
+        -- Currently 500MW
+        ingredients ={{type="fluid", name="fluidic-100-megajoules", amount=1}},
+        results={{type="fluid", name="fluidic-megajoules", amount=100}},
+        energy_required = 0.2,  -- This limits power throughput
     }
 })
 
