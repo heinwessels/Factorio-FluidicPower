@@ -38,13 +38,17 @@ function Generator.create_in_variant(config)
     })
 
     -- RECIPE
+    local ingredients = config.recipe and config.recipe.ingredients or nil
+    local energy_required = config.recipe and config.recipe.energy_required or nil
     data:extend({util.merge{
         data.raw["recipe"][config.base_name],
         {
-            name = name, 
-            result = name,
+            name = name,
+            result = name,            
+            energy_required = energy_required,
         }
     }})
+    if ingredients then data.raw.recipe[name].ingredients = ingredients end
 
     -- ENTITY
     local pipe_offset = -math.floor(config.size / 2)
@@ -222,13 +226,17 @@ function Generator.create_out_variant(config)
     })
 
     -- RECIPE
+    local ingredients = config.recipe and config.recipe.ingredients or nil
+    local energy_required = config.recipe and config.recipe.energy_required or nil
     data:extend({util.merge{
         data.raw["recipe"][config.base_name],
         {
-            name = name, 
-            result = name,
+            name = name,
+            result = name,            
+            energy_required = energy_required,
         }
     }})
+    if ingredients then data.raw.recipe[name].ingredients = ingredients end
 
     -- ENTITY
     -- First create the entity that will be placed
@@ -393,13 +401,17 @@ function Generator.create_transmit_variant(config)
     })
 
     -- RECIPE
+    local ingredients = config.recipe and config.recipe.ingredients or nil
+    local energy_required = config.recipe and config.recipe.energy_required or nil
     data:extend({util.merge{
         data.raw["recipe"][config.base_name],
         {
-            name = name, 
-            result = name,
+            name = name,
+            result = name,            
+            energy_required = energy_required,
         }
     }})
+    if ingredients then data.raw.recipe[name].ingredients = ingredients end
 
     -- ENTITY
     -- First create the entity that will be used while placing    
