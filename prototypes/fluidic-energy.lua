@@ -100,8 +100,8 @@ data:extend
         subgroup = "energy-pipe-distribution",
         order = "a[kilojoules]-a[kilojoules]",        
         ingredients ={},
-        energy_required = 0.25,
-        results={{type="fluid", name="fluidic-10-kilojoules", amount=1000}},      
+        energy_required = 0.2,
+        results={{type="fluid", name="fluidic-10-kilojoules", amount=2000}},
         hidden = true  
     },
 })

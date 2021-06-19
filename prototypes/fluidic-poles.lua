@@ -10,6 +10,8 @@ Generator = require("prototypes.fluidic-pole-generator")
 --      s = fluid usage per tick
 -- Then:
 --      P = u * s * 60
+--
+-- Remember to update recipes!
 
 -- Create small poles
 -------------------------------------------------------
@@ -24,7 +26,7 @@ Generator.create_out_variant{
 Generator.create_in_variant{
     base_name = "small-electric-pole",
     fixed_recipe = "fluidic-10-kilojoules-generate-small",
-    energy_usage = "5MW",
+    energy_usage = "5MW",  -- Needs to correspond with recipe
     next_upgrade = "fluidic-medium-electric-pole-in-place",
     fluid_box_base_area = 0.5,
     wire_reach = small_wire_reach,
@@ -48,7 +50,7 @@ Generator.create_out_variant{
 Generator.create_in_variant{
     base_name = "medium-electric-pole",
     fixed_recipe = "fluidic-10-kilojoules-generate-medium",
-    energy_usage = "30MW",
+    energy_usage = "30MW",  -- Needs to correspond with recipe
     wire_reach = medium_wire_reach,
     recipe = {
         ingredients =
@@ -64,14 +66,14 @@ Generator.create_in_variant{
 local substation_wire_reach = 20 -- vanilla is 18
 Generator.create_out_variant{
     base_name = "substation",
-    fluid_usage_per_tick = 66.66666666, -- P = 40MW
+    fluid_usage_per_tick = 166.66666666, -- P = 100MW
     wire_reach = substation_wire_reach,
     size = 2,   -- This is a 2x2 entity
 }
 Generator.create_in_variant{
     base_name = "substation",
     fixed_recipe = "fluidic-10-kilojoules-generate-substation",
-    energy_usage = "40MW",
+    energy_usage = "100MW",  -- Needs to correspond with recipe
     wire_reach = substation_wire_reach,
     size = 2,   -- This is a 2x2 entity
     recipe = {
