@@ -19,7 +19,7 @@ Date: 19. 06. 2021
     - Fixed that composite entities behave correctly on death.
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.4
-Date: 06. 06. 2021  
+Date: 06. 06. 2021   
   Bugfixes:
     - Fixed compatibility issue (thanks TalDoMula!)
     - Fixed overlay crash when rapidly deleting power poles.

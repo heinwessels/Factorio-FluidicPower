@@ -155,10 +155,8 @@ function Generator.create_in_out_variant(config)
             }
         }})    
         data.raw["assembling-machine"][name.."-in-place"].corpse = nil -- Ensure this has no corpse
-        data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].filename = 
-                "__FluidicPower__/graphics/entities/electric-poles/"..config.base_name..".png"
-        data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].hr_version.filename = 
-                "__FluidicPower__/graphics/entities/electric-poles/hr-"..config.base_name..".png"
+        data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].tint = tint_in
+        data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].hr_version.tint = tint_in
 
         -- Now create the main entity without graphics
         data:extend({util.merge{
@@ -188,10 +186,8 @@ function Generator.create_in_out_variant(config)
             }
         }})
         table.insert(data.raw["electric-pole"][name.."-in-electric"].flags, "not-upgradable")
-        data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].filename = 
-                "__FluidicPower__/graphics/entities/electric-poles/"..config.base_name..".png"
-        data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].hr_version.filename = 
-                "__FluidicPower__/graphics/entities/electric-poles/hr-"..config.base_name..".png"
+        data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].tint = tint_in
+        data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].hr_version.tint = tint_in
 
         -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
         if not constants.expose_fluid_boxes then
