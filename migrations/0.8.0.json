@@ -1,0 +1,16 @@
+{
+    "item":
+    [
+        ["fluidic-small-electric-pole-out", "small-electric-pole"],
+        ["fluidic-medium-electric-pole-out", "medium-electric-pole"],
+        ["fluidic-substation-out", "substation"],
+        ["fluidic-big-electric-pole", "big-electric-pole"]
+    ],
+    "recipe":
+    [
+        ["fluidic-small-electric-pole-out", "small-electric-pole"],
+        ["fluidic-medium-electric-pole-out", "medium-electric-pole"],
+        ["fluidic-substation-out", "substation"],
+        ["fluidic-big-electric-pole", "big-electric-pole"]
+    ]
+}

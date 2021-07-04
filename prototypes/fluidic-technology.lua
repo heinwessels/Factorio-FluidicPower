@@ -7,11 +7,11 @@ data.raw.technology["electric-energy-distribution-1"].effects = {
     },
     {
         type = "unlock-recipe",
-        recipe = "fluidic-medium-electric-pole-out"
+        recipe = "medium-electric-pole"
     },
     {
         type = "unlock-recipe",
-        recipe = "fluidic-big-electric-pole"
+        recipe = "big-electric-pole"
     },
     {
         type = "unlock-recipe",
@@ -25,7 +25,7 @@ data.raw.technology["electric-energy-distribution-2"].effects = {
     },
     {
         type = "unlock-recipe",
-        recipe = "fluidic-substation-out"
+        recipe = "substation"
     }
 }
 

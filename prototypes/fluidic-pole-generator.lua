@@ -5,369 +5,341 @@ fluidic_utils = require("scripts.fluidic-utils")
 local Generator = { }
 
 ------------------------------------------------------------------------------------------------------
--- IN VARIANT (SOURCE POLE)
+-- In and Out Variant
+-- (In = Source / Out = Normal)
 ------------------------------------------------------------------------------------------------------
+function Generator.create_in_out_variant(config)
 
-function Generator.create_in_variant(config)
-    -- This will create the item, recipe, and entity
-    -- in the fluidic IN variant with corresponding 
-    -- electrics
-
-    -- e.g.
-    --      base_name = "small-electric-pole"
-    -- Will create
-    --      "fluidic-small-electric-pole-in"
-    --      "fluidic-small-electric-pole-in-place"
-
-    local name = "fluidic-"..config.base_name.."-in"
-    local name_place = name.."-place"
-    local name_electric = name.."-electric"
-
+    local name = "fluidic-"..config.base_name
+    
+    local tint_in = { a = 0.75,  b = 0, g = 1.0, r = 1.0 }
     if not config.size then config.size = 1 end
 
-    -- ITEM
+    -- Items
+    -----------------------------------
+    -- The out pole will use the normal item
+    -- The in pole will use a new item
+    data.raw["item"][config.base_name].place_result = name.."-out-place"
     data:extend({
         util.merge{
             data.raw["item"][config.base_name],
             {
-                name = name, 
-                place_result = name_place,
-                icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png"
+                name = name.."-in", 
+                place_result =  name.."-in-place",
+                icons = {
+                    {
+                        icon = data.raw["item"][config.base_name].icon,
+                        tint = tint_in
+                    }                    
+                },
             }
         },
     })
 
-    -- RECIPE
-    local ingredients = config.recipe and config.recipe.ingredients or nil
-    local energy_required = config.recipe and config.recipe.energy_required or nil
-    data:extend({util.merge{
-        data.raw["recipe"][config.base_name],
-        {
-            name = name,
-            result = name,            
-            energy_required = energy_required,
-        }
-    }})
-    if ingredients then data.raw.recipe[name].ingredients = ingredients end
-
-    -- ENTITY
-    local pipe_offset = -math.floor(config.size / 2)
-    local fluid_boxes
-    if not config.size or config.size == nil or config.size == 1 then
-        fluid_boxes = { 
+    -- Item Recipes
+    -----------------------------------
+    -- The out pole will use the base recipe
+    -- The in pole will be made from the out pole
+    data:extend({
+        util.merge{
+            data.raw["recipe"][config.base_name],
             {
-                production_type = "output",
-                base_area = config.fluid_box_base_area or 1,
-                filter = "fluidic-10-kilojoules",
-                pipe_connections = {
-                    { type="input-output", position = {0, 1}, max_underground_distance = config.wire_reach + pipe_offset},
-                    { type="input-output", position = {0, -1}, max_underground_distance = config.wire_reach + pipe_offset},
-                    { type="input-output", position = {1, 0}, max_underground_distance = config.wire_reach + pipe_offset},
-                    { type="input-output", position = {-1, 0}, max_underground_distance = config.wire_reach + pipe_offset}
+                name = name.."-in", 
+                result = name.."-in",
+                ingredients = {
+                    {config.base_name, 1},
                 },
-                secondary_draw_orders = { north = -1 },
-            },
-        }  -- Default 1x1 sized fluidbox. Won't work for substation
-    elseif config.size and config.size == 2 then
-        fluid_boxes = { 
+                energy_required = 0.2,
+            }
+        },
+    })
+
+    -- In (source) Entities
+    -----------------------------------
+    do
+        local pipe_offset = -math.floor(config.size / 2)
+        local fluid_boxes
+        if not config.size or config.size == nil or config.size == 1 then
+            fluid_boxes = { 
+                {
+                    production_type = "output",
+                    base_area = config.fluid_box_base_area or 1,
+                    filter = "fluidic-10-kilojoules",
+                    pipe_connections = {
+                        { type="input-output", position = {0, 1}, max_underground_distance = config.wire_reach + pipe_offset},
+                        { type="input-output", position = {0, -1}, max_underground_distance = config.wire_reach + pipe_offset},
+                        { type="input-output", position = {1, 0}, max_underground_distance = config.wire_reach + pipe_offset},
+                        { type="input-output", position = {-1, 0}, max_underground_distance = config.wire_reach + pipe_offset}
+                    },
+                    secondary_draw_orders = { north = -1 },
+                },
+            }  -- Default 1x1 sized fluidbox. Won't work for substation
+        elseif config.size and config.size == 2 then
+            fluid_boxes = { 
+                {
+                    production_type = "output",        
+                    base_area = config.fluid_box_base_area or 1,
+                    filter = "fluidic-10-kilojoules",
+                    pipe_connections = {               
+                        {type = "output", position = {-1.5, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                        {type = "output", position = {1.5,  -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                        {type = "output", position = {-0.5, -1.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                        {type = "output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach + pipe_offset},
+        
+                        -- These connections are only for energy sensors.
+                        -- Will not connect to other poles (unless placed directly adjacent)
+                        -- and thus not influence fluid flow
+                        {type = "output", position = {-1.5, 0.5}, max_underground_distance = 1},
+                        {type = "output", position = {1.5, 0.5}, max_underground_distance = 1},
+                        {type = "output", position = {0.5, -1.5,}, max_underground_distance = 1},
+                        {type = "output", position = {0.5, 1.5}, max_underground_distance = 1},
+                    },
+                    secondary_draw_orders = { north = -1 },
+                },
+            }
+        else
+            error("Invalid pole size specified: "..config.size)
+        end
+
+        -- First create the PLACE entity
+        data:extend({util.merge{
+            data.raw["electric-pole"][config.base_name],
             {
-                production_type = "output",        
+                type = "assembling-machine",
+                name = name.."-in-place",                
+                icons = {
+                    {
+                        icon = data.raw["electric-pole"][config.base_name].icon,
+                        tint = tint_in
+                    }                    
+                },
+                
+                bottleneck_ignore = true,   -- For BottleNeck Lit
+                
+                -- This is required for when the item may not be placed due to fluids-mixing
+                -- Crash in 0.6.1
+                minable = {result = name.."-in"},
+                next_upgrade = nil,             -- Upgrading done through electric item
+                fast_replaceable_group = nil,
+
+                -- Overwrite flags so that this hidden component has barely any functionality
+                -- and most imporantly not "player-creation" so that biters won't attack it
+                -- but it might still happen that the entity dies and will not create the correct
+                -- ghost. Therefore handle the die callback correctly.
+                flags = {
+                    "not-rotatable", 
+                    "hide-alt-info", 
+                    "placeable-neutral", 
+                    "fast-replaceable-no-build-while-moving", 
+                    "not-flammable",
+                },          
+
+                crafting_speed = 1,
+                fixed_recipe = config.in_fixed_recipe,
+                energy_usage = config.energy_usage,
+                module_specification = nil,
+                allowed_effects = nil,
+                module_specification = { module_slots = 0 },
+                energy_source = {
+                    type = "electric",
+                    input_priority = "secondary",
+                    usage_priority = "secondary-input",
+                    drain = "0kW"  
+                },            
+                maximum_wire_distance = 0,
+                open_sound = nil,
+                close_sound = nil,            
+                crafting_categories = {"fluidic-generate"},
+                fluid_boxes = fluid_boxes,            
+                animation = data.raw["electric-pole"][config.base_name].pictures,
+            }
+        }})    
+        data.raw["assembling-machine"][name.."-in-place"].corpse = nil -- Ensure this has no corpse
+        data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].filename = 
+                "__FluidicPower__/graphics/entities/electric-poles/"..config.base_name..".png"
+        data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].hr_version.filename = 
+                "__FluidicPower__/graphics/entities/electric-poles/hr-"..config.base_name..".png"
+
+        -- Now create the main entity without graphics
+        data:extend({util.merge{
+            data.raw["assembling-machine"][name.."-in-place"],
+            {
+                name = name.."-in",
+            }
+        }})    
+        data.raw["assembling-machine"][name.."-in"].next_upgrade = 
+            config.next_upgrade_base and config.next_upgrade_base.."-in-place" or nil    
+        data.raw["assembling-machine"][name.."-in"].animation = {
+            filename = "__FluidicPower__/graphics/entities/empty.png",                
+            width = 32,
+            height = 32,
+        }
+
+        -- Now update create the electric entity
+        data:extend({util.merge{
+            data.raw["electric-pole"][config.base_name],
+            {
+                name = name.."-in-electric",
+                icon = "__FluidicPower__/graphics/icons/"..name.."-in-icon.png",
+                minable = {result = name.."-in"},
+                placeable_by = {item=name.."-in",count=1}, -- This is the magic to make the pipette and blueprint work!
+                maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
+                fast_replaceable_group = nil,
+            }
+        }})
+        table.insert(data.raw["electric-pole"][name.."-in-electric"].flags, "not-upgradable")
+        data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].filename = 
+                "__FluidicPower__/graphics/entities/electric-poles/"..config.base_name..".png"
+        data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].hr_version.filename = 
+                "__FluidicPower__/graphics/entities/electric-poles/hr-"..config.base_name..".png"
+
+        -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
+        if not constants.expose_fluid_boxes then
+            -- Default fluid is not exposed
+            data.raw["assembling-machine"][name.."-in"].selection_box = {{0,0}, {0,0}}
+            data.raw["assembling-machine"][name.."-in"].drawing_box = {{0,0}, {0,0}}
+        else
+            -- Debug option
+            data.raw["electric-pole"][name.."-in-electric"].selection_box = {{0,0}, {0,0}}
+            data.raw["electric-pole"][name.."-in-electric"].drawing_box = {{0,0}, {0,0}}
+        end
+    end
+
+    -- Out (Normal) Entities
+    -----------------------------------
+    do
+        -- First create the entity that will be placed
+        local pipe_offset = -math.floor(config.size / 2)
+        local fluid_boxes
+        if not config.size or config.size == nil or config.size == 1 then
+            fluid_boxes = {
                 base_area = config.fluid_box_base_area or 1,
-                filter = "fluidic-10-kilojoules",
-                pipe_connections = {               
-                    {type = "output", position = {-1.5, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                    {type = "output", position = {1.5,  -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                    {type = "output", position = {-0.5, -1.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                    {type = "output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach + pipe_offset},
-    
+                pipe_connections =
+                {
+                    {type = "input-output", position = {-1, 0}, max_underground_distance =config.wire_reach + pipe_offset},
+                    {type = "input-output", position = {1, 0}, max_underground_distance = config.wire_reach + pipe_offset},
+                    {type = "input-output", position = {0, -1}, max_underground_distance = config.wire_reach + pipe_offset},
+                    {type = "input-output", position = {0, 1}, max_underground_distance = config.wire_reach + pipe_offset},
+                },
+                production_type = "input-output",
+                minimum_temperature = 10,
+                filter = "fluidic-10-kilojoules"
+            }
+        elseif config.size and config.size == 2 then
+            fluid_boxes = {
+                base_area = 1,
+                pipe_connections =
+                {
+                    {type = "input-output", position = {-1.4, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                    {type = "input-output", position = {1.4,  -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                    {type = "input-output", position = {-0.5, -1.4}, max_underground_distance = config.wire_reach + pipe_offset},
+                    {type = "input-output", position = { -0.5, 1.4}, max_underground_distance = config.wire_reach + pipe_offset},
+        
                     -- These connections are only for energy sensors.
                     -- Will not connect to other poles (unless placed directly adjacent)
                     -- and thus not influence fluid flow
-                    {type = "output", position = {-1.5, 0.5}, max_underground_distance = 1},
-                    {type = "output", position = {1.5, 0.5}, max_underground_distance = 1},
-                    {type = "output", position = {0.5, -1.5,}, max_underground_distance = 1},
-                    {type = "output", position = {0.5, 1.5}, max_underground_distance = 1},
+                    {type = "input-output", position = {-1.4, 0.5}, max_underground_distance = 1},
+                    {type = "input-output", position = {1.4, 0.5}, max_underground_distance = 1},
+                    {type = "input-output", position = {0.5, -1.4,}, max_underground_distance = 1},
+                    {type = "input-output", position = {0.5, 1.4}, max_underground_distance = 1},
                 },
-                secondary_draw_orders = { north = -1 },
-            },
-        }
-    else
-        error("Invalid pole size specified: "..config.size)
-    end
-
-    -- First create the PLACE entity
-    data:extend({util.merge{
-        data.raw["electric-pole"][config.base_name],
-        {
-            type = "assembling-machine",
-            name = name_place,
-            icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
-            
-            bottleneck_ignore = true,   -- For BottleNeck Lit
-            
-            -- This is required for when the item may not be placed due to fluids-mixing
-            -- Crash in 0.6.1
-            minable = {result = name},
-            next_upgrade = nil,             -- Upgrading done through electric item
-            fast_replaceable_group = nil,
-
-            -- Overwrite flags so that this hidden component has barely any functionality
-            -- and most imporantly not "player-creation" so that biters won't attack it
-            -- but it might still happen that the entity dies and will not create the correct
-            -- ghost. Therefore handle the die callback correctly.
-            flags = {
-                "not-rotatable", 
-                "hide-alt-info", 
-                "placeable-neutral", 
-                "fast-replaceable-no-build-while-moving", 
-                "not-flammable",
-            },          
-
-            crafting_speed = 1,
-            fixed_recipe = config.fixed_recipe,
-            energy_usage = config.energy_usage,
-            module_specification = nil,
-            allowed_effects = nil,
-            module_specification = { module_slots = 0 },
-            energy_source = {
-                type = "electric",
-                input_priority = "secondary",
-                usage_priority = "secondary-input",
-                drain = "0kW"  
-            },            
-            maximum_wire_distance = 0,
-            open_sound = nil,
-            close_sound = nil,            
-            crafting_categories = {"fluidic-generate"},
-            fluid_boxes = fluid_boxes,            
-            animation = data.raw["electric-pole"][config.base_name].pictures,
-        }
-    }})    
-    data.raw["assembling-machine"][name_place].corpse = nil -- Ensure this has no corpse
-    data.raw["assembling-machine"][name_place].animation.layers[1].filename = 
-            "__FluidicPower__/graphics/entities/electric-poles/"..config.base_name..".png"
-    data.raw["assembling-machine"][name_place].animation.layers[1].hr_version.filename = 
-            "__FluidicPower__/graphics/entities/electric-poles/hr-"..config.base_name..".png"
-
-    -- Now create the main entity without graphics
-    data:extend({util.merge{
-        data.raw["assembling-machine"][name_place],
-        {
-            name = name,
-        }
-    }})    
-    data.raw["assembling-machine"][name].next_upgrade = config.next_upgrade or nil    
-    data.raw["assembling-machine"][name].animation = {
-        filename = "__FluidicPower__/graphics/entities/empty.png",                
-        width = 32,
-        height = 32,
-    }
-
-    -- Now update create the electric entity
-    data:extend({util.merge{
-        data.raw["electric-pole"][config.base_name],
-        {
-            name = name_electric,
-            icon = "__FluidicPower__/graphics/icons/"..name.."-icon.png",
-            minable = {result = name},            
-            placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
-            maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
-            fast_replaceable_group = nil,
-        }
-    }})
-    table.insert(data.raw["electric-pole"][name_electric].flags, "not-upgradable")
-    data.raw["electric-pole"][name_electric].pictures.layers[1].filename = 
-            "__FluidicPower__/graphics/entities/electric-poles/"..config.base_name..".png"
-    data.raw["electric-pole"][name_electric].pictures.layers[1].hr_version.filename = 
-            "__FluidicPower__/graphics/entities/electric-poles/hr-"..config.base_name..".png"
-
-    -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
-    if not constants.expose_fluid_boxes then
-        -- Default fluid is not exposed
-        data.raw["assembling-machine"][name].selection_box = {{0,0}, {0,0}}
-        data.raw["assembling-machine"][name].drawing_box = {{0,0}, {0,0}}
-    else
-        -- Debug option
-        data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
-        data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
-    end
-end
-
-------------------------------------------------------------------------------------------------------
--- OUT VARIANT (NORMAL ONE)
-------------------------------------------------------------------------------------------------------
-
-function Generator.create_out_variant(config)
-    -- This will create the item, recipe, and entity
-    -- in the fluidic OUT variant with corresponding 
-    -- electrics
-
-    -- e.g.
-    --      base_name = "small-electric-pole"
-    -- Will create
-    --      "fluidic-small-electric-pole-out"
-    --      "fluidic-small-electric-pole-in-place"
-
-    local name = "fluidic-"..config.base_name.."-out"
-    local name_place = name.."-place"
-    local name_electric = name.."-electric"
-
-    if not config.size then config.size = 1 end
-
-    -- ITEM
-    data:extend({
-        util.merge{
-            data.raw["item"][config.base_name],
-            {
-                name = name, 
-                place_result = name_place,
+                production_type = "input-output",        
+                minimum_temperature = 10,
+                filter = "fluidic-10-kilojoules"
             }
-        },
-    })
+        else
+            error("Invalid pole size specified: "..config.size)
+        end
 
-    -- RECIPE
-    local ingredients = config.recipe and config.recipe.ingredients or nil
-    local energy_required = config.recipe and config.recipe.energy_required or nil
-    data:extend({util.merge{
-        data.raw["recipe"][config.base_name],
-        {
-            name = name,
-            result = name,            
-            energy_required = energy_required,
-        }
-    }})
-    if ingredients then data.raw.recipe[name].ingredients = ingredients end
-
-    -- ENTITY
-    -- First create the entity that will be placed
-    local pipe_offset = -math.floor(config.size / 2)
-    local fluid_boxes
-    if not config.size or config.size == nil or config.size == 1 then
-        fluid_boxes = {
-            base_area = config.fluid_box_base_area or 1,
-            pipe_connections =
+        data:extend({util.merge{
+            data.raw["electric-pole"][config.base_name],
             {
-                {type = "input-output", position = {-1, 0}, max_underground_distance =config.wire_reach + pipe_offset},
-                {type = "input-output", position = {1, 0}, max_underground_distance = config.wire_reach + pipe_offset},
-                {type = "input-output", position = {0, -1}, max_underground_distance = config.wire_reach + pipe_offset},
-                {type = "input-output", position = {0, 1}, max_underground_distance = config.wire_reach + pipe_offset},
-            },
-            production_type = "input-output",
-            minimum_temperature = 10,
-            filter = "fluidic-10-kilojoules"
-        }
-    elseif config.size and config.size == 2 then
-        fluid_boxes = {
-            base_area = 1,
-            pipe_connections =
-            {
-                {type = "input-output", position = {-1.4, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                {type = "input-output", position = {1.4,  -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                {type = "input-output", position = {-0.5, -1.4}, max_underground_distance = config.wire_reach + pipe_offset},
-                {type = "input-output", position = { -0.5, 1.4}, max_underground_distance = config.wire_reach + pipe_offset},
-    
-                -- These connections are only for energy sensors.
-                -- Will not connect to other poles (unless placed directly adjacent)
-                -- and thus not influence fluid flow
-                {type = "input-output", position = {-1.4, 0.5}, max_underground_distance = 1},
-                {type = "input-output", position = {1.4, 0.5}, max_underground_distance = 1},
-                {type = "input-output", position = {0.5, -1.4,}, max_underground_distance = 1},
-                {type = "input-output", position = {0.5, 1.4}, max_underground_distance = 1},
-            },
-            production_type = "input-output",        
-            minimum_temperature = 10,
-            filter = "fluidic-10-kilojoules"
-        }
-    else
-        error("Invalid pole size specified: "..config.size)
-    end
-
-    data:extend({util.merge{
-        data.raw["electric-pole"][config.base_name],
-        {
-            type = "generator",
-            name = name_place,
-            
-            bottleneck_ignore = true,   -- For BottleNeck Lite
-
-            -- This is required for when the item may not be placed due to fluids-mixing
-            -- Crash in 0.6.1
-            minable = {result = name},
-            next_upgrade = nil,             -- Upgrading done through electric item
-
-            -- Overwrite flags so that this hidden component has barely any functionality
-            -- and most imporantly not "player-creation" so that biters won't attack it
-            -- but it might still happen that the entity dies and will not create the correct
-            -- ghost. Therefore handle the die callback correctly.
-            flags = {
-                "not-rotatable", 
-                "hide-alt-info", 
-                "placeable-neutral", 
-                "fast-replaceable-no-build-while-moving", 
-                "not-flammable",
-            },
-
-            effectivity = 1,
-            maximum_temperature = 15,
-            fluid_usage_per_tick = config.fluid_usage_per_tick,  -- Default energy output. value = P / 60
-            flow_length_in_ticks = 360,
-            burns_fluid = true,
-            two_direction_only = true,                        
-            fluid_box = fluid_boxes,
-            energy_source =
-            {
-                type = "electric",
+                type = "generator",
+                name = name.."-out-place",
                 
-                -- This is secondary to work with the Electric Energy Interface (?)
-                -- but it creates a feedback loop when placed right next to a source
-                -- pole. This will force user to not overlap two poles at power generation.
-                usage_priority = "secondary-output" 
-            },
-            vertical_animation = data.raw["electric-pole"][config.base_name].pictures,
-            horizontal_animation = data.raw["electric-pole"][config.base_name].pictures,
-        }
-    }})
-    data.raw.generator[name_place].corpse = nil -- Ensure this has no corpse
+                bottleneck_ignore = true,   -- For BottleNeck Lite
 
-    -- Now create the main entity without graphics
-    data:extend({util.merge{
-        data.raw["generator"][name_place],
-        {
-            name = name,
-        }
-    }})
-    data.raw["generator"][name].next_upgrade = config.next_upgrade or nil    
-    data.raw["generator"][name].vertical_animation = {
-        filename = "__FluidicPower__/graphics/entities/empty.png",                
-        width = 32,
-        height = 32,
-    }
-    data.raw["generator"][name].horizontal_animation = {
-        filename = "__FluidicPower__/graphics/entities/empty.png",                
-        width = 32,
-        height = 32,
-    }
+                -- This is required for when the item may not be placed due to fluids-mixing
+                -- Crash in 0.6.1
+                minable = {result = config.base_name},
+                next_upgrade = nil,             -- Upgrading done through electric item
 
-    -- Now update create the electric entity
-    data:extend({util.merge{
-        data.raw["electric-pole"][config.base_name],
-        {
-            name = name_electric,
-            minable = {result = name},
-            placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
-            maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length            
-        }
-    }})
-    table.insert(data.raw["electric-pole"][name_electric].flags, "not-upgradable")
+                -- Overwrite flags so that this hidden component has barely any functionality
+                -- and most imporantly not "player-creation" so that biters won't attack it
+                -- but it might still happen that the entity dies and will not create the correct
+                -- ghost. Therefore handle the die callback correctly.
+                flags = {
+                    "not-rotatable", 
+                    "hide-alt-info", 
+                    "placeable-neutral", 
+                    "fast-replaceable-no-build-while-moving", 
+                    "not-flammable",
+                },
 
-    -- Depending on debug option, choose which entity is exposed
-    if not constants.expose_fluid_boxes then
-        -- Default
-        data.raw["generator"][name].selection_box = {{0,0}, {0,0}}        
-    else
-        -- Debug option
-        data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
+                effectivity = 1,
+                maximum_temperature = 15,
+                fluid_usage_per_tick = config.fluid_usage_per_tick,  -- Default energy output. value = P / 60
+                flow_length_in_ticks = 360,
+                burns_fluid = true,
+                two_direction_only = true,                        
+                fluid_box = fluid_boxes,
+                energy_source =
+                {
+                    type = "electric",
+                    
+                    -- This is secondary to work with the Electric Energy Interface (?)
+                    -- but it creates a feedback loop when placed right next to a source
+                    -- pole. This will force user to not overlap two poles at power generation.
+                    usage_priority = "secondary-output" 
+                },
+                vertical_animation = data.raw["electric-pole"][config.base_name].pictures,
+                horizontal_animation = data.raw["electric-pole"][config.base_name].pictures,
+            }
+        }})
+        data.raw.generator[name.."-out-place"].corpse = nil -- Ensure this has no corpse
+
+        -- Now create the main entity without graphics
+        data:extend({util.merge{
+            data.raw["generator"][name.."-out-place"],
+            {
+                name = name.."-out",
+            }
+        }})
+        data.raw["generator"][name.."-out"].next_upgrade = 
+            config.next_upgrade_base and config.next_upgrade_base.."-out-place" or nil
+        data.raw["generator"][name.."-out"].vertical_animation = {
+            filename = "__FluidicPower__/graphics/entities/empty.png",                
+            width = 32,
+            height = 32,
+        }
+        data.raw["generator"][name.."-out"].horizontal_animation = {
+            filename = "__FluidicPower__/graphics/entities/empty.png",                
+            width = 32,
+            height = 32,
+        }
+
+        -- Now update create the electric entity
+        data:extend({util.merge{
+            data.raw["electric-pole"][config.base_name],
+            {
+                name = name.."-out-electric",
+                minable = {result = config.base_name},
+                placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
+                maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length            
+            }
+        }})
+        table.insert(data.raw["electric-pole"][name.."-out-electric"].flags, "not-upgradable")
+
+        -- Depending on debug option, choose which entity is exposed
+        if not constants.expose_fluid_boxes then
+            -- Default
+            data.raw["generator"][name.."-out"].selection_box = {{0,0}, {0,0}}        
+        else
+            -- Debug option
+            data.raw["electric-pole"][name.."-out-electric"].selection_box = {{0,0}, {0,0}}
+        end
     end
+
 end
 
 ------------------------------------------------------------------------------------------------------
@@ -384,34 +356,11 @@ function Generator.create_transmit_variant(config)
     --      name =      "fluidic-big-electric-pole"
     
     local name = "fluidic-"..config.base_name
-    local name_place = name.."-place"
-    local name_electric = name.."-electric"
 
     if not config.size then config.size = 1 end
 
     -- ITEM
-    data:extend({
-        util.merge{
-            data.raw["item"][config.base_name],
-            {
-                name = name, 
-                place_result = name_place,
-            }
-        },
-    })
-
-    -- RECIPE
-    local ingredients = config.recipe and config.recipe.ingredients or nil
-    local energy_required = config.recipe and config.recipe.energy_required or nil
-    data:extend({util.merge{
-        data.raw["recipe"][config.base_name],
-        {
-            name = name,
-            result = name,            
-            energy_required = energy_required,
-        }
-    }})
-    if ingredients then data.raw.recipe[name].ingredients = ingredients end
+    data.raw["item"][config.base_name].place_result = name.."-place"    
 
     -- ENTITY
     -- First create the entity that will be used while placing    
@@ -420,8 +369,8 @@ function Generator.create_transmit_variant(config)
         data.raw["electric-pole"][config.base_name],
         {
             type = "pipe",
-            name = name_place,
-            minable = {result = name},
+            name = name.."-place",
+            minable = {result = config.base_name},
             horizontal_window_bounding_box = {{0,0},{0,0}},
             vertical_window_bounding_box = {{0,0},{0,0}},
             bottleneck_ignore = true,   -- For BottleNeck Lite
@@ -491,10 +440,10 @@ function Generator.create_transmit_variant(config)
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
-        data.raw["pipe"][name_place],
+        data.raw["pipe"][name.."-place"],
         {
             name = name,
-            minable = {result = name},  -- It will return the normal item            
+            minable = {result = config.base_name},  -- It will return the vanilla item
         }
     }})
     data.raw["pipe"][name].next_upgrade = config.next_upgrade or nil    
@@ -510,9 +459,9 @@ function Generator.create_transmit_variant(config)
     data:extend({util.merge{
         data.raw["electric-pole"][config.base_name],
         {
-            name = name_electric,
-            minable = {result = name},
-            placeable_by = {item=name,count=1}, -- This is the magic to make the pipette and blueprint work!
+            name = name.."-electric",
+            minable = {result = config.base_name},
+            placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
             supply_area_distance = 0,
             next_upgrade = nil,                  -- Upgrade should be done through base entity
             maximum_wire_distance = config.wire_reach
@@ -526,8 +475,8 @@ function Generator.create_transmit_variant(config)
         data.raw["pipe"][name].drawing_box = {{0,0}, {0,0}}
     else
         -- Debug option
-        data.raw["electric-pole"][name_electric].selection_box = {{0,0}, {0,0}}
-        data.raw["electric-pole"][name_electric].drawing_box = {{0,0}, {0,0}}
+        data.raw["electric-pole"][name.."-electric"].selection_box = {{0,0}, {0,0}}
+        data.raw["electric-pole"][name.."-electric"].drawing_box = {{0,0}, {0,0}}
     end
 end
 
