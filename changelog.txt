@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.6.5
-Date: ??. ??. 2021  
+Version: 0.7.0
+Date: 19. 06. 2021
   Features:
     - Bottleneck Lite will not draw indicators on power poles (does on transformers).
     - Improved some descriptions.
