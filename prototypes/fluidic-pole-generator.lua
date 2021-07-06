@@ -144,7 +144,9 @@ function Generator.create_in_out_variant(config)
                     type = "electric",
                     input_priority = "secondary",
                     usage_priority = "secondary-input",
-                    drain = "0kW"  
+                    drain = "0kW",
+                    render_no_network_icon = false,
+                    render_no_power_icon = false,
                 },            
                 maximum_wire_distance = 0,
                 open_sound = nil,

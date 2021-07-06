@@ -293,17 +293,18 @@ end
 function overlay.create_alert_for_mixed_fluids(player, entity)
     local alerts = player.get_alerts{
         type = defines.alert_type.custom,
-        -- icon = {"fluidic-text.fluidic-mixed-fluid-alert"},
     }
     local too_close = false
-    for _, alert in pairs(alerts[player.surface.index][defines.alert_type.custom]) do
-        -- If this alert is too close we will assume that it's the same broken connection
-        local range = 10
-        if (entity.position.x > alert.position.x - range) and (entity.position.x < alert.position.x + range)
-            and (entity.position.y > alert.position.y - range) and (entity.position.y < alert.position.y + range)
-        then
-            -- It's too close. Don't trigger.
-            return
+    if alerts[player.surface.index] and alerts[player.surface.index][defines.alert_type.custom] then
+        for _, alert in pairs(alerts[player.surface.index][defines.alert_type.custom]) do
+            -- If this alert is too close we will assume that it's the same broken connection
+            local range = 10
+            if (entity.position.x > alert.position.x - range) and (entity.position.x < alert.position.x + range)
+                and (entity.position.y > alert.position.y - range) and (entity.position.y < alert.position.y + range)
+            then
+                -- It's too close. Don't trigger.
+                return
+            end
         end
     end
     player.add_custom_alert(

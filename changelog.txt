@@ -1,8 +1,14 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.8.0
-Date: ??. ??. 2021
+Date: 04. 07. 2021
+  Bugfixes:
+    - Fix possible crash in with alerts (Thanks Ninjardo!)
+---------------------------------------------------------------------------------------------------
+Version: 0.8.0
+Date: 04. 07. 2021
   Changes:
-    - Normal power poles now use vanilla items to improve mod compatibility.
+    - Normal power poles now use vanilla items to improve mod compatibility (Thanks Arathok!).
+    - Source power poles no longer shows electric network alerts (e.g. no power).
 ---------------------------------------------------------------------------------------------------
 Version: 0.7.0
 Date: 19. 06. 2021
