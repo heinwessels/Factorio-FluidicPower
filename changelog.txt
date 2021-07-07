@@ -1,8 +1,8 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.8.0
-Date: 04. 07. 2021
+Version: 0.8.1
+Date: 06. 07. 2021
   Bugfixes:
-    - Fix possible crash in with alerts (Thanks Ninjardo!)
+    - Fix possible crash with alerts (Thanks Ninjardo!)
 ---------------------------------------------------------------------------------------------------
 Version: 0.8.0
 Date: 04. 07. 2021
