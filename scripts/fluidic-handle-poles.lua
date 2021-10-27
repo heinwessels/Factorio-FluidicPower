@@ -128,8 +128,15 @@ function poles.on_entity_removed(event, die)
                 -- Need to handle it correctly
                 if not die then 
                     e.destroy{raise_destroy=false} 
-                else 
-                    e.die(event.force, event.cause)
+                else
+                    -- Sometime the killer is nil.
+                    -- Handle it correctly
+                    local killer = event.cause
+                    if killer and killer.valid then
+                        e.die(killer.force, killer)
+                    else
+                        e.die()
+                    end
                 end
             end
 
