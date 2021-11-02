@@ -84,6 +84,12 @@ This means that it's not possible to see the global power produced per entity, b
 
 ---
 
+## My machines keep browning out?
+
+It happens often in this mod that your machines will intermittently lose power and it might seem like the power poles are not transferring enough power. This is usually caused by not enough power generation, because the fuller the poles the further the power will travel. I also struggled with this in my playthrough and solved this by building a little circuit alarm on my high voltage line that notifies me when the pole's energy drops below 60%.
+
+---
+
 ## No Electric Network Info when I select Big Power Pole?
 
 This is as designed. The `Big Electric Pole` does not consume or supply power, only the other power poles do that. If you want to know the energy level on a Big Power Pole (the amount of fluid inside) place an `Energy Meter` right next to it.
