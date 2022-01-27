@@ -132,6 +132,7 @@ function Generator.create_in_out_variant(config)
                     "placeable-neutral", 
                     "fast-replaceable-no-build-while-moving", 
                     "not-flammable",
+                    "player-creation",  -- Allows to place ghosts with shift-click
                 },          
 
                 crafting_speed = 1,
@@ -273,6 +274,7 @@ function Generator.create_in_out_variant(config)
                     "placeable-neutral", 
                     "fast-replaceable-no-build-while-moving", 
                     "not-flammable",
+                    "player-creation",  -- Allows to place ghosts with shift-click
                 },
 
                 effectivity = 1,
@@ -385,6 +387,7 @@ function Generator.create_transmit_variant(config)
                 "placeable-neutral", 
                 "fast-replaceable-no-build-while-moving", 
                 "not-flammable",
+                "player-creation",  -- Allows to place ghosts with shift-click
             },
 
             fluid_box =

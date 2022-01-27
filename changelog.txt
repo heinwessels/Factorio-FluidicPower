@@ -3,6 +3,7 @@ Version: 0.8.3
 Date: 27. 01. 2022
   Bugfixes:
     - Fixed blueprinting of circuits over existing power poles.
+    - Fixed placing power-pole ghosts using shift-click.
 ---------------------------------------------------------------------------------------------------
 Version: 0.8.2
 Date: 27. 10. 2021
