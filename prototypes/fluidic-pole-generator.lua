@@ -185,6 +185,7 @@ function Generator.create_in_out_variant(config)
                 placeable_by = {item=name.."-in",count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
                 fast_replaceable_group = nil,
+                collision_mask = {},    -- Allows pasting of blueprints with circuits
             }
         }})
         table.insert(data.raw["electric-pole"][name.."-in-electric"].flags, "not-upgradable")
@@ -323,7 +324,8 @@ function Generator.create_in_out_variant(config)
                 name = name.."-out-electric",
                 minable = {result = config.base_name},
                 placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
-                maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length            
+                maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
+                collision_mask = {},    -- Allows pasting of blueprints with circuits
             }
         }})
         table.insert(data.raw["electric-pole"][name.."-out-electric"].flags, "not-upgradable")
@@ -462,7 +464,8 @@ function Generator.create_transmit_variant(config)
             placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
             supply_area_distance = 0,
             next_upgrade = nil,                  -- Upgrade should be done through base entity
-            maximum_wire_distance = config.wire_reach
+            maximum_wire_distance = config.wire_reach,
+            collision_mask = {},    -- Allows pasting of blueprints with circuits
         }
     }})    
 

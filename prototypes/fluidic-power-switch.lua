@@ -1,13 +1,11 @@
 -- Create item
-local item = table.deepcopy(data.raw["item"]["power-switch"])
-override = {
-    name = "fluidic-power-switch",
-    place_result = "fluidic-power-switch",
-}
-for k,v in pairs(override) do
-    item[k]=v
-end
-data:extend({item})
+data:extend({util.merge{
+    data.raw["item"]["power-switch"],
+      {
+        name = "fluidic-power-switch",
+        place_result = "fluidic-power-switch",
+      }
+}})
 
 -- Recipe
 data:extend({util.merge{
