@@ -118,8 +118,7 @@ function Generator.create_in_out_variant(config)
                 
                 -- This is required for when the item may not be placed due to fluids-mixing
                 -- Crash in 0.6.1
-                minable = {result = name.."-in"},
-                next_upgrade = nil,             -- Upgrading done through electric item
+                minable = {result = name.."-in"},                
                 fast_replaceable_group = nil,
 
                 -- Overwrite flags so that this hidden component has barely any functionality
@@ -133,6 +132,7 @@ function Generator.create_in_out_variant(config)
                     "fast-replaceable-no-build-while-moving", 
                     "not-flammable",
                     "player-creation",  -- Allows to place ghosts with shift-click
+                    "not-upgradable",   -- Upgrades are done through electric entity
                 },          
 
                 crafting_speed = 1,
@@ -158,6 +158,7 @@ function Generator.create_in_out_variant(config)
             }
         }})    
         data.raw["assembling-machine"][name.."-in-place"].corpse = nil -- Ensure this has no corpse
+        data.raw["assembling-machine"][name.."-in-place"].next_upgrade = nil -- Upgrading done through electric item
         data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].tint = tint_in
         data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].hr_version.tint = tint_in
 
@@ -166,10 +167,13 @@ function Generator.create_in_out_variant(config)
             data.raw["assembling-machine"][name.."-in-place"],
             {
                 name = name.."-in",
+            
+                -- Allows pasting of blueprints with circuits
+                -- Needs to be here with the hidden entity so that
+                -- blueprints still collide correctly.
+                collision_mask = {},
             }
-        }})    
-        data.raw["assembling-machine"][name.."-in"].next_upgrade = 
-            config.next_upgrade_base and config.next_upgrade_base.."-in-place" or nil    
+        }})
         data.raw["assembling-machine"][name.."-in"].animation = {
             filename = "__FluidicPower__/graphics/entities/empty.png",                
             width = 32,
@@ -185,11 +189,10 @@ function Generator.create_in_out_variant(config)
                 minable = {result = name.."-in"},
                 placeable_by = {item=name.."-in",count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
-                fast_replaceable_group = nil,
-                collision_mask = {},    -- Allows pasting of blueprints with circuits
             }
         }})
-        table.insert(data.raw["electric-pole"][name.."-in-electric"].flags, "not-upgradable")
+        data.raw["electric-pole"][name.."-in-electric"].next_upgrade = 
+            config.next_upgrade_base and config.next_upgrade_base.."-in-electric" or nil
         data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].tint = tint_in
         data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].hr_version.tint = tint_in
 
@@ -262,7 +265,6 @@ function Generator.create_in_out_variant(config)
                 -- This is required for when the item may not be placed due to fluids-mixing
                 -- Crash in 0.6.1
                 minable = {result = config.base_name},
-                next_upgrade = nil,             -- Upgrading done through electric item
 
                 -- Overwrite flags so that this hidden component has barely any functionality
                 -- and most imporantly not "player-creation" so that biters won't attack it
@@ -275,6 +277,7 @@ function Generator.create_in_out_variant(config)
                     "fast-replaceable-no-build-while-moving", 
                     "not-flammable",
                     "player-creation",  -- Allows to place ghosts with shift-click
+                    "not-upgradable",   -- Upgrades are done through electric entity
                 },
 
                 effectivity = 1,
@@ -297,6 +300,7 @@ function Generator.create_in_out_variant(config)
                 horizontal_animation = data.raw["electric-pole"][config.base_name].pictures,
             }
         }})
+        data.raw.generator[name.."-out-place"].next_upgrade = nil -- Upgrading done through electric item
         data.raw.generator[name.."-out-place"].corpse = nil -- Ensure this has no corpse
 
         -- Now create the main entity without graphics
@@ -304,10 +308,14 @@ function Generator.create_in_out_variant(config)
             data.raw["generator"][name.."-out-place"],
             {
                 name = name.."-out",
+                next_upgrade = nil,
+            
+                -- Allows pasting of blueprints with circuits
+                -- Needs to be here with the hidden entity so that
+                -- blueprints still collide correctly.
+                collision_mask = {},
             }
         }})
-        data.raw["generator"][name.."-out"].next_upgrade = 
-            config.next_upgrade_base and config.next_upgrade_base.."-out-place" or nil
         data.raw["generator"][name.."-out"].vertical_animation = {
             filename = "__FluidicPower__/graphics/entities/empty.png",                
             width = 32,
@@ -327,10 +335,10 @@ function Generator.create_in_out_variant(config)
                 minable = {result = config.base_name},
                 placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
-                collision_mask = {},    -- Allows pasting of blueprints with circuits
             }
         }})
-        table.insert(data.raw["electric-pole"][name.."-out-electric"].flags, "not-upgradable")
+        data.raw["electric-pole"][name.."-out-electric"].next_upgrade = 
+            config.next_upgrade_base and config.next_upgrade_base.."-out-electric" or nil
 
         -- Depending on debug option, choose which entity is exposed
         if not constants.expose_fluid_boxes then
@@ -388,6 +396,7 @@ function Generator.create_transmit_variant(config)
                 "fast-replaceable-no-build-while-moving", 
                 "not-flammable",
                 "player-creation",  -- Allows to place ghosts with shift-click
+                "not-upgradable",   -- Upgrades are done through electric entity
             },
 
             fluid_box =
@@ -440,6 +449,7 @@ function Generator.create_transmit_variant(config)
             }
         }
     }})
+    data.raw["pipe"][name.."-place"].next_upgrade = nil
 
     -- Now create the main entity without graphics
     data:extend({util.merge{
@@ -447,9 +457,13 @@ function Generator.create_transmit_variant(config)
         {
             name = name,
             minable = {result = config.base_name},  -- It will return the vanilla item
+            
+            -- Allows pasting of blueprints with circuits
+            -- Needs to be here with the hidden entity so that
+            -- blueprints still collide correctly.
+            collision_mask = {},
         }
-    }})
-    data.raw["pipe"][name].next_upgrade = config.next_upgrade or nil    
+    }})    
     for key, _ in pairs(data.raw["pipe"][name].pictures) do       
         data.raw["pipe"][name].pictures[key] = {
             filename = "__FluidicPower__/graphics/entities/empty.png",                
@@ -465,12 +479,12 @@ function Generator.create_transmit_variant(config)
             name = name.."-electric",
             minable = {result = config.base_name},
             placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
-            supply_area_distance = 0,
-            next_upgrade = nil,                  -- Upgrade should be done through base entity
+            supply_area_distance = 0,            
             maximum_wire_distance = config.wire_reach,
-            collision_mask = {},    -- Allows pasting of blueprints with circuits
         }
-    }})    
+    }})
+    data.raw["electric-pole"][name.."-electric"].next_upgrade = 
+            config.next_upgrade_base and config.next_upgrade_base.."-electric" or nil
 
     -- Depending on debug option, choose which entity is exposed
     if not constants.expose_fluid_boxes then
