@@ -118,8 +118,9 @@ function Generator.create_in_out_variant(config)
                 
                 -- This is required for when the item may not be placed due to fluids-mixing
                 -- Crash in 0.6.1
-                minable = {result = name.."-in"},                
-                fast_replaceable_group = nil,
+                minable = {result = name.."-in"},
+                
+                fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
 
                 -- Overwrite flags so that this hidden component has barely any functionality
                 -- and most imporantly not "player-creation" so that biters won't attack it
@@ -168,9 +169,12 @@ function Generator.create_in_out_variant(config)
             {
                 name = name.."-in",
             
-                -- Allows pasting of blueprints with circuits
+                                -- Allows pasting of blueprints with circuits
                 -- Needs to be here with the hidden entity so that
                 -- blueprints still collide correctly.
+                -- Note: This breaks quick-replace, since the top entity (pole)
+                -- and entity-to-place (fluidic) don't have the same collision masks.
+                -- Prefer having blueprints functioning correctly.
                 collision_mask = {},
             }
         }})
@@ -189,6 +193,7 @@ function Generator.create_in_out_variant(config)
                 minable = {result = name.."-in"},
                 placeable_by = {item=name.."-in",count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
+                fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
             }
         }})
         data.raw["electric-pole"][name.."-in-electric"].next_upgrade = 
@@ -266,6 +271,8 @@ function Generator.create_in_out_variant(config)
                 -- Crash in 0.6.1
                 minable = {result = config.base_name},
 
+                fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
+
                 -- Overwrite flags so that this hidden component has barely any functionality
                 -- and most imporantly not "player-creation" so that biters won't attack it
                 -- but it might still happen that the entity dies and will not create the correct
@@ -313,6 +320,9 @@ function Generator.create_in_out_variant(config)
                 -- Allows pasting of blueprints with circuits
                 -- Needs to be here with the hidden entity so that
                 -- blueprints still collide correctly.
+                -- Note: This breaks quick-replace, since the top entity (pole)
+                -- and entity-to-place (fluidic) don't have the same collision masks.
+                -- Prefer having blueprints functioning correctly.
                 collision_mask = {},
             }
         }})
@@ -335,6 +345,7 @@ function Generator.create_in_out_variant(config)
                 minable = {result = config.base_name},
                 placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
+                fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
             }
         }})
         data.raw["electric-pole"][name.."-out-electric"].next_upgrade = 
@@ -384,6 +395,8 @@ function Generator.create_transmit_variant(config)
             horizontal_window_bounding_box = {{0,0},{0,0}},
             vertical_window_bounding_box = {{0,0},{0,0}},
             bottleneck_ignore = true,   -- For BottleNeck Lite
+
+            fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
 
             -- Overwrite flags so that this hidden component has barely any functionality
             -- and most imporantly not "player-creation" so that biters won't attack it
@@ -461,6 +474,9 @@ function Generator.create_transmit_variant(config)
             -- Allows pasting of blueprints with circuits
             -- Needs to be here with the hidden entity so that
             -- blueprints still collide correctly.
+            -- Note: This breaks quick-replace, since the top entity (pole)
+            -- and entity-to-place (fluidic) don't have the same collision masks.
+            -- Prefer having blueprints functioning correctly.
             collision_mask = {},
         }
     }})    
@@ -481,6 +497,7 @@ function Generator.create_transmit_variant(config)
             placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
             supply_area_distance = 0,            
             maximum_wire_distance = config.wire_reach,
+            fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
         }
     }})
     data.raw["electric-pole"][name.."-electric"].next_upgrade = 
