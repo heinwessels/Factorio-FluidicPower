@@ -105,3 +105,21 @@ data:extend
         hidden = true  
     },
 })
+
+if mods["Krastorio2"] and data.raw.recipe["kr-substation-mk2"] then
+    data:extend({   
+        {
+            type = "recipe",
+            name = "fluidic-10-kilojoules-generate-k2-substation-mk2",
+            icon_size = 64,
+            icon = "__FluidicPower__/graphics/icons/fluidic-level-1-generate-icon.png",
+            category = "fluidic-generate",
+            subgroup = "energy-pipe-distribution",
+            order = "a[kilojoules]-a[kilojoules]",        
+            ingredients ={},
+            energy_required = 0.2,
+            results={{type="fluid", name="fluidic-10-kilojoules", amount=4000}},
+            hidden = true  
+        }
+    })
+end
