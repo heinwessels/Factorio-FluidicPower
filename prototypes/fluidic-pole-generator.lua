@@ -72,6 +72,7 @@ function Generator.create_in_out_variant(config)
                         { type="input-output", position = {-1, 0}, max_underground_distance = config.wire_reach + pipe_offset}
                     },
                     secondary_draw_orders = { north = -1 },
+                    hide_connection_info = true,
                 },
             }  -- Default 1x1 sized fluidbox. Won't work for substation
         elseif config.size and config.size == 2 then
@@ -95,6 +96,7 @@ function Generator.create_in_out_variant(config)
                         {type = "output", position = {0.5, 1.5}, max_underground_distance = 1},
                     },
                     secondary_draw_orders = { north = -1 },
+                    hide_connection_info = true,
                 },
             }
         else
@@ -231,7 +233,8 @@ function Generator.create_in_out_variant(config)
                 },
                 production_type = "input-output",
                 minimum_temperature = 10,
-                filter = "fluidic-10-kilojoules"
+                filter = "fluidic-10-kilojoules",
+                hide_connection_info = true,
             }
         elseif config.size and config.size == 2 then
             fluid_boxes = {
@@ -253,7 +256,8 @@ function Generator.create_in_out_variant(config)
                 },
                 production_type = "input-output",        
                 minimum_temperature = 10,
-                filter = "fluidic-10-kilojoules"
+                filter = "fluidic-10-kilojoules",
+                hide_connection_info = true,
             }
         else
             error("Invalid pole size specified: "..config.size)
@@ -431,6 +435,7 @@ function Generator.create_transmit_variant(config)
                     {type = "input-output", position = {0.5, -1.5,}, max_underground_distance = 1},
                     {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 1},
                 },
+                hide_connection_info = true,
             },
             pictures = {
                 straight_vertical_single = data.raw["electric-pole"][config.base_name].pictures,
