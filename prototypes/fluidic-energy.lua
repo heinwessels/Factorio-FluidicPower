@@ -118,8 +118,8 @@ if mods["Krastorio2"] and data.raw.recipe["kr-substation-mk2"] then
             order = "a[kilojoules]-a[kilojoules]",        
             ingredients ={},
             energy_required = 0.2,
-            results={{type="fluid", name="fluidic-10-kilojoules", amount=4000}},
-            hidden = true  
+            results={{type="fluid", name="fluidic-10-kilojoules", amount=2000}},
+            hidden = true
         }
     })
 end

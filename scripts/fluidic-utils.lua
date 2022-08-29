@@ -22,7 +22,12 @@ utils.entity_fluid_to_electric_lu[
 utils.entity_fluid_to_electric_lu[
     "fluidic-big-electric-pole"
 ] = "fluidic-big-electric-pole-electric"
-
+utils.entity_fluid_to_electric_lu[
+    "fluidic-kr-substation-mk2-in"
+] = "fluidic-kr-substation-mk2-in-electric"
+utils.entity_fluid_to_electric_lu[
+    "fluidic-kr-substation-mk2-out"
+] = "fluidic-kr-substation-mk2-out-electric"
 
 utils.entity_electric_to_fluid_lu = { }
 utils.entity_electric_to_fluid_lu[
@@ -46,6 +51,12 @@ utils.entity_electric_to_fluid_lu[
 utils.entity_electric_to_fluid_lu[
     "fluidic-big-electric-pole-electric"
 ] = "fluidic-big-electric-pole"
+utils.entity_electric_to_fluid_lu[
+    "fluidic-kr-substation-mk2-in-electric"
+] = "fluidic-kr-substation-mk2-in"
+utils.entity_electric_to_fluid_lu[
+    "fluidic-kr-substation-mk2-out-electric"
+] = "fluidic-kr-substation-mk2-out"
 
 function utils.get_fluidic_entity_from_electric(entity)
 	-- Given the electric part of a fluidic power pole,

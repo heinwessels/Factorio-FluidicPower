@@ -66,13 +66,14 @@ Generator.create_transmit_variant{
 if mods["Krastorio2"] and data.raw.recipe["kr-substation-mk2"] then
     -- Checking for recipe first to see if the substation mk2 is 
     -- enabled. The settings dissapears in KR2 1.3.
+    -- I'm making it the same as a normal substation
     Generator.create_in_out_variant{
         base_name = "kr-substation-mk2",
         fluid_usage_per_tick = 166.66666666, -- P = 100MW
         wire_reach = 26, -- K2 is 24.25
         size = 2,   -- This is a 2x2 entity
         in_fixed_recipe = "fluidic-10-kilojoules-generate-k2-substation-mk2",
-        energy_usage = "200MW",  -- Needs to correspond with recipe
+        energy_usage = "100MW",  -- Needs to correspond with recipe
         size = 2,   -- This is a 2x2 entity
     }
 
