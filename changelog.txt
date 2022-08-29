@@ -3,6 +3,7 @@ Version: 0.9.0
 Date: ???
   Features:
     - Now supports Krastorio 2 (not fully tested).
+    - Item now returns to robots cargo when placement is restricted, instead of dropping on the floor.
   Changes:
     - Poles in cursor no longer shows fluidbox arrows.
     - Explicit incompatibility with some mods.

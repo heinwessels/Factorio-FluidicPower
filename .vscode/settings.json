@@ -1,0 +1,9 @@
+{
+    "factorio.versions": [
+        {
+            "name": "Ubuntu",
+            "factorioPath": "/home/hein/Documents/Personal/factorio_1.1.68/factorio_alpha_x64_1.1.68/factorio/bin/x64/factorio",
+            "active": true
+        }
+    ]
+}

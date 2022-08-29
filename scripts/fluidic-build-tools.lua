@@ -146,7 +146,7 @@ function check_fluid_connection_backlog()
 
                             -- Keep local copy to return an item to the player
                             local entity_copy = util.table.deepcopy(entity_to_destroy)
-                            return_item_from_entity(entry.event, entity_copy) -- The <entity> will be invalid by now
+                            return_item_from_entity(entry.event, entity_copy, true) -- The <entity> will be invalid by now
 
                             entity_to_destroy.destroy{
                                 -- We must allways raise an destroy event on other entities. 
@@ -164,25 +164,38 @@ function check_fluid_connection_backlog()
     end
 end
 
-function return_item_from_entity(event, entity)
-    -- Returns the required <item> back to the player.
+function return_item_from_entity(event, entity, backlog)
+    -- Returns the required <item> back to the player or robot
     -- Either to his inventory or it's dropped on the floor
     -- with a deconstruction planner, depending on the <event>
     -- This function does not destroy the entity.
+    -- If it's a backlogged return then it either to player or to ground
     
+    local items_to_return = entity.prototype.mineable_properties.products
+    if not items_to_return then return end -- This entity has nothing to drop
+
     -- Should we drop items on the floor?    
     local drop_item = false
-    if event.robot then drop_item = true end
-    if not entity.prototype.mineable_properties.products then return end -- This entity has nothing to drop
 
-    if not drop_item then 
-        -- It wasn't a robot action. Can we give it to the player?
+    -- Can only attempt to give it to a robot if it's not a backlogged action.
+    local robot = event.robot
+    if not backlog and robot then
+        -- There should always be space in the robots cargo to add it
+        local inventory = robot.get_inventory(defines.inventory.robot_cargo)
+        for _, product in pairs(entity.prototype.mineable_properties.products) do
+            inventory.insert{name=product.name or product[1], count=product.amount or product[2]}
+        end
+        
+        return
+    end
 
+    -- Can we give it to the player?
+    if not drop_item then
         local player = 
             (event.player_index and game.get_player(event.player_index)) or nil
         if player then
             -- We know what player did the action. Try give it to him
-            for _, product in pairs(entity.prototype.mineable_properties.products) do
+            for _, product in pairs(items_to_return) do
                 if not player.insert{name=product.name or product[1], count=product.amount or product[2]} then
                     -- Player inventory was full.
                     drop_item = true
