@@ -5,6 +5,8 @@ Date: ???
     - Now supports Krastorio 2 (not fully tested).
   Changes:
     - Poles in cursor no longer shows fluidbox arrows.
+  Optimizations:
+    - Localisation is now more maintainable.
 ---------------------------------------------------------------------------------------------------
 Version: 0.8.4
 Date: 28. 01. 2022

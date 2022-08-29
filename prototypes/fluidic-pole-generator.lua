@@ -11,7 +11,7 @@ local Generator = { }
 function Generator.create_in_out_variant(config)
 
     local name = "fluidic-"..config.base_name
-    
+
     local tint_in = { a = 0.75,  b = 0, g = 1.0, r = 1.0 }
     if not config.size then config.size = 1 end
 
@@ -24,7 +24,9 @@ function Generator.create_in_out_variant(config)
         util.merge{
             data.raw["item"][config.base_name],
             {
-                name = name.."-in", 
+                name = name.."-in",
+                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
+                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
                 place_result =  name.."-in-place",
                 icons = {
                     {
@@ -44,7 +46,9 @@ function Generator.create_in_out_variant(config)
         util.merge{
             data.raw["recipe"][config.base_name],
             {
-                name = name.."-in", 
+                name = name.."-in",
+                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
+                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
                 result = name.."-in",
                 ingredients = {
                     {config.base_name, 1},
@@ -108,7 +112,9 @@ function Generator.create_in_out_variant(config)
             data.raw["electric-pole"][config.base_name],
             {
                 type = "assembling-machine",
-                name = name.."-in-place",                
+                name = name.."-in-place",
+                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
+                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
                 icons = {
                     {
                         icon = data.raw["electric-pole"][config.base_name].icon,
@@ -170,8 +176,10 @@ function Generator.create_in_out_variant(config)
             data.raw["assembling-machine"][name.."-in-place"],
             {
                 name = name.."-in",
+                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
+                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
             
-                                -- Allows pasting of blueprints with circuits
+                -- Allows pasting of blueprints with circuits
                 -- Needs to be here with the hidden entity so that
                 -- blueprints still collide correctly.
                 -- Note: This breaks quick-replace, since the top entity (pole)
@@ -191,6 +199,8 @@ function Generator.create_in_out_variant(config)
             data.raw["electric-pole"][config.base_name],
             {
                 name = name.."-in-electric",
+                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
+                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
                 icon = "__FluidicPower__/graphics/icons/"..name.."-in-icon.png",
                 minable = {result = name.."-in"},
                 placeable_by = {item=name.."-in",count=1}, -- This is the magic to make the pipette and blueprint work!
@@ -268,6 +278,8 @@ function Generator.create_in_out_variant(config)
             {
                 type = "generator",
                 name = name.."-out-place",
+                localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
+                localised_description={"", {"fluidic-text.pole-out-variant-description"}},
                 
                 bottleneck_ignore = true,   -- For BottleNeck Lite
 
@@ -319,6 +331,8 @@ function Generator.create_in_out_variant(config)
             data.raw["generator"][name.."-out-place"],
             {
                 name = name.."-out",
+                localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
+                localised_description={"", {"fluidic-text.pole-out-variant-description"}},
                 next_upgrade = nil,
             
                 -- Allows pasting of blueprints with circuits
@@ -346,6 +360,11 @@ function Generator.create_in_out_variant(config)
             data.raw["electric-pole"][config.base_name],
             {
                 name = name.."-out-electric",
+                localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
+                localised_description={"", 
+                    {"fluidic-text.pole-out-variant-description"},
+                    {"fluidic-text.pole-out-variant-description-rating", config.energy_usage}
+                },
                 minable = {result = config.base_name},
                 placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
@@ -364,6 +383,9 @@ function Generator.create_in_out_variant(config)
             data.raw["electric-pole"][name.."-out-electric"].selection_box = {{0,0}, {0,0}}
         end
     end
+
+    -- Add "no-no" message to now-hidden entity
+    data.raw["electric-pole"][config.base_name].localised_description = {"fluidic-text.non-accessable"}
 
 end
 
@@ -385,7 +407,8 @@ function Generator.create_transmit_variant(config)
     if not config.size then config.size = 1 end
 
     -- ITEM
-    data.raw["item"][config.base_name].place_result = name.."-place"    
+    data.raw["item"][config.base_name].place_result = name.."-place"
+    data.raw["item"][config.base_name].localised_name = {"entity-name."..config.base_name}
 
     -- ENTITY
     -- First create the entity that will be used while placing    
@@ -395,6 +418,8 @@ function Generator.create_transmit_variant(config)
         {
             type = "pipe",
             name = name.."-place",
+            localised_name = {"entity-name."..config.base_name},
+            localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
             minable = {result = config.base_name},
             horizontal_window_bounding_box = {{0,0},{0,0}},
             vertical_window_bounding_box = {{0,0},{0,0}},
@@ -474,13 +499,15 @@ function Generator.create_transmit_variant(config)
         data.raw["pipe"][name.."-place"],
         {
             name = name,
+            localised_name = {"entity-name."..config.base_name},
+            localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
             minable = {result = config.base_name},  -- It will return the vanilla item
             
             -- Allows pasting of blueprints with circuits
             -- Needs to be here with the hidden entity so that
             -- blueprints still collide correctly.
             -- Note: This breaks quick-replace, since the top entity (pole)
-            -- and entity-to-place (fluidic) don't have the same collision masks.
+            -- and entity-to-place (fluidic) don't have the senergy_usageame collision masks.
             -- Prefer having blueprints functioning correctly.
             collision_mask = {},
         }
@@ -498,6 +525,8 @@ function Generator.create_transmit_variant(config)
         data.raw["electric-pole"][config.base_name],
         {
             name = name.."-electric",
+            localised_name = {"entity-name."..config.base_name},
+            localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
             minable = {result = config.base_name},
             placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
             supply_area_distance = 0,            
@@ -518,6 +547,9 @@ function Generator.create_transmit_variant(config)
         data.raw["electric-pole"][name.."-electric"].selection_box = {{0,0}, {0,0}}
         data.raw["electric-pole"][name.."-electric"].drawing_box = {{0,0}, {0,0}}
     end
+
+    -- Add "no-no" message to now-hidden entity
+    data.raw["electric-pole"][config.base_name].localised_description = {"fluidic-text.non-accessable"}
 end
 
 return Generator
