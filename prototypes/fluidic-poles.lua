@@ -78,7 +78,9 @@ if mods["Krastorio2"] and data.raw.recipe["kr-substation-mk2"] then
     }
 
     -- Some required extra settings
-    data.raw["electric-pole"]["fluidic-substation-out-electric"].next_upgrade = "fluidic-kr-substation-mk2-out-electric"
-    data.raw["electric-pole"]["fluidic-substation-in-electric"].next_upgrade = "fluidic-kr-substation-mk2-in-electric"
-    data.raw["electric-pole"]["substation"].next_upgrade = nil -- The entity still exists
+    data.raw["electric-pole"]["fluidic-substation-out-electric"].next_upgrade = 
+            "fluidic-kr-substation-mk2-out-electric"
+    data.raw["electric-pole"]["fluidic-substation-in-electric"].next_upgrade = 
+            "fluidic-kr-substation-mk2-in-electric"
+    data.raw["electric-pole"]["substation"].next_upgrade = nil
 end

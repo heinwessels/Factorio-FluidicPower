@@ -43,19 +43,19 @@ function Generator.create_in_out_variant(config)
     -- The out pole will use the base recipe
     -- The in pole will be made from the out pole
     data:extend({
-        util.merge{
-            data.raw["recipe"][config.base_name],
-            {
-                name = name.."-in",
-                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
-                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
-                result = name.."-in",
-                ingredients = {
-                    {config.base_name, 1},
-                },
-                energy_required = 0.2,
-            }
-        },
+        {   
+            type = "recipe",
+            name = name.."-in",
+            localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
+            localised_description={"", {"fluidic-text.pole-in-variant-description"}},
+            ingredients = {
+                {config.base_name, 1},
+            },
+            results = {
+                {type = "item", name = name.."-in", amount = 1}
+            },
+            energy_required = 0.2,
+        }
     })
 
     -- In (source) Entities

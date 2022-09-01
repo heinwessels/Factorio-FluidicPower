@@ -1,25 +1,25 @@
 local hit_effects = require ("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 
--- Create item
-data:extend({
-    util.merge{
-        data.raw["item"]["substation"],
-        {
-            name = "fluidic-transformer",
-            place_result = "fluidic-transformer",
-            icon = "__FluidicPower__/graphics/icons/transformer-icon.png",
-            stack_size = 20,
-            icon_size = 32,
-        }
-    },    
-})
-
 -- Create some recipes
 data:extend
 ({ 
     ------------------------
-    -- Item recipes
+    -- Item
+    ------------------------
+    {
+        type = "item",
+        name = "fluidic-transformer",
+        place_result = "fluidic-transformer",
+        icon = "__FluidicPower__/graphics/icons/transformer-icon.png",
+        icon_size = 32, icon_mipmaps = 4,
+        subgroup = "energy-pipe-distribution",
+        order = "a[energy]-z[transformer]",
+        stack_size = 20
+    },
+    
+    ------------------------
+    -- Recipe
     ------------------------
     {
         type = "recipe",
