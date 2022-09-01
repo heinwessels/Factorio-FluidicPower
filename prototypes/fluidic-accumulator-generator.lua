@@ -1,20 +1,4 @@
-
 util = require("util")
-
--- Create the entity
-local circuit_connections = circuit_connector_definitions.create(
-    universal_connector_template,
-    {
-        { variation = 26, main_offset = util.by_pixel(18.5, 19), shadow_offset = util.by_pixel(20.5, 25.5), show_shadow = true },
-        { variation = 26, main_offset = util.by_pixel(18.5, 19), shadow_offset = util.by_pixel(20.5, 25.5), show_shadow = true },
-        { variation = 26, main_offset = util.by_pixel(18.5, 19), shadow_offset = util.by_pixel(20.5, 25.5), show_shadow = true },
-        { variation = 26, main_offset = util.by_pixel(18.5, 19), shadow_offset = util.by_pixel(20.5, 25.5), show_shadow = true },
-    }
-)
-local entity = data.raw["accumulator"]["accumulator"]
-local tank = data.raw["storage-tank"]["storage-tank"]
-
-
 local Generator = { }
 
 function Generator.create_accumulator(context)
@@ -27,8 +11,20 @@ function Generator.create_accumulator(context)
     data.raw.item[context.base_name].place_result = name
 
     -- We assume the accumulator is square, and centered on the center :P
-    fluidbox_offset = math.ceil(base_entity.collision_box[2][1]) + 0.5
-    fluid_base_divider = 100 * util.parse_energy(data.raw.fluid[context.fluid_filter].fuel_value)
+    -- And put a fluidbox-connection at every spot
+    local fluid_base_divider = 100 * util.parse_energy(data.raw.fluid[context.fluid_filter].fuel_value)
+    local size = math.ceil(base_entity.collision_box[2][1]) - 0.5
+    local pipe_connections = {}
+    for offset = -size, size do
+        table.insert(pipe_connections,
+            {type = "input-output", position = {-size-1, -offset}, max_underground_distance = 1})            
+        table.insert(pipe_connections, 
+            {type = "input-output", position = {size+1, -offset}, max_underground_distance = 1})
+        table.insert(pipe_connections, 
+            {type = "input-output", position = { -offset, -size-1}, max_underground_distance = 1})
+        table.insert(pipe_connections, 
+            {type = "input-output", position = { -offset, size+1}, max_underground_distance = 1})
+    end
 
     -- Create entity
     local tank = data.raw["storage-tank"]["storage-tank"]
@@ -55,14 +51,7 @@ function Generator.create_accumulator(context)
             base_area = util.parse_energy(base_entity.energy_source.buffer_capacity) / fluid_base_divider,
             filter = context.fluid_filter,
             hide_connection_info = true,
-            pipe_connections =
-            {   
-                -- TODO custom
-                {type = "input-output", position = {-fluidbox_offset, -0.5}, max_underground_distance = 1},
-                {type = "input-output", position = {fluidbox_offset, -0.5}, max_underground_distance = 1},
-                {type = "input-output", position = { -0.5, -fluidbox_offset,}, max_underground_distance = 1},
-                {type = "input-output", position = { -0.5, fluidbox_offset}, max_underground_distance = 1},
-            }
+            pipe_connections = pipe_connections,
         },
         rotatable = false,
         window_bounding_box = {{0, 0}, {0, 0}},
@@ -77,9 +66,19 @@ function Generator.create_accumulator(context)
         vehicle_impact_sound = base_entity.vehicle_impact_sound,
         open_sound = base_entity.open_sound,
         close_sound = base_entity.close_sound,
-        working_sound = base_entity.working_sound,  
-        circuit_wire_connection_points = circuit_connections.points,
-        circuit_connector_sprites = circuit_connections.sprites,
+        working_sound = base_entity.working_sound,
+        circuit_wire_connection_points = {
+            base_entity.circuit_wire_connection_point,
+            base_entity.circuit_wire_connection_point,
+            base_entity.circuit_wire_connection_point,
+            base_entity.circuit_wire_connection_point,
+        },
+        circuit_connector_sprites = {
+            base_entity.circuit_connector_sprites,
+            base_entity.circuit_connector_sprites,
+            base_entity.circuit_connector_sprites,
+            base_entity.circuit_connector_sprites,
+        },
         circuit_wire_max_distance = default_circuit_wire_max_distance,
         water_reflection = base_entity.water_reflection
     }
