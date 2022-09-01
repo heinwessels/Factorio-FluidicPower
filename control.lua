@@ -1,6 +1,24 @@
 local build_tools = require("scripts.fluidic-build-tools")
 local poles = require("scripts.fluidic-handle-poles")
 local overlay = require("scripts.overlay")
+local fluidic_utils = require("scripts.fluidic-utils")
+
+local function pickerdolly_handler(event)
+    local top_entity = event.moved_entity
+    local hidden_entity_name = 
+        fluidic_utils.entity_electric_to_fluid_lu[top_entity.name]
+    if hidden_entity_name then
+        local hidden_entity = top_entity.surface.find_entity(
+            hidden_entity_name,
+            event.start_pos
+        )
+        if hidden_entity then
+            hidden_entity.teleport(top_entity.position)
+        else
+            error("There should be a hidden entity here")
+        end
+    end
+end
 
 function creation_event (event)        
     
@@ -42,6 +60,18 @@ script.on_init(function()
     -- It's fine to reset them.
     global.neigbours_to_check = { }
     global.overlay_iterators = { }
+
+    if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["dolly_moved_entity_id"] then
+        script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), pickerdolly_handler)
+    end
+end)
+
+script.on_load(function()
+    -- Add support for picker dollies
+    if remote.interfaces["PickerDollies"] 
+        and remote.interfaces["PickerDollies"]["dolly_moved_entity_id"] then
+        script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), pickerdolly_handler)
+    end
 end)
 
 -- Hack this in here for now. TODO Move somewhere else
