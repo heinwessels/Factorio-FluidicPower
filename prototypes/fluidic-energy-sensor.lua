@@ -52,6 +52,7 @@ data:extend({
         fluid_box =
         {
             base_area = 1,
+            hide_connection_info = true,
             pipe_connections =
             {
                 { type="input-output", position = {0, 1}, max_underground_distance = 1},

@@ -48,12 +48,8 @@ function Generator.create_in_out_variant(config)
             name = name.."-in",
             localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
             localised_description={"", {"fluidic-text.pole-in-variant-description"}},
-            ingredients = {
-                {config.base_name, 1},
-            },
-            results = {
-                {type = "item", name = name.."-in", amount = 1}
-            },
+            ingredients = {{config.base_name, 1}},
+            results = {{type = "item", name = name.."-in", amount = 1}},
             energy_required = 0.2,
         }
     })
@@ -69,6 +65,11 @@ function Generator.create_in_out_variant(config)
                     production_type = "output",
                     base_area = config.fluid_box_base_area or 1,
                     filter = "fluidic-10-kilojoules",
+                    
+                    -- Source box higher to aid pushing the fluid out just like pumps
+                    -- Also, subsequent poles only fill up to about 60% if we don't increase this
+                    height = 2,
+
                     pipe_connections = {
                         { type="input-output", position = {0, 1}, max_underground_distance = config.wire_reach + pipe_offset},
                         { type="input-output", position = {0, -1}, max_underground_distance = config.wire_reach + pipe_offset},
