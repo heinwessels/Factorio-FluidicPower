@@ -1,0 +1,8 @@
+{
+    "recipe":
+    [
+        ["fluidic-10-kilojoules-generate-small", "fluidic-generate-small-electric-pole"],
+        ["fluidic-10-kilojoules-generate-medium", "fluidic-generate-medium-electric-pole"],
+        ["fluidic-10-kilojoules-generate-substation", "fluidic-generate-substation"]
+    ]
+}

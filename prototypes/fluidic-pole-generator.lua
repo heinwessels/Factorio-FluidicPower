@@ -54,6 +54,24 @@ function Generator.create_in_out_variant(config)
         }
     })
 
+    -- Power fluid generation recipe
+    data:extend({
+        util.merge{
+            {
+                type = "recipe",
+                name = "fluidic-generate-"..config.base_name,
+                icon_size = 64,
+                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-generate-icon.png",
+                category = "fluidic-generate",
+                subgroup = "energy-pipe-distribution",
+                order = "a[kilojoules]-a[kilojoules]",        
+                ingredients ={},
+                hidden = true  
+            },
+            config.in_fixed_recipe
+        }
+    })
+
     -- In (source) Entities
     -----------------------------------
     do
@@ -146,7 +164,7 @@ function Generator.create_in_out_variant(config)
                 },          
 
                 crafting_speed = 1,
-                fixed_recipe = config.in_fixed_recipe,
+                fixed_recipe = "fluidic-generate-"..config.base_name,
                 energy_usage = config.energy_usage,
                 module_specification = nil,
                 allowed_effects = nil,

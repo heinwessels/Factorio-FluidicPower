@@ -8,7 +8,7 @@
             "type": "factoriomod",
             "request": "launch",
             "name": "Factorio Mod Debug",
-            "hookData": true,
+            // "hookData": true,
         },
         {
             "type": "factoriomod",

@@ -11,6 +11,7 @@ Date: ???
     - Accumulators now have more connection points.
   Optimizations:
     - Localisation is now more maintainable.
+    - Fluidic power pole generation is now more modular.
     - Fluidic accumulator generation is now more modular.
   Bugfixes:
     - Fix source recipe to only require the normal pole variant.
