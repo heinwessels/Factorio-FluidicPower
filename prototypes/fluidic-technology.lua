@@ -37,10 +37,6 @@ table.insert(
     }
 )
 
-fluidic_utils.overwrite_technology_for_recipe(
-    "power-switch", "fluidic-power-switch"
-)
-
 if mods["Krastorio2"] and data.raw.recipe["kr-substation-mk2"] then
     data.raw.technology["electric-energy-distribution-3"].effects = {
         {

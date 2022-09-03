@@ -2,13 +2,14 @@
 Version: 0.9.0
 Date: 03. 09. 2022
   Features:
-    - Now supports Krastorio 2 (not fully tested).
+    - Now supports Krastorio 2 (with limited testing).
     - Item now returns to robots cargo when placement is restricted, instead of dropping on the floor.
     - Support for Picker Dollies.
   Changes:
     - Poles in cursor no longer shows fluidbox arrows.
     - Accumulators now have more connection points.
     - Explicit incompatibility with some mods.
+    - Power switch now uses vanilla item.
   Optimizations:
     - Localisation is now more maintainable.
     - Fluidic power pole generation is now more modular.

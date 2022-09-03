@@ -1,21 +1,8 @@
--- Create item
-data:extend({util.merge{
-    data.raw["item"]["power-switch"],
-      {
-        name = "fluidic-power-switch",
-        place_result = "fluidic-power-switch",
-      }
-}})
-
--- Recipe
-data:extend({util.merge{
-  data.raw["recipe"]["power-switch"],
-  {
-      name = "fluidic-power-switch",
-      result = "fluidic-power-switch",
-  }
-}})
-data.raw["recipe"]["power-switch"].enabled = false
+-- Will use the vanilla item and recipe
+data.raw["item"]["power-switch"].place_result = "fluidic-power-switch"
+data.raw["recipe"]["power-switch"].results = {
+  {type = "item", name = "power-switch", amount = 1}
+}
 
 -- Create entity
 local circuit_connections = circuit_connector_definitions.create(
@@ -32,7 +19,7 @@ data:extend({util.merge{
     {
       name = "fluidic-power-switch",
       type = "pump",
-      minable = {result = "fluidic-power-switch"},
+      minable = {result = "power-switch"},
       
       pumping_speed = 83.3333333333333333333, -- x60 = 5000. Thus, either 50MW or 50GW transfer
 
