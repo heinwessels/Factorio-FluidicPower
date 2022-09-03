@@ -135,6 +135,7 @@ data:extend({
     {
         type = "assembling-machine",
         name = "fluidic-transformer",
+        localised_description = {"fluidic-text.transformer"},
         icon = "__FluidicPower__/graphics/icons/transformer-icon.png",
         icon_size = 32,
         flags = {"placeable-neutral", "placeable-player", "player-creation"},
@@ -178,9 +179,13 @@ data:extend({
                 },        
             },
             {
+
                 production_type = "output",        
                 base_area = 1,
                 base_level = 1,
+                -- Source box higher to aid pushing the fluid out just like pumps
+                -- Also, subsequent poles only fill up to about 60% if we don't increase this
+                height = 2,
                 pipe_connections = {
                     {type = "output", position = {1.5, 0.5}, max_underground_distance = 4},        
                     {type = "output", position = {1.5, -0.5}, max_underground_distance = 4},

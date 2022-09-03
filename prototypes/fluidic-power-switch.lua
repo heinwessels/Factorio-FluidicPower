@@ -43,7 +43,11 @@ data:extend({util.merge{
       
       fluid_box =
       {
+
         base_area = 1,
+        -- Source box higher to aid pushing the fluid out just like pumps
+        -- Also, subsequent poles only fill up to about 60% if we don't increase this
+        height = 2,
         pipe_connections =
         {
           { position = {-0.5, -1.5}, type="output", max_underground_distance = 10 },

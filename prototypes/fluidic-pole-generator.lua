@@ -219,7 +219,10 @@ function Generator.create_in_out_variant(config)
             {
                 name = name.."-in-electric",
                 localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
-                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
+                localised_description={"", 
+                    {"fluidic-text.pole-in-variant-description"},
+                    {"fluidic-text.power-rating", config.energy_usage}
+                },
                 icon = "__FluidicPower__/graphics/icons/"..name.."-in-icon.png",
                 minable = {result = name.."-in"},
                 placeable_by = {item=name.."-in",count=1}, -- This is the magic to make the pipette and blueprint work!
@@ -267,7 +270,7 @@ function Generator.create_in_out_variant(config)
             }
         elseif config.size and config.size == 2 then
             fluid_boxes = {
-                base_area = 1,
+                base_area = config.fluid_box_base_area or 1,
                 pipe_connections =
                 {
                     {type = "input-output", position = {-1.4, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
@@ -382,7 +385,7 @@ function Generator.create_in_out_variant(config)
                 localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
                 localised_description={"", 
                     {"fluidic-text.pole-out-variant-description"},
-                    {"fluidic-text.pole-out-variant-description-rating", config.energy_usage}
+                    {"fluidic-text.power-rating", config.energy_usage}
                 },
                 minable = {result = config.base_name},
                 placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
