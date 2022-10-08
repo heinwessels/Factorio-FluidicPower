@@ -228,6 +228,7 @@ function Generator.create_in_out_variant(config)
                 placeable_by = {item=name.."-in",count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
                 fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
+                draw_copper_wires = false,                  -- Don't draw copper wires!
             }
         }})
         data.raw["electric-pole"][name.."-in-electric"].next_upgrade = 
@@ -391,6 +392,7 @@ function Generator.create_in_out_variant(config)
                 placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
                 fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
+                draw_copper_wires = false,                  -- Don't draw copper wires!
             }
         }})
         data.raw["electric-pole"][name.."-out-electric"].next_upgrade = 
@@ -554,6 +556,7 @@ function Generator.create_transmit_variant(config)
             supply_area_distance = 0,            
             maximum_wire_distance = config.wire_reach,
             fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
+            draw_copper_wires = false,                  -- Don't draw copper wires!
         }
     }})
     data.raw["electric-pole"][name.."-electric"].next_upgrade = 
