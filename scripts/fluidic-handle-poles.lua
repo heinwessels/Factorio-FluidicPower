@@ -31,6 +31,11 @@ function poles.on_entity_created(event)
         }
         entity.destroy{raise_destroy=false}
         entity = replaced   -- Overwrite the value as if nothing happend
+
+        -- This is the hidden fluid entity. Mark it as
+        -- indestructable so it cannot be targetted by biters and destroyed,
+        -- although we still handle that case with the `die` flag
+        entity.destructible = false
     end
 
     -- Now create whatever is needed to assist this entity
