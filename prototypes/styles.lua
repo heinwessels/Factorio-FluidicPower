@@ -6,6 +6,12 @@ styles["fluidic-content-frame"] = {
     vertically_stretchable = "on"
 }
 
+styles["fluidic-time-scale-frame"] = {
+    type = "frame_style",
+    parent = "naked_frame",
+    horizontally_stretchable = "on"
+}
+
 styles["fluidic-consumption-bar"] = {
     type = "progressbar_style",
     font_color={r=230/255, g=227/255, b=230/255},
@@ -28,4 +34,10 @@ styles["fluidic-production-bar"] = {
       {less_than = 0.5, color = {218, 69, 53}},
       {less_than = 0.8, color = {219, 176, 22}}
     }
+}
+
+styles["fluidic-timescale-radio"] = {
+    type = "radiobutton_style",
+    parent = "radiobutton",
+    text_padding = 5
 }
