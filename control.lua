@@ -2,6 +2,7 @@ local build_tools = require("scripts.fluidic-build-tools")
 local poles = require("scripts.fluidic-handle-poles")
 local overlay = require("scripts.overlay")
 local fluidic_utils = require("scripts.fluidic-utils")
+local pole_gui = require("scripts.pole-gui")
 
 local function pickerdolly_handler(event)
     local top_entity = event.moved_entity
@@ -49,9 +50,21 @@ script.on_event(defines.events.on_robot_mined_entity, removal_event)
 script.on_event(defines.events.on_entity_died, die_event)
 script.on_event(defines.events.script_raised_destroy, removal_event)
 
+script.on_event(defines.events.on_gui_opened, function(event)
+    if event.gui_type ~= defines.gui_type.entity then return end
+    local pole = event.entity
+    if not pole then return end
+    local player = game.get_player(event.player_index)
+    if not player then return end
+    pole_gui.open_for_player(pole, player)
+end)
+
 function ontick_event (event)
     build_tools.ontick(event)
     overlay.ontick(event)
+    for _, player in pairs(game.players) do
+        pole_gui.refresh_for_player(player)
+    end
 end
 script.on_event(defines.events.on_tick, ontick_event)
 
@@ -60,6 +73,7 @@ script.on_init(function()
     -- It's fine to reset them.
     global.neigbours_to_check = { }
     global.overlay_iterators = { }
+    global.players = { }
 
     if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["dolly_moved_entity_id"] then
         script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), pickerdolly_handler)
@@ -79,8 +93,9 @@ script.on_configuration_changed(function()
 
     -- Previous versions might not have this initiated.
     -- It's fine to reset them.
-    global.neigbours_to_check = { }
-    global.overlay_iterators = { }
+    global.neigbours_to_check = global.neigbours_to_check or { }
+    global.overlay_iterators = global.overlay_iterators or { }
+    global.players = global.players or { }
 
     for index, force in pairs(game.forces) do
         local technologies = force.technologies
