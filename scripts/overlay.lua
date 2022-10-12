@@ -1,5 +1,5 @@
-fluidic_utils = require("scripts.fluidic-utils")
-overlay = {}
+local fluidic_utils = require("scripts.fluidic-utils")
+local overlay = {}
 
 -- IN GLOBAL
 --  Remember when we draw overlays
@@ -244,7 +244,7 @@ function overlay.draw_connection(player, this_entity, that_entity)
         format = high_voltage
     end
 
-    if overlay.is_connection_fluids_mixed(this_entity, that_entity) then
+    if fluidic_utils.is_connection_fluids_mixed(this_entity, that_entity) then
         -- Draw red circle around compromised entity
         format.colour = {r = 1,  g = 0, b = 0, a = 0}
         for _,entity in pairs{this_entity, that_entity} do
@@ -315,35 +315,7 @@ function overlay.create_alert_for_mixed_fluids(player, entity)
     )
 end
 
-function overlay.is_connection_fluids_mixed(this_entity, that_entity)
-    if not this_entity.neighbours or 
-            not that_entity.neighbours then return false end
-    for this_index = 1, #this_entity.fluidbox do
-        if this_entity.fluidbox[this_index] then
-            local this_fluid = this_entity.fluidbox[this_index].name
-            for _, that_fluidbox in pairs(this_entity.fluidbox.get_connections(this_index)) do
-                if that_fluidbox.owner.unit_number == that_entity.unit_number then
-                    -- We now this is a connection between this and that entity
-                    for that_index = 1, #that_fluidbox do
-                        if that_fluidbox[that_index] ~= nil then
-                            -- Now we must make sure that that fluidbox is actually
-                            -- connected to this
-                            for _, backtrack_fluidbox in pairs(that_fluidbox.get_connections(that_index)) do
-                                if backtrack_fluidbox.owner.unit_number == this_entity.unit_number then
-                                    local that_fluid = that_fluidbox[that_index].name
-                                    if this_fluid ~= that_fluid then
-                                        return true
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return false
-end
+
 
 function overlay.is_pole_empty(entity)
     -- Ignore anything that is not a pole

@@ -158,4 +158,34 @@ function utils.get_fluid_neighbours(entity)
     return neighbours
 end
 
+function utils.is_connection_fluids_mixed(this_entity, that_entity)
+    if not this_entity.neighbours or 
+            not that_entity.neighbours then return false end
+    for this_index = 1, #this_entity.fluidbox do
+        if this_entity.fluidbox[this_index] then
+            local this_fluid = this_entity.fluidbox[this_index].name
+            for _, that_fluidbox in pairs(this_entity.fluidbox.get_connections(this_index)) do
+                if that_fluidbox.owner.unit_number == that_entity.unit_number then
+                    -- We now this is a connection between this and that entity
+                    for that_index = 1, #that_fluidbox do
+                        if that_fluidbox[that_index] ~= nil then
+                            -- Now we must make sure that that fluidbox is actually
+                            -- connected to this
+                            for _, backtrack_fluidbox in pairs(that_fluidbox.get_connections(that_index)) do
+                                if backtrack_fluidbox.owner.unit_number == this_entity.unit_number then
+                                    local that_fluid = that_fluidbox[that_index].name
+                                    if this_fluid ~= that_fluid then
+                                        return true
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
 return utils

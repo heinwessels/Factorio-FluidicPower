@@ -1,5 +1,10 @@
 local styles = data.raw["gui-style"].default
 
+styles["fluidic-main-frame"] = {
+    type = "frame_style",
+    vertically_stretchable = "on"
+}
+
 styles["fluidic-content-frame"] = {
     type = "frame_style",
     parent = "inside_shallow_frame_with_padding",
@@ -11,6 +16,17 @@ styles["fluidic-time-scale-frame"] = {
     parent = "naked_frame",
     horizontally_stretchable = "on"
 }
+
+styles["fluidic-dark-frame"] = {
+    type="frame_style",
+    parent="frame",
+    vertical_flow_style={type="vertical_flow_style", vertical_spacing=2},
+    top_padding=6,--3,
+    bottom_padding=4,--1,
+    left_padding=12,--4,
+    right_padding=12,--4,
+    graphical_set=styles["subheader_frame"].graphical_set
+  }
 
 styles["fluidic-consumption-bar"] = {
     type = "progressbar_style",
@@ -40,4 +56,9 @@ styles["fluidic-timescale-radio"] = {
     type = "radiobutton_style",
     parent = "radiobutton",
     text_padding = 5
+}
+
+styles["fluidic-what-is-this"] = {
+    type = "label_style",
+    font_color = {1, 1, 1, 0.5}
 }
