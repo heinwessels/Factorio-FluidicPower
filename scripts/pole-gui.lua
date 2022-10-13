@@ -42,7 +42,10 @@ end
 
 function pole_gui.refresh_this_pole_for_player(gui_data, player)
     local fluids_frame = gui_data.fluids_frame
+
+    -- TODO Do better than this
     for _, child in pairs(fluids_frame.children) do child.destroy() end
+
     local fluidic_entity = gui_data.entities.fluidic    
     for index = 1, #fluidic_entity.fluidbox do
         local capacity = fluidic_entity.fluidbox.get_capacity(index)
@@ -56,6 +59,31 @@ function pole_gui.refresh_this_pole_for_player(gui_data, player)
                 {"description.of", math.floor(fluid.amount+0.5), capacity}}}
         inside.add{type="progressbar",
             style="statistics_progressbar", value=fluid.amount/capacity}
+    end
+
+    -- Only check for bad fluid connections every second
+    if game.tick % 60 ~= 0 then return end
+    local conflicts = {}    
+    for _, neighbour in pairs(fluidic_util.get_fluid_neighbours(fluidic_entity)) do
+        local fluids = fluidic_util.is_connection_fluids_mixed(fluidic_entity, neighbour)
+        if fluids then table.insert(conflicts, {neighbour, fluids}) end
+    end
+    if next(conflicts) then
+        gui_data.conflict_frame.visible = true
+        local compound_tooptip = {"", {"fluidic-pole-gui.conflict-tooltip-description"}}
+        for _, conflict in pairs(conflicts) do
+            local neighbour, fluids = conflict[1], conflict[2]
+            local fluid = fluids[2]            
+            table.insert(compound_tooptip, {"fluidic-pole-gui.conflict-tooltip-entry",
+                neighbour.name,
+                neighbour.prototype.localised_name,
+                fluid.name,
+                game.fluid_prototypes[fluid.name].localised_name
+            })
+        end
+        gui_data.conflict_tooltip_element.tooltip = compound_tooptip
+    else
+        gui_data.conflict_frame.visible = false
     end
 end
 
@@ -110,23 +138,30 @@ function pole_gui.build_statistics_for_player(gui_data, player, handle)
 end
 
 function pole_gui.build_this_for_player(gui_data, player, handle)
-    local this_pole_gui = handle.add{type="frame", style="fluidic-main-frame", 
-        direction="vertical", anchor=anchor}
-    local this_pole_title = this_pole_gui.add{type="label", caption={"fluidic-pole-gui.this-pole-header"},
+    local main = handle.add{type="frame", style="fluidic-main-frame", 
+        direction="vertical"}
+    local title = main.add{type="label", caption={"This is a pole yea"},
         style="frame_title", direction="vertical"}
-    local pole_content_outer = this_pole_gui.add{type="frame",
+    local outer = main.add{type="frame",
         direction="vertical", style="fluidic-outer-content-frame"}
 
-    local entity_preview = pole_content_outer.add{type="entity-preview", 
+    local entity_preview = outer.add{type="entity-preview", 
         style="fluidic-entity-preview"}
-        
-    local fluids_frame = pole_content_outer.add{type="frame", name="fluids-frame",
+    local fluids_frame = outer.add{type="frame", name="fluids-frame",
         style="fluidic-dark-content-frame", direction="vertical"}
     
+    local conflict_frame = outer.add{type="frame",
+        style="fluidic-red-content-frame"}
+    local red_flow = conflict_frame.add{type="flow"}
+    local conflict_label = red_flow.add{type="label", style="heading_2_label",
+        caption={"fluidic-pole-gui.conflict-detected"}}
+
     gui_data.pole_gui = {
-        title = this_pole_title,
+        title = title,
         entity_preview = entity_preview,
         fluids_frame = fluids_frame,
+        conflict_frame = conflict_frame,
+        conflict_tooltip_element = conflict_label,
     }    
 end
 
@@ -161,6 +196,7 @@ function pole_gui.open_for_player(pole, player)
 
     -- Update the gui to point towards the correct
     gui_data.pole_gui.entity_preview.entity = pole
+    gui_data.pole_gui.conflict_frame.visible = false
     gui_data.pole_gui.title.caption = pole.prototype.localised_name
     gui_data.pole_gui.entities = {
         electric = pole,

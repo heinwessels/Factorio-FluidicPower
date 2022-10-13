@@ -163,7 +163,7 @@ function utils.is_connection_fluids_mixed(this_entity, that_entity)
             not that_entity.neighbours then return false end
     for this_index = 1, #this_entity.fluidbox do
         if this_entity.fluidbox[this_index] then
-            local this_fluid = this_entity.fluidbox[this_index].name
+            local this_fluid = this_entity.fluidbox[this_index]
             for _, that_fluidbox in pairs(this_entity.fluidbox.get_connections(this_index)) do
                 if that_fluidbox.owner.unit_number == that_entity.unit_number then
                     -- We now this is a connection between this and that entity
@@ -173,9 +173,9 @@ function utils.is_connection_fluids_mixed(this_entity, that_entity)
                             -- connected to this
                             for _, backtrack_fluidbox in pairs(that_fluidbox.get_connections(that_index)) do
                                 if backtrack_fluidbox.owner.unit_number == this_entity.unit_number then
-                                    local that_fluid = that_fluidbox[that_index].name
-                                    if this_fluid ~= that_fluid then
-                                        return true
+                                    local that_fluid = that_fluidbox[that_index]
+                                    if this_fluid.name ~= that_fluid.name then
+                                        return {this_fluid, that_fluid}
                                     end
                                 end
                             end
@@ -185,7 +185,6 @@ function utils.is_connection_fluids_mixed(this_entity, that_entity)
             end
         end
     end
-    return false
 end
 
 return utils

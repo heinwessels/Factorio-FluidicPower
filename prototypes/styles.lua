@@ -46,7 +46,18 @@ styles["fluidic-dark-content-frame"] = {
     left_padding=12,--4,
     right_padding=12,--4,
     graphical_set=styles["subheader_frame"].graphical_set
-  }
+}
+
+styles["fluidic-red-content-frame"] = {
+    type = "frame_style",
+    parent = "negative_subheader_frame",
+    horizontally_stretchable = "on",
+    horizontal_flow_style = {
+        type = "horizontal_flow_style",
+        horizontal_align = "center",
+        horizontal_spacing = 0
+    },
+}
 
 styles["fluidic-consumption-bar"] = {
     type = "progressbar_style",
