@@ -11,9 +11,14 @@ local pole_gui = {
     }
 }
 
-function pole_gui.refresh_statistics_for_player(gui_data, player)
-    if game.tick % 10 ~= 0 then return end
+local function fluid_to_energy(amount, fluid_type)
+    if not fluid_type or fluid_type == "fluidic-10-kilojoules" then return amount * 10e3 end
+    if fluid_type == "fluidic-megajoules" then return amount * 1e6 end
+    if fluid_type == "fluidic-100-megajoules" then return amount * 100e6 end
+    error("Bad fluid type: "..fluid_type)    
+end
 
+function pole_gui.refresh_statistics_for_player(gui_data, player)
     local precision_index = nil
     for _, elem in pairs(gui_data.time_scale_frame.children) do
         if elem.type == "radiobutton" and elem.state == true then
@@ -23,14 +28,10 @@ function pole_gui.refresh_statistics_for_player(gui_data, player)
     if not precision_index then error("Could not find precision index!") end
     
     local fluid_statistics = player.force.fluid_production_statistics
-    local produced = fluid_statistics.get_flow_count{name = "fluidic-10-kilojoules", 
-        input = true, precision_index = precision_index}
-    local consumed = fluid_statistics.get_flow_count{name = "fluidic-10-kilojoules",
-        precision_index = precision_index}
-
-    local multiplier = 10e3 / 60
-    produced = produced * multiplier
-    consumed = consumed * multiplier
+    local produced = fluid_to_energy(fluid_statistics.get_flow_count{name = "fluidic-10-kilojoules", 
+        input = true, precision_index = precision_index}) / 60
+    local consumed = fluid_to_energy(fluid_statistics.get_flow_count{name = "fluidic-10-kilojoules",
+        precision_index = precision_index}) / 60
 
     local ceiling = math.max(produced, consumed, 1)
     gui_data.production_bar.value = produced / ceiling
@@ -46,7 +47,7 @@ function pole_gui.refresh_this_pole_for_player(gui_data, player)
     -- TODO Do better than this
     for _, child in pairs(fluids_frame.children) do child.destroy() end
 
-    local fluidic_entity = gui_data.entities.fluidic    
+    local fluidic_entity = gui_data.entities.fluidic
     for index = 1, #fluidic_entity.fluidbox do
         local capacity = fluidic_entity.fluidbox.get_capacity(index)
         local fluid = fluidic_entity.fluidbox[index]
@@ -56,7 +57,7 @@ function pole_gui.refresh_this_pole_for_player(gui_data, player)
         inside.add{type="label", 
             caption={"",
                 {"fluidic-pole-gui.fluid-name", game.fluid_prototypes[fluid.name].localised_name}, 
-                {"description.of", math.floor(fluid.amount+0.5), capacity}}}
+                util.format_number(fluid_to_energy(fluid.amount, fluid.name), true).."J"}}
         inside.add{type="progressbar",
             style="statistics_progressbar", value=fluid.amount/capacity}
     end
@@ -88,6 +89,8 @@ function pole_gui.refresh_this_pole_for_player(gui_data, player)
 end
 
 function pole_gui.refresh_for_player(player)
+    if game.tick % 10 ~= 0 then return end
+
     local player_data = global.players[player.index]
     if not player_data or not player_data.gui_data then return end
     local gui_data = player_data.gui_data
