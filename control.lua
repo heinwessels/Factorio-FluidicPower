@@ -59,6 +59,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
     pole_gui.open_for_player(pole, player)
 end)
 
+
 function ontick_event (event)
     build_tools.ontick(event)
     overlay.ontick(event)

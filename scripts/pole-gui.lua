@@ -11,16 +11,11 @@ local pole_gui = {
     }
 }
 
-function pole_gui.refresh_for_player(player)
-    local player_data = global.players[player.index]
-    if not player_data or not player_data.pole_gui then return end
-    local gui = player_data.pole_gui
+function pole_gui.refresh_statistics_for_player(gui_data, player)
+    if game.tick % 10 ~= 0 then return end
 
-    ---------------------
-    -- Global statistics
-    ---------------------
     local precision_index = nil
-    for _, elem in pairs(gui.time_scale_frame.children) do
+    for _, elem in pairs(gui_data.time_scale_frame.children) do
         if elem.type == "radiobutton" and elem.state == true then
             precision_index = pole_gui.time_scales[elem.name]
         end
@@ -38,18 +33,17 @@ function pole_gui.refresh_for_player(player)
     consumed = consumed * multiplier
 
     local ceiling = math.max(produced, consumed, 1)
-    gui.production_bar.value = produced / ceiling
-    gui.production_bar.caption = util.format_number(produced, true).."W"
+    gui_data.production_bar.value = produced / ceiling
+    gui_data.production_bar.caption = util.format_number(produced, true).."W"
 
-    gui.consumption_bar.value = consumed / ceiling
-    gui.consumption_bar.caption = util.format_number(consumed, true).."W"
+    gui_data.consumption_bar.value = consumed / ceiling
+    gui_data.consumption_bar.caption = util.format_number(consumed, true).."W"
+end
 
-    ----------------------------
-    -- This fluidic pole's data
-    ----------------------------
-    local fluids_frame = gui.fluids_frame
+function pole_gui.refresh_this_pole_for_player(gui_data, player)
+    local fluids_frame = gui_data.fluids_frame
     for _, child in pairs(fluids_frame.children) do child.destroy() end
-    local fluidic_entity = gui.this_fluidic_entity    
+    local fluidic_entity = gui_data.entities.fluidic    
     for index = 1, #fluidic_entity.fluidbox do
         local capacity = fluidic_entity.fluidbox.get_capacity(index)
         local fluid = fluidic_entity.fluidbox[index]
@@ -57,89 +51,113 @@ function pole_gui.refresh_for_player(player)
         outside.add{type="sprite", sprite="fluid/"..fluid.name}
         local inside = outside.add{type="frame", direction="vertical", style="naked_frame"}
         inside.add{type="label", 
-            caption={"", game.fluid_prototypes[fluid.name].localised_name, ": ", {"description.of", math.floor(fluid.amount+0.5), capacity}}}
+            caption={"",
+                {"fluidic-pole-gui.fluid-name", game.fluid_prototypes[fluid.name].localised_name}, 
+                {"description.of", math.floor(fluid.amount+0.5), capacity}}}
         inside.add{type="progressbar",
             style="statistics_progressbar", value=fluid.amount/capacity}
     end
-
 end
 
-function pole_gui.build_for_player(pole, player)
-    local main = player.gui.relative.add{name=pole_gui.name, type="frame",
-        style="naked_frame", direction="vertical", anchor={
-            gui=defines.relative_gui_type.electric_network_gui, 
-            position=defines.relative_gui_position.left}}
+function pole_gui.refresh_for_player(player)
+    local player_data = global.players[player.index]
+    if not player_data or not player_data.gui_data then return end
+    local gui_data = player_data.gui_data
+    
+    pole_gui.refresh_statistics_for_player(gui_data, player)
+    pole_gui.refresh_this_pole_for_player(gui_data, player)
+end
 
-    ---------------------
-    -- Global statistics
-    ---------------------
-    local statistics = main.add{type="frame",
+function pole_gui.build_statistics_for_player(gui_data, player, handle)
+    local main = handle.add{type="frame",
         style="fluidic-main-frame", direction="vertical", anchor=anchor}
-
-    statistics.add{type="label",  caption={"fluidic-pole-gui.statistics"},
+    main.add{type="label",  caption={"fluidic-pole-gui.statistics"},
         style="frame_title", direction="vertical"}
-    local content = statistics.add{type="frame", name="content", 
+    local outer = main.add{type="frame",
+        direction="vertical", style="fluidic-outer-content-frame"}
+    
+    local what_frame = outer.add{type="frame", name="content", 
         direction="vertical", style="fluidic-content-frame"}
-    content.add{type="label", direction="vertical",
+    what_frame.add{type="label", direction="vertical",
         style="fluidic-what-is-this", caption={"fluidic-pole-gui.what-is-this-label"}}
 
-    content.add{type="label", direction="vertical",
+    local power_frame = outer.add{type="frame", name="fluids-frame",
+        style="fluidic-dark-content-frame", direction="vertical", anchor=anchor}
+        power_frame.add{type="label", direction="vertical",
         style="heading_3_label", caption={"gui-electric-network.production"}}
-    local production_bar = content.add{type="progressbar",
+    local production_bar = power_frame.add{type="progressbar",
         style="fluidic-production-bar", value=1}
 
-    content.add{type="label", direction="vertical",
+    power_frame.add{type="label", direction="vertical",
         style="heading_3_label", caption={"gui-electric-network.consumption"}}
-    local consumption_bar = content.add{type="progressbar",
+    local consumption_bar = power_frame.add{type="progressbar",
         style="fluidic-consumption-bar", value=1}
 
-    local time_scale_frame = content.add{type="frame", name=pole_gui.time_scales_name,
+    local time_scale_frame = power_frame.add{type="frame", name=pole_gui.time_scales_name,
         direction="horizontal", style="fluidic-time-scale-frame"}    
     time_scale_frame.add{type="label", direction="vertical",
         caption={"fluidic-pole-gui.time-scale"}}
     for scale, _ in pairs(pole_gui.time_scales) do
         time_scale_frame.add{type="radiobutton", name=scale, direction="vertical",
-            style="fluidic-timescale-radio", caption=scale, state=scale=="1m"}
+            style="fluidic-timescale-radio", caption=scale, state=scale=="10m"}
     end
 
-    ----------------------------
-    -- This fluidic pole's data
-    ----------------------------
-    local this_pole_gui = main.add{type="frame", style="fluidic-main-frame", 
+    gui_data.production_bar = production_bar
+    gui_data.consumption_bar = consumption_bar
+    gui_data.time_scale_frame = time_scale_frame
+end
+
+function pole_gui.build_this_for_player(gui_data, player, handle)
+    local this_pole_gui = handle.add{type="frame", style="fluidic-main-frame", 
         direction="vertical", anchor=anchor}
-    this_pole_gui.add{type="label", caption={"fluidic-pole-gui.this-pole-header"},
+    local this_pole_title = this_pole_gui.add{type="label", caption={"fluidic-pole-gui.this-pole-header"},
         style="frame_title", direction="vertical"}
-    local pole_content = this_pole_gui.add{type="frame",
-        direction="vertical", style="fluidic-content-frame"}
-    pole_content.add{type="label", direction="vertical",
-        caption={"fluidic-pole-gui.pole-contents"}}
-    local fluids_frame = pole_content.add{type="frame", name="fluids-frame",
-        style="fluidic-dark-frame", direction="vertical", anchor=anchor}
+    local pole_content_outer = this_pole_gui.add{type="frame",
+        direction="vertical", style="fluidic-outer-content-frame"}
+
+    local fluids_frame = pole_content_outer.add{type="frame", name="fluids-frame",
+        style="fluidic-dark-content-frame", direction="vertical", anchor=anchor}
     
-    
-    global.players[player.index] = global.players[player.index] or { }
-    global.players[player.index].pole_gui = {
-        production_bar = production_bar,
-        consumption_bar = consumption_bar,
-        time_scale_frame = time_scale_frame,
-        this_pole_gui = this_pole_gui,
-        fluids_frame = fluids_frame,
-        this_fluidic_entity = fluidic_util.get_fluidic_entity_from_electric(pole)
-    }
+    gui_data.this_pole_title = this_pole_title
+    gui_data.this_pole_gui = this_pole_gui
+    gui_data.fluids_frame = fluids_frame
+end
+
+function pole_gui.build_for_player(gui_data, player)
+    local main = player.gui.relative.add{name=pole_gui.name, type="frame",
+        style="naked_frame", direction="vertical", anchor={
+            gui=defines.relative_gui_type.electric_network_gui, 
+            position=defines.relative_gui_position.left}}
+
+    pole_gui.build_statistics_for_player(gui_data, player, main)
+    pole_gui.build_this_for_player(gui_data, player, main)
 end
 
 function pole_gui.open_for_player(pole, player)
+    if pole.type ~= "electric-pole" then return end
+    if string.sub(pole.name, 1, 7) ~= "fluidic" then return end
     
-    -- If GUI doesn't exist yet for player then build it
-    local gui = nil -- will contain the gui if it exists
-    for _, child in pairs(player.gui.relative.children) do
-        if child.name == pole_gui.name then
-            gui = child
-        end
+    -- Find any existing data on this GUI
+    local exist = true
+    local gui_data = global.players[player.index] and global.players[player.index].gui_data or nil
+    if not gui_data then
+        global.players[player.index] = global.players[player.index] or { }
+        global.players[player.index].gui_data = { }        
+        gui_data = global.players[player.index].gui_data
+        exist = false
     end
-    if not gui then
-        gui = pole_gui.build_for_player(pole, player)
+
+    -- If the Gui doesn't exist yet, create it
+    if not exist then
+        pole_gui.build_for_player(gui_data, player)
     end
+
+    -- Update the gui to point towards the correct
+    gui_data.this_pole_title.caption = pole.prototype.localised_name
+    gui_data.entities = {
+        electric = pole,
+        fluidic = fluidic_util.get_fluidic_entity_from_electric(pole),
+    }
 end
 
 script.on_event(defines.events.on_gui_checked_state_changed, function(event)

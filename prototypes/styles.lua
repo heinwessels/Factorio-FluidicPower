@@ -2,13 +2,23 @@ local styles = data.raw["gui-style"].default
 
 styles["fluidic-main-frame"] = {
     type = "frame_style",
-    vertically_stretchable = "on"
+    vertically_stretchable = "off"
 }
 
 styles["fluidic-content-frame"] = {
     type = "frame_style",
     parent = "inside_shallow_frame_with_padding",
-    vertically_stretchable = "on"
+    vertically_stretchable = "off"
+}
+
+styles["fluidic-outer-content-frame"] = {
+    type = "frame_style",
+    parent = "inside_shallow_frame_with_padding",
+    vertically_stretchable = "on",
+    top_padding=0,
+    bottom_padding=0,
+    left_padding=0,
+    right_padding=0,
 }
 
 styles["fluidic-time-scale-frame"] = {
@@ -17,7 +27,7 @@ styles["fluidic-time-scale-frame"] = {
     horizontally_stretchable = "on"
 }
 
-styles["fluidic-dark-frame"] = {
+styles["fluidic-dark-content-frame"] = {
     type="frame_style",
     parent="frame",
     vertical_flow_style={type="vertical_flow_style", vertical_spacing=2},
