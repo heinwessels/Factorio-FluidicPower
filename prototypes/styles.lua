@@ -8,7 +8,9 @@ styles["fluidic-main-frame"] = {
 styles["fluidic-content-frame"] = {
     type = "frame_style",
     parent = "inside_shallow_frame_with_padding",
-    vertically_stretchable = "off"
+    vertically_stretchable = "off",
+    top_padding=3,
+    bottom_padding=4,
 }
 
 styles["fluidic-outer-content-frame"] = {
@@ -25,6 +27,14 @@ styles["fluidic-time-scale-frame"] = {
     type = "frame_style",
     parent = "naked_frame",
     horizontally_stretchable = "on"
+}
+
+styles["fluidic-entity-preview"] =
+{
+  type = "empty_widget_style",
+  height = 130,
+  horizontally_stretchable = "on",
+  vertically_stretchable = "on",
 }
 
 styles["fluidic-dark-content-frame"] = {

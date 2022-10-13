@@ -64,8 +64,8 @@ function pole_gui.refresh_for_player(player)
     if not player_data or not player_data.gui_data then return end
     local gui_data = player_data.gui_data
     
-    pole_gui.refresh_statistics_for_player(gui_data, player)
-    pole_gui.refresh_this_pole_for_player(gui_data, player)
+    pole_gui.refresh_statistics_for_player(gui_data.statistics_gui, player)
+    pole_gui.refresh_this_pole_for_player(gui_data.pole_gui, player)
 end
 
 function pole_gui.build_statistics_for_player(gui_data, player, handle)
@@ -102,9 +102,11 @@ function pole_gui.build_statistics_for_player(gui_data, player, handle)
             style="fluidic-timescale-radio", caption=scale, state=scale=="10m"}
     end
 
-    gui_data.production_bar = production_bar
-    gui_data.consumption_bar = consumption_bar
-    gui_data.time_scale_frame = time_scale_frame
+    gui_data.statistics_gui = {
+        production_bar = production_bar,
+        consumption_bar = consumption_bar,
+        time_scale_frame = time_scale_frame,
+    }
 end
 
 function pole_gui.build_this_for_player(gui_data, player, handle)
@@ -115,12 +117,17 @@ function pole_gui.build_this_for_player(gui_data, player, handle)
     local pole_content_outer = this_pole_gui.add{type="frame",
         direction="vertical", style="fluidic-outer-content-frame"}
 
+    local entity_preview = pole_content_outer.add{type="entity-preview", 
+        style="fluidic-entity-preview"}
+        
     local fluids_frame = pole_content_outer.add{type="frame", name="fluids-frame",
-        style="fluidic-dark-content-frame", direction="vertical", anchor=anchor}
+        style="fluidic-dark-content-frame", direction="vertical"}
     
-    gui_data.this_pole_title = this_pole_title
-    gui_data.this_pole_gui = this_pole_gui
-    gui_data.fluids_frame = fluids_frame
+    gui_data.pole_gui = {
+        title = this_pole_title,
+        entity_preview = entity_preview,
+        fluids_frame = fluids_frame,
+    }    
 end
 
 function pole_gui.build_for_player(gui_data, player)
@@ -153,8 +160,9 @@ function pole_gui.open_for_player(pole, player)
     end
 
     -- Update the gui to point towards the correct
-    gui_data.this_pole_title.caption = pole.prototype.localised_name
-    gui_data.entities = {
+    gui_data.pole_gui.entity_preview.entity = pole
+    gui_data.pole_gui.title.caption = pole.prototype.localised_name
+    gui_data.pole_gui.entities = {
         electric = pole,
         fluidic = fluidic_util.get_fluidic_entity_from_electric(pole),
     }
