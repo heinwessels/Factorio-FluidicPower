@@ -21,7 +21,7 @@ local function pickerdolly_handler(event)
     end
 end
 
-function creation_event (event)        
+local function creation_event (event)        
     
     -- First need build tools to check connections
     -- before the creation event is triggered
@@ -36,14 +36,14 @@ script.on_event(defines.events.script_raised_built, creation_event)
 script.on_event(defines.events.script_raised_revive, creation_event)
 script.on_event(defines.events.on_robot_built_entity, creation_event)
 
-function removal_event (event, die)
+local function removal_event (event, die)
     -- First need build tools to check connections
     -- before the removal event is triggered
     build_tools.on_entity_removed(event)
 
     poles.on_entity_removed(event, die)
 end
-function die_event(event) removal_event(event, true) end    -- Ugly hack.
+local function die_event(event) removal_event(event, true) end    -- Ugly hack.
 
 script.on_event(defines.events.on_player_mined_entity, removal_event)
 script.on_event(defines.events.on_robot_mined_entity, removal_event)
@@ -60,7 +60,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
 end)
 
 
-function ontick_event (event)
+local function ontick_event (event)
     build_tools.ontick(event)
     overlay.ontick(event)
     for _, player in pairs(game.connected_players) do

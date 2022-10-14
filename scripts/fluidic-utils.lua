@@ -1,4 +1,4 @@
-utils = {}
+local utils = {}
 
 utils.entity_fluid_to_electric_lu = { }
 utils.entity_fluid_to_electric_lu[
@@ -145,7 +145,7 @@ function utils.get_fluid_neighbours(entity)
     local neighbours_lu = {}    -- Ensures no duplicate entries
 
     -- Is this a valid entity with neighbours we want?
-    if not fluidic_utils.table_has_attribute(entity, "neighbours") then return neighbours end
+    if not utils.table_has_attribute(entity, "neighbours") then return neighbours end
     if #entity.fluidbox == 0 then return neighbours end
     if not entity.neighbours then return neighbours end
 

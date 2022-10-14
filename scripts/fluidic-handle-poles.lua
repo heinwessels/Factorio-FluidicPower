@@ -1,11 +1,28 @@
-fluidic_utils = require("scripts.fluidic-utils")
-util = require("util")
+local fluidic_utils = require("scripts.fluidic-utils")
+local util = require("util")
 
-poles = {}
+local poles = {}
 
 -------------------------
 -- HANDLERS
 -------------------------
+
+local function disconnect_entity_and_neighbours(entity)
+    -- Removes all copper wires from current entity,
+    -- and all the entities it might have connected too
+    -- We assume it's an electric pole
+
+    -- Have we deleted this entity? Then do nothing.
+    if not entity.valid then return end
+    
+    -- Don't do it unnecessarily. 
+    local count = 0
+    for _ in pairs(entity.neighbours.copper) do count = count + 1 end
+    if count == 0 then return end
+
+    -- Now disconnect the entity itself from any remaining poles
+    entity.disconnect_neighbour()
+end
 
 function poles.on_entity_created(event)
     local entity
@@ -91,23 +108,6 @@ function poles.on_entity_created(event)
         -- Also need to make sure no electric wires were placed
         disconnect_entity_and_neighbours(entity)
     end
-end
-
-function disconnect_entity_and_neighbours(entity)
-    -- Removes all copper wires from current entity,
-    -- and all the entities it might have connected too
-    -- We assume it's an electric pole
-
-    -- Have we deleted this entity? Then do nothing.
-    if not entity.valid then return end
-    
-    -- Don't do it unnecessarily. 
-    local count = 0
-    for _ in pairs(entity.neighbours.copper) do count = count + 1 end
-    if count == 0 then return end
-
-    -- Now disconnect the entity itself from any remaining poles
-    entity.disconnect_neighbour()
 end
 
 function poles.on_entity_removed(event, die)

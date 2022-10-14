@@ -1,7 +1,7 @@
-fluidic_utils = require("scripts.fluidic-utils")
-util = require("util")
+local fluidic_utils = require("scripts.fluidic-utils")
+local util = require("util")
 
-build_tools = {}
+local build_tools = {}
 
 -- IN GLOBAL
 --  Here a list is kept of fluid connections to check for
@@ -15,7 +15,7 @@ function build_tools.ontick (event)
 
     -- If there was a destroy event, make sure it didn't
     -- create any unwanted fluid connections
-    check_fluid_connection_backlog()
+    build_tools.check_fluid_connection_backlog()
 end
 
 function build_tools.on_entity_created(event)    
@@ -31,7 +31,7 @@ function build_tools.on_entity_created(event)
     
     -- Something has been built. Make sure there are no unwanted connections    
     for _, neighbour in pairs(fluidic_utils.get_fluid_neighbours(entity)) do
-        if not is_valid_fluid_connection(entity, neighbour) then
+        if not build_tools.is_valid_fluid_connection(entity, neighbour) then
             -- Invalid connection!
             -- User is trying to connect a normal fluid to
             -- a power fluid!
@@ -48,7 +48,7 @@ function build_tools.on_entity_created(event)
 
                 -- Keep local copy to return an item to the player
                 local entity_copy = util.copy(entity)
-                return_item_from_entity(event, entity_copy) -- The <entity> will be invalid by now
+                build_tools.return_item_from_entity(event, entity_copy) -- The <entity> will be invalid by now
 
                 -- Destroy the entity
                 entity.destroy{
@@ -81,7 +81,7 @@ function build_tools.on_entity_removed(event)
         if not entity_to_check then entity_to_check = entity end
         
         -- Now check if it has fluidboxes
-        if has_underground_fluidbox(entity_to_check) then
+        if build_tools.has_underground_fluidbox(entity_to_check) then
             -- This entity could have underground neighbours.
 
             local neighbours = fluidic_utils.get_fluid_neighbours(entity_to_check)
@@ -102,7 +102,7 @@ function build_tools.on_entity_removed(event)
     end    
 end
 
-function check_fluid_connection_backlog()
+function build_tools.check_fluid_connection_backlog()
     -- During <on_entity_removed> we cannot check for 
     -- any new connections that might be wrong because
     -- the original entity is still in the way.
@@ -124,7 +124,7 @@ function check_fluid_connection_backlog()
                 local his_neighbours = fluidic_utils.get_fluid_neighbours(neighbour)
                 for _, his_neighbour in ipairs(his_neighbours) do
 
-                    if not is_valid_fluid_connection(neighbour, his_neighbour) then
+                    if not build_tools.is_valid_fluid_connection(neighbour, his_neighbour) then
                         -- Invalid connection with the neighbour's neighbour!
                         -- It might connect a normal pipe to a fluidic pipe!
 
@@ -146,7 +146,8 @@ function check_fluid_connection_backlog()
 
                             -- Keep local copy to return an item to the player
                             local entity_copy = util.table.deepcopy(entity_to_destroy)
-                            return_item_from_entity(entry.event, entity_copy, true) -- The <entity> will be invalid by now
+                            -- The <entity> will be invalid by now
+                            build_tools.return_item_from_entity(entry.event, entity_copy, true)
 
                             entity_to_destroy.destroy{
                                 -- We must allways raise an destroy event on other entities. 
@@ -164,7 +165,7 @@ function check_fluid_connection_backlog()
     end
 end
 
-function return_item_from_entity(event, entity, backlog)
+function build_tools.return_item_from_entity(event, entity, backlog)
     -- Returns the required <item> back to the player or robot
     -- Either to his inventory or it's dropped on the floor
     -- with a deconstruction planner, depending on the <event>
@@ -218,7 +219,7 @@ function return_item_from_entity(event, entity, backlog)
     end
 end
 
-function has_underground_fluidbox(entity)
+function build_tools.has_underground_fluidbox(entity)
     -- Returns true if this entity has an underground 
     -- fluidbox connection that can connect to one
     -- of our poles.
@@ -239,7 +240,7 @@ function has_underground_fluidbox(entity)
     return false
 end
 
-function is_valid_fluid_connection(this, that)
+function build_tools.is_valid_fluid_connection(this, that)
     -- Checks if the fluid connection between this entity 
     -- and that entity is invalid. Returns true if
     -- it's valid
