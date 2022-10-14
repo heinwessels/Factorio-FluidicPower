@@ -142,6 +142,7 @@ end
 function utils.get_fluid_neighbours(entity)
     -- Returns all fluid neighbours of this entity    
     local neighbours = {}
+    local neighbours_lu = {}    -- Ensures no duplicate entries
 
     -- Is this a valid entity with neighbours we want?
     if not fluidic_utils.table_has_attribute(entity, "neighbours") then return neighbours end
@@ -152,7 +153,10 @@ function utils.get_fluid_neighbours(entity)
     for _, neighbours_section in pairs(entity.neighbours) do
         if next(neighbours_section) == nil then break end    -- Table is empty
         for _, neighbour in ipairs(neighbours_section) do            
-            table.insert(neighbours, neighbour)
+            if not neighbours_lu[neighbour.unit_number] then
+                table.insert(neighbours, neighbour)
+                neighbours_lu[neighbour.unit_number]=true
+            end
         end 
     end
     return neighbours

@@ -47,28 +47,31 @@ function pole_gui.refresh_this_pole_for_player(gui_data, player)
 
     gui_data.visible = fluidic_entity.valid
     if not fluidic_entity.valid then return end
-    
-    -- Only clean when we're redrawing something
-    for _, child in pairs(fluids_frame.children) do child.destroy() end    
 
-    for index = 1, #fluidic_entity.fluidbox do
-        local capacity = fluidic_entity.fluidbox.get_capacity(index)
-        local fluid = fluidic_entity.fluidbox[index]
-        if fluid then
-            local outside = fluids_frame.add{type="frame", direction="horizontal", style="naked_frame"}
-            outside.add{type="sprite", sprite="fluid/"..fluid.name}
-            local inside = outside.add{type="frame", direction="vertical", style="naked_frame"}
-            inside.add{type="label", 
-                caption={"",
-                    {"fluidic-pole-gui.fluid-name", game.fluid_prototypes[fluid.name].localised_name}, 
-                    util.format_number(fluid_to_energy(fluid.amount, fluid.name), true).."J"}}
-            inside.add{type="progressbar",
-                style="statistics_progressbar", value=fluid.amount/capacity}
+    local capacity = fluidic_entity.fluidbox.get_capacity(1)
+    local fluid = fluidic_entity.fluidbox[1] or {name=nil, amount=0}
+
+    if fluid.name then
+        if fluid.name ~= gui_data.fluid_last then
+            gui_data.fluid_sprite.sprite = "fluid/"..fluid.name
+            gui_data.fluid_last = fluid.name -- ensure this is only done once
+        end
+        gui_data.fluid_descr.caption = {"",
+            {"fluidic-pole-gui.fluid-name", game.fluid_prototypes[fluid.name].localised_name}, 
+            util.format_number(fluid_to_energy(fluid.amount, fluid.name), true).."J"}
+        gui_data.fluid_bar.value = fluid.amount / capacity
+    else
+        if gui_data.fluid_last then
+            gui_data.fluid_sprite.sprite = "fluid/fluidic-10-kilojoules"
+            gui_data.fluid_descr.caption =  {"",
+                {"fluidic-pole-gui.fluid-name", {"fluidic-pole-gui.fluid-name-nothing"}}, "0J"}
+            gui_data.fluid_bar.value = 0
+            gui_data.fluid_last = nil -- ensure this is only done once
         end
     end
 
     -- Only check for bad fluid connections every second
-    if game.tick % 60 ~= 0 then return end
+    if game.tick % 120 ~= 0 then return end
     local conflicts = {}    
     for _, neighbour in pairs(fluidic_util.get_fluid_neighbours(fluidic_entity)) do
         local fluids = fluidic_util.is_connection_fluids_mixed(fluidic_entity, neighbour)
@@ -162,6 +165,14 @@ function pole_gui.build_this_for_player(gui_data, player, anchor)
         style="fluidic-entity-preview"}
     local fluids_frame = outer.add{type="frame", name="fluids-frame",
         style="fluidic-dark-content-frame", direction="vertical"}
+
+    local outside = fluids_frame.add{type="frame", direction="horizontal", style="naked_frame"}
+    local fluid_sprite = outside.add{type="sprite", sprite="fluid/fluidic-10-kilojoules"} -- default
+    local inside = outside.add{type="frame", direction="vertical", style="naked_frame"}
+    local fluid_descr = inside.add{type="label", 
+        caption={"",
+            {"fluidic-pole-gui.fluid-name", {"fluidic-pole-gui.fluid-name-nothing"}}, "0J"}}
+    local fluid_bar = inside.add{type="progressbar", style="statistics_progressbar", value=0}
     
     local conflict_frame = outer.add{type="frame",
         style="fluidic-red-content-frame"}
@@ -173,7 +184,12 @@ function pole_gui.build_this_for_player(gui_data, player, anchor)
         handle = handle,
         title = title,
         entity_preview = entity_preview,
-        fluids_frame = fluids_frame,
+        
+        fluid_sprite = fluid_sprite,
+        fluid_descr = fluid_descr,
+        fluid_bar = fluid_bar,
+        fluid_last = nil,
+        
         conflict_frame = conflict_frame,
         conflict_tooltip_element = conflict_label,
     }    
@@ -198,7 +214,7 @@ function pole_gui.open_for_player(pole, player)
     local gui_data = global.players[player.index] and global.players[player.index].gui_data or nil
     if not gui_data then
         global.players[player.index] = global.players[player.index] or { }
-        global.players[player.index].gui_data = { }        
+        global.players[player.index].gui_data = { }
         gui_data = global.players[player.index].gui_data
         exist = false
     end
@@ -216,24 +232,32 @@ function pole_gui.open_for_player(pole, player)
         electric = pole,
         fluidic = fluidic_util.get_fluidic_entity_from_electric(pole),
     }
+
+    -- Refresh the pole GUI, otherwise there's a flash of the old data
+    pole_gui.refresh_this_pole_for_player(gui_data.pole_gui, player)
+end
+
+function pole_gui.destroy_for_player(player)
+    for _, child in pairs(player.gui.relative.children) do
+        if child.name == pole_gui.name then child.destroy() end
+    end
+    global.players[player.index].gui_data = { }
 end
 
 script.on_event(defines.events.on_gui_checked_state_changed, function(event)
     if event.element.parent.name == pole_gui.time_scales_name then
         local elm = event.element
         if elm.type == "radiobutton" then
-          if elm.state == false then --[[can't deactivate already active radio button]]
-            elm.state = true
-          else
-            for _, child in pairs(elm.parent.children) do
-              if child.type == "radiobutton" then
-                child.state = false
-              end
+            if elm.state == false then --[[can't deactivate already active radio button]]
+                elm.state = true
+            else
+                for _, child in pairs(elm.parent.children) do
+                    if child.type == "radiobutton" then child.state = false end
+                end
+                elm.state = true --[[turn it back on]]
             end
-            elm.state = true --[[turn it back on]]
-          end
         end
-      end
+    end
 end)
 
 return pole_gui

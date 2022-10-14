@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.10.0
+Date: ??. 10. 2022
+  Features:
+    - Add custom GUI to see global electric production and consumption.
+    - Add custom GUI to see fluidic pole's internal power fluid contents.
+---------------------------------------------------------------------------------------------------
 Version: 0.9.1
 Date: 08. 10. 2022
   Features:
