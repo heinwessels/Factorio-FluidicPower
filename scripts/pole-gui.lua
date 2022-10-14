@@ -109,8 +109,9 @@ function pole_gui.build_statistics_for_player(gui_data, player, handle)
     
     local what_frame = outer.add{type="frame", name="content", 
         direction="vertical", style="fluidic-content-frame"}
-    what_frame.add{type="label", direction="vertical",
-        style="fluidic-what-is-this", caption={"fluidic-pole-gui.what-is-this-label"}}
+    what_frame.add{type="label", style="fluidic-what-is-this", 
+        caption={"fluidic-pole-gui.what-is-this-label"}, 
+        tooltip={"fluidic-pole-gui.what-is-this-tooltip"}}
 
     local power_frame = outer.add{type="frame", name="fluids-frame",
         style="fluidic-dark-content-frame", direction="vertical", anchor=anchor}
