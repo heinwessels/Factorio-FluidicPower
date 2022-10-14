@@ -63,7 +63,7 @@ end)
 function ontick_event (event)
     build_tools.ontick(event)
     overlay.ontick(event)
-    for _, player in pairs(game.players) do
+    for _, player in pairs(game.connected_players) do
         pole_gui.refresh_for_player(player)
     end
 end

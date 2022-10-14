@@ -10,7 +10,7 @@ local overlay = {}
 function overlay.ontick (event)   
 
     -- Iterate for each player
-    for _, player in pairs(game.players) do
+    for _, player in pairs(game.connected_players) do
         local uid = player.index -- Unique key for player
 
         -- Check for the current selected entity
