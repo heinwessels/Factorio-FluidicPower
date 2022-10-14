@@ -54,17 +54,17 @@ function pole_gui.refresh_this_pole_for_player(gui_data, player)
     if fluid.name then
         if fluid.name ~= gui_data.fluid_last then
             gui_data.fluid_sprite.sprite = "fluid/"..fluid.name
+            gui_data.fluid_sprite.tooltip = {
+                "fluidic-pole-gui.fluid-sprite-tooltip", game.fluid_prototypes[fluid.name].localised_name}
             gui_data.fluid_last = fluid.name -- ensure this is only done once
         end
-        gui_data.fluid_descr.caption = {"",
-            {"fluidic-pole-gui.fluid-name", game.fluid_prototypes[fluid.name].localised_name}, 
-            util.format_number(fluid_to_energy(fluid.amount, fluid.name), true).."J"}
+        gui_data.fluid_descr.caption = {"fluidic-pole-gui.fluid-name", 
+            fluidic_util.format_number(fluid_to_energy(fluid.amount, fluid.name), true).."J"}
         gui_data.fluid_bar.value = fluid.amount / capacity
     else
         if gui_data.fluid_last then
             gui_data.fluid_sprite.sprite = "fluid/fluidic-10-kilojoules"
-            gui_data.fluid_descr.caption =  {"",
-                {"fluidic-pole-gui.fluid-name", {"fluidic-pole-gui.fluid-name-nothing"}}, "0J"}
+            gui_data.fluid_descr.caption = {"fluidic-pole-gui.fluid-name", "0J"}
             gui_data.fluid_bar.value = 0
             gui_data.fluid_last = nil -- ensure this is only done once
         end

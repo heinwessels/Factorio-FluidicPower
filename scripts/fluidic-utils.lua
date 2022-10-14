@@ -74,6 +74,37 @@ function utils.get_fluidic_entity_from_electric(entity)
 	return nil
 end
 
+
+-- Recreation of the one in lualib, except for
+-- fixing the odd usage of `B`
+function utils.format_number(amount, append_suffix)
+    local suffix = ""
+    if append_suffix then
+      local suffix_list =
+        {
+          ["T"] = 1000000000000,
+          ["G"] = 1000000000,   -- `G` and not `B`!
+          ["M"] = 1000000,
+          ["k"] = 1000
+        }
+      for letter, limit in pairs (suffix_list) do
+        if math.abs(amount) >= limit then
+          amount = math.floor(amount/(limit/10))/10
+          suffix = letter
+          break
+        end
+      end
+    end
+    local formatted, k = amount
+    while true do
+      formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+      if (k==0) then
+        break
+      end
+    end
+    return formatted..suffix
+  end
+
 function utils.overwrite_technology_for_recipe(old_recipe, new_recipe)
 	-- Looks for all technologies that unlocks the old_recipe,
 	-- and replaces said recipe with a new_recipe
