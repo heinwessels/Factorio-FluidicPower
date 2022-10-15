@@ -97,8 +97,6 @@ function pole_gui.refresh_this_pole_for_player(gui_data, player)
 end
 
 function pole_gui.refresh_for_player(player)
-    if game.tick % 10 ~= 0 then return end
-
     if player.opened_gui_type ~= defines.gui_type.entity then return end
     local looking_at = player.opened
     if not looking_at or not looking_at.type or looking_at.type ~= "electric-pole" then return end

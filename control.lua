@@ -63,6 +63,9 @@ end)
 local function ontick_event (event)
     build_tools.ontick(event)
     overlay.ontick(event)
+
+    -- Don't update GUI every tick
+    if game.tick % 10 ~= 0 then return end -- factor of 60
     for _, player in pairs(game.connected_players) do
         pole_gui.refresh_for_player(player)
     end
