@@ -156,8 +156,7 @@ function Generator.create_in_out_variant(config)
             },
 
             -- This is required for when the item may not be placed due to fluids-mixing
-            minable = {result = name.."-in", mining_time=base_pole.minable.mining_time},
-            fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
+            minable = {result = name.."-in", mining_time=base_pole.minable.mining_time},            
             max_health = base_pole.max_health,
             resistances = base_pole.resistances,
             flags = {
@@ -177,8 +176,6 @@ function Generator.create_in_out_variant(config)
             crafting_speed = 1,
             fixed_recipe = "fluidic-generate-"..config.base_name,
             energy_usage = config.energy_usage,
-            module_specification = nil,
-            allowed_effects = nil,
             module_specification = { module_slots = 0 },
             energy_source = {
                 type = "electric",
