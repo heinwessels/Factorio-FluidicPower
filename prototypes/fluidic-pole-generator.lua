@@ -436,98 +436,109 @@ function Generator.create_transmit_variant(config)
     data.raw["item"][config.base_name].place_result = name.."-place"
     data.raw["item"][config.base_name].localised_name = {"entity-name."..config.base_name}
 
-    -- ENTITY
+    -- ENTITIES    
+    local base_pole = data.raw["electric-pole"][config.base_name]
+    
     -- First create the entity that will be used while placing    
     local pipe_offset = -math.floor(config.size / 2)
-    data:extend({util.merge{
-        data.raw["electric-pole"][config.base_name],
+    local pole_fluidic_place = {
+        type = "pipe",
+        name = name.."-place",
+        localised_name = {"entity-name."..config.base_name},
+        localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
+        minable = {result = config.base_name, mining_time=base_pole.minable.mining_time},
+        horizontal_window_bounding_box = {{0,0},{0,0}},
+        vertical_window_bounding_box = {{0,0},{0,0}},
+        
+        icon = base_pole.icon,
+        icons = base_pole.icons,
+        icon_size = base_pole.icon_size, 
+        icon_mipmaps = base_pole.icon_mipmaps,
+
+        collision_box = base_pole.collision_box,
+        selection_box = base_pole.selection_box,
+        max_health = base_pole.max_health,
+        resistances = base_pole.resistances,
+        damaged_trigger_effect = base_pole.damaged_trigger_effect,
+
+        -- Overwrite flags so that this hidden component has barely any functionality
+        -- and most imporantly not "player-creation" so that biters won't attack it
+        -- but it might still happen that the entity dies and will not create the correct
+        -- ghost. Therefore handle the die callback correctly.
+        flags = {
+            "not-rotatable", 
+            "hide-alt-info", 
+            "placeable-neutral", 
+            "fast-replaceable-no-build-while-moving", 
+            "not-flammable",
+            "player-creation",  -- Allows to place ghosts with shift-click
+            "not-upgradable",   -- Upgrades are done through electric entity
+        },
+
+        fluid_box =
         {
-            type = "pipe",
-            name = name.."-place",
-            localised_name = {"entity-name."..config.base_name},
-            localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
-            minable = {result = config.base_name},
-            horizontal_window_bounding_box = {{0,0},{0,0}},
-            vertical_window_bounding_box = {{0,0},{0,0}},
-            bottleneck_ignore = true,   -- For BottleNeck Lite
-
-            fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
-
-            -- Overwrite flags so that this hidden component has barely any functionality
-            -- and most imporantly not "player-creation" so that biters won't attack it
-            -- but it might still happen that the entity dies and will not create the correct
-            -- ghost. Therefore handle the die callback correctly.
-            flags = {
-                "not-rotatable", 
-                "hide-alt-info", 
-                "placeable-neutral", 
-                "fast-replaceable-no-build-while-moving", 
-                "not-flammable",
-                "player-creation",  -- Allows to place ghosts with shift-click
-                "not-upgradable",   -- Upgrades are done through electric entity
-            },
-
-            fluid_box =
+            base_area = 1,               
+            pipe_connections =
             {
-                base_area = 1,               
-                pipe_connections =
-                {
-                    {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                    {type = "input-output", position = {1.5, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
-                    {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = config.wire_reach + pipe_offset},
-                    {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                {type = "input-output", position = {-1.5, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                {type = "input-output", position = {1.5, -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
+                {type = "input-output", position = { -0.5, -1.5,}, max_underground_distance = config.wire_reach + pipe_offset},
+                {type = "input-output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach + pipe_offset},
 
 
-                    -- These connections are only for energy sensors.
-                    -- Will not connect to other poles (unless placed directly adjacent)
-                    -- and thus not influence fluid flow
-                    {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 1},
-                    {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 1},
-                    {type = "input-output", position = {0.5, -1.5,}, max_underground_distance = 1},
-                    {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 1},
-                },
-                hide_connection_info = true,
+                -- These connections are only for energy sensors.
+                -- Will not connect to other poles (unless placed directly adjacent)
+                -- and thus not influence fluid flow
+                {type = "input-output", position = {-1.5, 0.5}, max_underground_distance = 1},
+                {type = "input-output", position = {1.5, 0.5}, max_underground_distance = 1},
+                {type = "input-output", position = {0.5, -1.5,}, max_underground_distance = 1},
+                {type = "input-output", position = {0.5, 1.5}, max_underground_distance = 1},
             },
-            pictures = {
-                straight_vertical_single = data.raw["electric-pole"][config.base_name].pictures,
-                straight_vertical = data.raw["electric-pole"][config.base_name].pictures,
-                straight_vertical_window = data.raw["electric-pole"][config.base_name].pictures,
-                straight_horizontal = data.raw["electric-pole"][config.base_name].pictures,
-                straight_horizontal_window = data.raw["electric-pole"][config.base_name].pictures,
-                straight_horizontal_single = data.raw["electric-pole"][config.base_name].pictures,
-                corner_up_right = data.raw["electric-pole"][config.base_name].pictures,
-                corner_up_left = data.raw["electric-pole"][config.base_name].pictures,
-                corner_down_right = data.raw["electric-pole"][config.base_name].pictures,
-                corner_down_left = data.raw["electric-pole"][config.base_name].pictures,
-                t_up = data.raw["electric-pole"][config.base_name].pictures,
-                t_down = data.raw["electric-pole"][config.base_name].pictures,
-                t_left = data.raw["electric-pole"][config.base_name].pictures,
-                t_right = data.raw["electric-pole"][config.base_name].pictures,
-                cross = data.raw["electric-pole"][config.base_name].pictures,
-                ending_up = data.raw["electric-pole"][config.base_name].pictures,
-                ending_down = data.raw["electric-pole"][config.base_name].pictures,
-                ending_left = data.raw["electric-pole"][config.base_name].pictures,
-                ending_right = data.raw["electric-pole"][config.base_name].pictures,
-                horizontal_window_background = data.raw["electric-pole"][config.base_name].pictures,
-                vertical_window_background = data.raw["electric-pole"][config.base_name].pictures,
-                fluid_background = data.raw["electric-pole"][config.base_name].pictures,
-                low_temperature_flow = data.raw["electric-pole"][config.base_name].pictures,
-                middle_temperature_flow = data.raw["electric-pole"][config.base_name].pictures,
-                high_temperature_flow = data.raw["electric-pole"][config.base_name].pictures,
-                gas_flow = data.raw["electric-pole"][config.base_name].pictures,
-            }
+            hide_connection_info = true,
+        },
+        pictures = {
+            straight_vertical_single = util.table.deepcopy(base_pole.pictures),
+            straight_vertical = util.table.deepcopy(base_pole.pictures),
+            straight_vertical_window = util.table.deepcopy(base_pole.pictures),
+            straight_horizontal = util.table.deepcopy(base_pole.pictures),
+            straight_horizontal_window = util.table.deepcopy(base_pole.pictures),
+            corner_up_right = util.table.deepcopy(base_pole.pictures),
+            corner_up_left = util.table.deepcopy(base_pole.pictures),
+            corner_down_right = util.table.deepcopy(base_pole.pictures),
+            corner_down_left = util.table.deepcopy(base_pole.pictures),
+            t_up = util.table.deepcopy(base_pole.pictures),
+            t_down = util.table.deepcopy(base_pole.pictures),
+            t_left = util.table.deepcopy(base_pole.pictures),
+            t_right = util.table.deepcopy(base_pole.pictures),
+            cross = util.table.deepcopy(base_pole.pictures),
+            ending_up = util.table.deepcopy(base_pole.pictures),
+            ending_down = util.table.deepcopy(base_pole.pictures),
+            ending_left = util.table.deepcopy(base_pole.pictures),
+            ending_right = util.table.deepcopy(base_pole.pictures),
+            horizontal_window_background = util.table.deepcopy(base_pole.pictures),
+            vertical_window_background = util.table.deepcopy(base_pole.pictures),
+            fluid_background = util.table.deepcopy(base_pole.pictures),
+            low_temperature_flow = util.table.deepcopy(base_pole.pictures),
+            middle_temperature_flow = util.table.deepcopy(base_pole.pictures),
+            high_temperature_flow = util.table.deepcopy(base_pole.pictures),
+            gas_flow = util.table.deepcopy(base_pole.pictures),
         }
-    }})
-    data.raw["pipe"][name.."-place"].next_upgrade = nil
+    }
+    if mods["BottleneckLite"] then
+        pole_fluidic_place.bottleneck_ignore = true   -- For BottleNeck Lite
+    end
 
     -- Now create the main entity without graphics
-    data:extend({util.merge{
-        data.raw["pipe"][name.."-place"],
+    local pole_fluidic = util.merge{
+        pole_fluidic_place,
         {
             name = name,
             localised_name = {"entity-name."..config.base_name},
             localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
             minable = {result = config.base_name},  -- It will return the vanilla item
+
+            corpse = base_pole.corpse,
+            dying_explosion = base_pole.dying_explosion,
             
             -- Allows pasting of blueprints with circuits
             -- Needs to be here with the hidden entity so that
@@ -537,18 +548,14 @@ function Generator.create_transmit_variant(config)
             -- Prefer having blueprints functioning correctly.
             collision_mask = {},
         }
-    }})    
-    for key, _ in pairs(data.raw["pipe"][name].pictures) do       
-        data.raw["pipe"][name].pictures[key] = {
-            filename = "__FluidicPower__/graphics/entities/empty.png",                
-            width = 32,
-            height = 32,
-        }
+    }
+    for key, _ in pairs(pole_fluidic.pictures) do       
+        pole_fluidic.pictures[key] = empty_animation
     end
     
     -- Now update create the electric entity
-    data:extend({util.merge{
-        data.raw["electric-pole"][config.base_name],
+    local pole_electric = util.merge{
+        base_pole,
         {
             name = name.."-electric",
             localised_name = {"entity-name."..config.base_name},
@@ -560,23 +567,24 @@ function Generator.create_transmit_variant(config)
             fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
             draw_copper_wires = false,                  -- Don't draw copper wires!
         }
-    }})
-    data.raw["electric-pole"][name.."-electric"].next_upgrade = 
-            config.next_upgrade_base and config.next_upgrade_base.."-electric" or nil
+    }
+    pole_electric.next_upgrade = config.next_upgrade_base and config.next_upgrade_base.."-electric" or nil
 
     -- Depending on debug option, choose which entity is exposed
     if not constants.expose_fluid_boxes then
         -- Default
-        data.raw["pipe"][name].selection_box = {{0,0}, {0,0}}
-        data.raw["pipe"][name].drawing_box = {{0,0}, {0,0}}
+        pole_fluidic.selection_box = {{0,0}, {0,0}}
+        pole_fluidic.drawing_box = {{0,0}, {0,0}}
     else
         -- Debug option
-        data.raw["electric-pole"][name.."-electric"].selection_box = {{0,0}, {0,0}}
-        data.raw["electric-pole"][name.."-electric"].drawing_box = {{0,0}, {0,0}}
+        pole_electric.selection_box = {{0,0}, {0,0}}
+        pole_electric.drawing_box = {{0,0}, {0,0}}
     end
 
     -- Add "no-no" message to now-hidden entity
     data.raw["electric-pole"][config.base_name].localised_description = {"fluidic-text.non-accessable"}
+
+    data:extend{pole_fluidic_place, pole_fluidic, pole_electric}
 end
 
 return Generator
