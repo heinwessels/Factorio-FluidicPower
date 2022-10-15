@@ -1,5 +1,6 @@
 -- Will use the vanilla item and recipe
 data.raw["item"]["power-switch"].place_result = "fluidic-power-switch"
+data.raw["recipe"]["power-switch"].result = nil
 data.raw["recipe"]["power-switch"].results = {
   {type = "item", name = "power-switch", amount = 1}
 }

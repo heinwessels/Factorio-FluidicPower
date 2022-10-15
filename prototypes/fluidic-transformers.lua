@@ -68,7 +68,6 @@ data:extend
         category = "fluidic-transformers",
         order = "a[a]-a[a]",
         subgroup = "fluidic-transformer-up",
-        scale_entity_info_icon = true,        
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
         hide_from_player_crafting = true,
 
@@ -85,7 +84,6 @@ data:extend
         order = "a[c]-a[100-megajoules]",
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-up",
-        scale_entity_info_icon = true,
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
         hide_from_player_crafting = true,
         
@@ -102,7 +100,6 @@ data:extend
         order = "a[b]-a[b]",
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
-        scale_entity_info_icon = true,
         hide_from_stats = true, -- Hide stats to not influence production/consumption 
         hide_from_player_crafting = true,
         
@@ -119,7 +116,6 @@ data:extend
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
         order = "a[d]-a[megajoules]",
-        scale_entity_info_icon = true,
         hide_from_stats = true, -- Hide stats to not influence production/consumption stats
         hide_from_player_crafting = true,
         
