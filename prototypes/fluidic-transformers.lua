@@ -140,7 +140,6 @@ data:extend({
         corpse = "assembling-machine-1-remnants",
         dying_explosion = "assembling-machine-1-explosion",
         crafting_categories = {"fluidic-transformers"},
-        mode = "output-to-separate-pipe",
         allowed_effects = {},
         module_specification = {module_slots=0},
         crafting_speed = 1,
@@ -155,10 +154,7 @@ data:extend({
         selection_box = {{-1, -1}, {1, 1}},
         damaged_trigger_effect = hit_effects.entity(),
         energy_usage = "1W",    -- Not used
-        energy_source = {
-            type = "void",        
-            drain = "0kW"    
-        },
+        energy_source = { type = "void" },
         fluid_boxes =
         {
             -- Would like to have less fluid connections here, 

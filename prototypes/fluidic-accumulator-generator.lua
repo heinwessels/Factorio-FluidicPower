@@ -53,7 +53,6 @@ function Generator.create_accumulator(context)
             hide_connection_info = true,
             pipe_connections = pipe_connections,
         },
-        rotatable = false,
         window_bounding_box = {{0, 0}, {0, 0}},
         pictures = {
             picture = base_entity.picture,
