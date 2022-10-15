@@ -12,7 +12,7 @@ data:extend
         name = "fluidic-transformer",
         place_result = "fluidic-transformer",
         icon = "__FluidicPower__/graphics/icons/transformer-icon.png",
-        icon_size = 32, icon_mipmaps = 4,
+        icon_size = 32, icon_mipmaps = 1,
         subgroup = "energy-pipe-distribution",
         order = "a[energy]-z[transformer]",
         stack_size = 20

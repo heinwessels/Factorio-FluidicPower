@@ -19,23 +19,27 @@ function Generator.create_in_out_variant(config)
     -----------------------------------
     -- The out pole will use the normal item
     -- The in pole will use a new item
-    data.raw["item"][config.base_name].place_result = name.."-out-place"
+    local item_out = data.raw["item"][config.base_name]
+    item_out.place_result = name.."-out-place"
     data:extend({
-        util.merge{
-            data.raw["item"][config.base_name],
-            {
-                name = name.."-in",
-                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
-                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
-                place_result =  name.."-in-place",
-                icons = {
-                    {
-                        icon = data.raw["item"][config.base_name].icon,
-                        tint = tint_in
-                    }                    
-                },
-            }
-        },
+        {   -- Create item-in (also source)
+            type = "item",
+            name = name.."-in",
+            localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
+            localised_description={"", {"fluidic-text.pole-in-variant-description"}},
+            place_result =  name.."-in-place",
+            stack_size = item_out.stack_size,
+            subgroup = item_out.subgroup,
+            order = item_out.order,
+            icons = {
+                {
+                    icon = data.raw["item"][config.base_name].icon,
+                    tint = tint_in
+                }                    
+            },
+            icon_size = item_out.icon_size,
+            icon_mipmaps = item_out.icon_mipmaps,
+        }
     })
 
     -- Item Recipes
