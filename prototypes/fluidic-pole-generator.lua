@@ -78,6 +78,7 @@ function Generator.create_in_out_variant(config)
 
     -- In (source) Entities
     -----------------------------------
+    local base_pole = data.raw["electric-pole"][config.base_name]
     do
         local pipe_offset = -math.floor(config.size / 2)
         local fluid_boxes
@@ -130,73 +131,72 @@ function Generator.create_in_out_variant(config)
             error("Invalid pole size specified: "..config.size)
         end
 
-        -- First create the PLACE entity
-        data:extend({util.merge{
-            data.raw["electric-pole"][config.base_name],
-            {
-                type = "assembling-machine",
-                name = name.."-in-place",
-                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
-                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
-                icons = {
-                    {
-                        icon = data.raw["electric-pole"][config.base_name].icon,
-                        tint = tint_in
-                    }                    
-                },
-                
-                bottleneck_ignore = true,   -- For BottleNeck Lit
-                
-                -- This is required for when the item may not be placed due to fluids-mixing
-                -- Crash in 0.6.1
-                minable = {result = name.."-in"},
-                
-                fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
+        -- First create PLACE entity. This entity is the same as the
+        -- hidden fluidic entity, which for the source pole is an assembler
+        -- This assembler turns electricity into a power fluid
+        local pole_in_place = {
+            type = "assembling-machine",
+            name = name.."-in-place",
+            localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
+            localised_description={"", {"fluidic-text.pole-in-variant-description"}},
+            
+            icon_size = base_pole.icon_size, 
+            icon_mipmaps = base_pole.icon_mipmaps,
+            icons = {
+                {
+                    icon = base_pole.icon,
+                    tint = tint_in
+                }                    
+            },
 
-                -- Overwrite flags so that this hidden component has barely any functionality
-                -- and most imporantly not "player-creation" so that biters won't attack it
-                -- but it might still happen that the entity dies and will not create the correct
-                -- ghost. Therefore handle the die callback correctly.
-                flags = {
-                    "not-rotatable", 
-                    "hide-alt-info", 
-                    "placeable-neutral", 
-                    "fast-replaceable-no-build-while-moving", 
-                    "not-flammable",
-                    "player-creation",  -- Allows to place ghosts with shift-click
-                    "not-upgradable",   -- Upgrades are done through electric entity
-                },          
+            -- This is required for when the item may not be placed due to fluids-mixing
+            -- Crash in 0.6.1
+            minable = {result = name.."-in", mining_time=base_pole.minable.mining_time},
+            fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
+            max_health = base_pole.max_health,
+            resistances = base_pole.resistances,
+            flags = {
+                "not-rotatable", 
+                "hide-alt-info", 
+                "placeable-neutral", 
+                "fast-replaceable-no-build-while-moving", 
+                "not-flammable",
+                "player-creation",  -- Allows to place ghosts with shift-click
+                "not-upgradable",   -- Upgrades are done through electric entity
+            },
 
-                crafting_speed = 1,
-                fixed_recipe = "fluidic-generate-"..config.base_name,
-                energy_usage = config.energy_usage,
-                module_specification = nil,
-                allowed_effects = nil,
-                module_specification = { module_slots = 0 },
-                energy_source = {
-                    type = "electric",
-                    input_priority = "secondary",
-                    usage_priority = "secondary-input",
-                    drain = "0kW",
-                    render_no_network_icon = false,
-                    render_no_power_icon = false,
-                },            
-                maximum_wire_distance = 0,
-                open_sound = nil,
-                close_sound = nil,            
-                crafting_categories = {"fluidic-generate"},
-                fluid_boxes = fluid_boxes,            
-                animation = data.raw["electric-pole"][config.base_name].pictures,
-            }
-        }})    
-        data.raw["assembling-machine"][name.."-in-place"].corpse = nil -- Ensure this has no corpse
-        data.raw["assembling-machine"][name.."-in-place"].next_upgrade = nil -- Upgrading done through electric item
-        data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].tint = tint_in
-        data.raw["assembling-machine"][name.."-in-place"].animation.layers[1].hr_version.tint = tint_in
+            collision_box = base_pole.collision_box,
+            selection_box = base_pole.selection_box,
+            damaged_trigger_effect = base_pole.damaged_trigger_effect,
+            
+            crafting_speed = 1,
+            fixed_recipe = "fluidic-generate-"..config.base_name,
+            energy_usage = config.energy_usage,
+            module_specification = nil,
+            allowed_effects = nil,
+            module_specification = { module_slots = 0 },
+            energy_source = {
+                type = "electric",
+                usage_priority = "secondary-input",
+                drain = "0kW",
+                render_no_network_icon = false,
+                render_no_power_icon = false,
+            },
+            open_sound = nil,
+            close_sound = nil,            
+            crafting_categories = {"fluidic-generate"},
+            fluid_boxes = fluid_boxes,            
+            animation = util.table.deepcopy(base_pole.pictures),
+        }
+        pole_in_place.animation.layers[1].tint = tint_in
+        pole_in_place.animation.layers[1].hr_version.tint = tint_in
+        if mods["BottleneckLite"] then
+            pole_in_place.bottleneck_ignore = true   -- For BottleNeck Lite
+        end
 
         -- Now create the main entity without graphics
-        data:extend({util.merge{
-            data.raw["assembling-machine"][name.."-in-place"],
+        local pole_in = util.merge{
+            pole_in_place,
             {
                 name = name.."-in",
                 localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
@@ -210,16 +210,16 @@ function Generator.create_in_out_variant(config)
                 -- Prefer having blueprints functioning correctly.
                 collision_mask = {},
             }
-        }})
-        data.raw["assembling-machine"][name.."-in"].animation = {
+        }
+        pole_in.animation = {
             filename = "__FluidicPower__/graphics/entities/empty.png",                
             width = 32,
             height = 32,
         }
 
         -- Now update create the electric entity
-        data:extend({util.merge{
-            data.raw["electric-pole"][config.base_name],
+        local pole_in_electric = util.merge{
+            base_pole,
             {
                 name = name.."-in-electric",
                 localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
@@ -234,22 +234,23 @@ function Generator.create_in_out_variant(config)
                 fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
                 draw_copper_wires = false,                  -- Don't draw copper wires!
             }
-        }})
-        data.raw["electric-pole"][name.."-in-electric"].next_upgrade = 
-            config.next_upgrade_base and config.next_upgrade_base.."-in-electric" or nil
-        data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].tint = tint_in
-        data.raw["electric-pole"][name.."-in-electric"].pictures.layers[1].hr_version.tint = tint_in
+        }
+        pole_in_electric.next_upgrade = config.next_upgrade_base and config.next_upgrade_base.."-in-electric" or nil
+        pole_in_electric.pictures.layers[1].tint = tint_in
+        pole_in_electric.pictures.layers[1].hr_version.tint = tint_in
 
         -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
         if not constants.expose_fluid_boxes then
             -- Default fluid is not exposed
-            data.raw["assembling-machine"][name.."-in"].selection_box = {{0,0}, {0,0}}
-            data.raw["assembling-machine"][name.."-in"].drawing_box = {{0,0}, {0,0}}
+            pole_in.selection_box = {{0,0}, {0,0}}
+            pole_in.drawing_box = {{0,0}, {0,0}}
         else
             -- Debug option
-            data.raw["electric-pole"][name.."-in-electric"].selection_box = {{0,0}, {0,0}}
-            data.raw["electric-pole"][name.."-in-electric"].drawing_box = {{0,0}, {0,0}}
+            pole_in_electric.selection_box = {{0,0}, {0,0}}
+            pole_in_electric.drawing_box = {{0,0}, {0,0}}
         end
+
+        data:extend{pole_in_place, pole_in, pole_in_electric}
     end
 
     -- Out (Normal) Entities
