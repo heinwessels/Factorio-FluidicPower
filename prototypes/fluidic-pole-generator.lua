@@ -4,6 +4,12 @@ fluidic_utils = require("scripts.fluidic-utils")
 
 local Generator = { }
 
+local empty_animation = {
+    filename = "__FluidicPower__/graphics/entities/empty.png",                
+    width = 32,
+    height = 32,
+}
+
 ------------------------------------------------------------------------------------------------------
 -- In and Out Variant
 -- (In = Source / Out = Normal)
@@ -150,7 +156,6 @@ function Generator.create_in_out_variant(config)
             },
 
             -- This is required for when the item may not be placed due to fluids-mixing
-            -- Crash in 0.6.1
             minable = {result = name.."-in", mining_time=base_pole.minable.mining_time},
             fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
             max_health = base_pole.max_health,
@@ -201,7 +206,10 @@ function Generator.create_in_out_variant(config)
                 name = name.."-in",
                 localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
                 localised_description={"", {"fluidic-text.pole-in-variant-description"}},
-            
+
+                corpse = base_pole.corpse,
+                dying_explosion = base_pole.dying_explosion,
+                
                 -- Allows pasting of blueprints with circuits
                 -- Needs to be here with the hidden entity so that
                 -- blueprints still collide correctly.
@@ -211,11 +219,7 @@ function Generator.create_in_out_variant(config)
                 collision_mask = {},
             }
         }
-        pole_in.animation = {
-            filename = "__FluidicPower__/graphics/entities/empty.png",                
-            width = 32,
-            height = 32,
-        }
+        pole_in.animation = empty_animation
 
         -- Now update create the electric entity
         local pole_in_electric = util.merge{
@@ -301,68 +305,68 @@ function Generator.create_in_out_variant(config)
             error("Invalid pole size specified: "..config.size)
         end
 
-        data:extend({util.merge{
-            data.raw["electric-pole"][config.base_name],
+        local pole_out_place = {
+            type = "generator",
+            name = name.."-out-place",
+            localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
+            localised_description={"", {"fluidic-text.pole-out-variant-description"}},
+
+            icon = base_pole.icon,
+            icons = base_pole.icons,
+            icon_size = base_pole.icon_size, 
+            icon_mipmaps = base_pole.icon_mipmaps,
+            
+            -- This is required for when the item may not be placed due to fluids-mixing
+            minable = {result = config.base_name, mining_time=base_pole.minable.mining_time},
+            max_health = base_pole.max_health,
+            resistances = base_pole.resistances,
+            flags = {
+                "not-rotatable", 
+                "hide-alt-info", 
+                "placeable-neutral", 
+                "fast-replaceable-no-build-while-moving", 
+                "not-flammable",
+                "player-creation",  -- Allows to place ghosts with shift-click
+                "not-upgradable",   -- Upgrades are done through electric entity
+            },
+
+            collision_box = base_pole.collision_box,
+            selection_box = base_pole.selection_box,
+            damaged_trigger_effect = base_pole.damaged_trigger_effect,
+
+            effectivity = 1,
+            maximum_temperature = 15,
+            fluid_usage_per_tick = config.fluid_usage_per_tick,  -- Default energy output. value = P / 60
+            burns_fluid = true,
+            fluid_box = fluid_boxes,
+            energy_source =
             {
-                type = "generator",
-                name = name.."-out-place",
-                localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
-                localised_description={"", {"fluidic-text.pole-out-variant-description"}},
+                type = "electric",
                 
-                bottleneck_ignore = true,   -- For BottleNeck Lite
+                -- This is secondary to work with the Electric Energy Interface (?)
+                -- but it creates a feedback loop when placed right next to a source
+                -- pole. This will force user to not overlap two poles at power generation.
+                usage_priority = "secondary-output" 
+            },
+            vertical_animation = util.table.deepcopy(base_pole.pictures),
+            horizontal_animation = util.table.deepcopy(base_pole.pictures),
+        }
+        if mods["BottleneckLite"] then
+            pole_out_place.bottleneck_ignore = true   -- For BottleNeck Lite
+        end
 
-                -- This is required for when the item may not be placed due to fluids-mixing
-                -- Crash in 0.6.1
-                minable = {result = config.base_name},
-
-                fast_replaceable_group = "",    -- To ensure it's not a upgrade-planner option
-
-                -- Overwrite flags so that this hidden component has barely any functionality
-                -- and most imporantly not "player-creation" so that biters won't attack it
-                -- but it might still happen that the entity dies and will not create the correct
-                -- ghost. Therefore handle the die callback correctly.
-                flags = {
-                    "not-rotatable", 
-                    "hide-alt-info", 
-                    "placeable-neutral", 
-                    "fast-replaceable-no-build-while-moving", 
-                    "not-flammable",
-                    "player-creation",  -- Allows to place ghosts with shift-click
-                    "not-upgradable",   -- Upgrades are done through electric entity
-                },
-
-                effectivity = 1,
-                maximum_temperature = 15,
-                fluid_usage_per_tick = config.fluid_usage_per_tick,  -- Default energy output. value = P / 60
-                flow_length_in_ticks = 360,
-                burns_fluid = true,
-                two_direction_only = true,                        
-                fluid_box = fluid_boxes,
-                energy_source =
-                {
-                    type = "electric",
-                    
-                    -- This is secondary to work with the Electric Energy Interface (?)
-                    -- but it creates a feedback loop when placed right next to a source
-                    -- pole. This will force user to not overlap two poles at power generation.
-                    usage_priority = "secondary-output" 
-                },
-                vertical_animation = data.raw["electric-pole"][config.base_name].pictures,
-                horizontal_animation = data.raw["electric-pole"][config.base_name].pictures,
-            }
-        }})
-        data.raw.generator[name.."-out-place"].next_upgrade = nil -- Upgrading done through electric item
-        data.raw.generator[name.."-out-place"].corpse = nil -- Ensure this has no corpse
-
-        -- Now create the main entity without graphics
-        data:extend({util.merge{
-            data.raw["generator"][name.."-out-place"],
+        -- Now create the main entity without graphics        
+        local pole_out = util.merge{
+            pole_out_place,
             {
                 name = name.."-out",
                 localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
                 localised_description={"", {"fluidic-text.pole-out-variant-description"}},
                 next_upgrade = nil,
-            
+
+                corpse = base_pole.corpse,
+                dying_explosion = base_pole.dying_explosion,
+                
                 -- Allows pasting of blueprints with circuits
                 -- Needs to be here with the hidden entity so that
                 -- blueprints still collide correctly.
@@ -371,21 +375,13 @@ function Generator.create_in_out_variant(config)
                 -- Prefer having blueprints functioning correctly.
                 collision_mask = {},
             }
-        }})
-        data.raw["generator"][name.."-out"].vertical_animation = {
-            filename = "__FluidicPower__/graphics/entities/empty.png",                
-            width = 32,
-            height = 32,
         }
-        data.raw["generator"][name.."-out"].horizontal_animation = {
-            filename = "__FluidicPower__/graphics/entities/empty.png",                
-            width = 32,
-            height = 32,
-        }
+        pole_out.vertical_animation = empty_animation
+        pole_out.horizontal_animation = empty_animation
 
         -- Now update create the electric entity
-        data:extend({util.merge{
-            data.raw["electric-pole"][config.base_name],
+        local pole_out_electric = util.merge{
+            base_pole,
             {
                 name = name.."-out-electric",
                 localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
@@ -399,22 +395,23 @@ function Generator.create_in_out_variant(config)
                 fast_replaceable_group = "electric-pole",   -- Reinstate the fast replaceable behaviour
                 draw_copper_wires = false,                  -- Don't draw copper wires!
             }
-        }})
-        data.raw["electric-pole"][name.."-out-electric"].next_upgrade = 
-            config.next_upgrade_base and config.next_upgrade_base.."-out-electric" or nil
+        }
+        pole_out_electric.next_upgrade = config.next_upgrade_base and config.next_upgrade_base.."-out-electric" or nil
 
         -- Depending on debug option, choose which entity is exposed
         if not constants.expose_fluid_boxes then
             -- Default
-            data.raw["generator"][name.."-out"].selection_box = {{0,0}, {0,0}}        
+            pole_out.selection_box = {{0,0}, {0,0}}        
         else
             -- Debug option
-            data.raw["electric-pole"][name.."-out-electric"].selection_box = {{0,0}, {0,0}}
+            pole_out_electric.selection_box = {{0,0}, {0,0}}
         end
+        
+        data:extend{pole_out_place, pole_out, pole_out_electric}
     end
 
     -- Add "no-no" message to now-hidden entity
-    data.raw["electric-pole"][config.base_name].localised_description = {"fluidic-text.non-accessable"}
+    base_pole.localised_description = {"fluidic-text.non-accessable"}
 
 end
 
