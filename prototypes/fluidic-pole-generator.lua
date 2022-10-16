@@ -155,10 +155,9 @@ function Generator.create_in_out_variant(config)
                 }                    
             },
 
-            -- This is required for when the item may not be placed due to fluids-mixing
-            minable = {result = name.."-in", mining_time=base_pole.minable.mining_time},            
-            max_health = base_pole.max_health,
+            minable = {result = name.."-in", mining_time=base_pole.minable.mining_time},
             resistances = base_pole.resistances,
+            max_health = base_pole.max_health,
             flags = {
                 "not-rotatable", 
                 "hide-alt-info", 
@@ -168,10 +167,9 @@ function Generator.create_in_out_variant(config)
                 "player-creation",  -- Allows to place ghosts with shift-click
                 "not-upgradable",   -- Upgrades are done through electric entity
             },
-
+            
             collision_box = base_pole.collision_box,
             selection_box = base_pole.selection_box,
-            damaged_trigger_effect = base_pole.damaged_trigger_effect,
             
             crafting_speed = 1,
             fixed_recipe = "fluidic-generate-"..config.base_name,
@@ -204,9 +202,6 @@ function Generator.create_in_out_variant(config)
                 localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
                 localised_description={"", {"fluidic-text.pole-in-variant-description"}},
 
-                corpse = base_pole.corpse,
-                dying_explosion = base_pole.dying_explosion,
-                
                 -- Allows pasting of blueprints with circuits
                 -- Needs to be here with the hidden entity so that
                 -- blueprints still collide correctly.
@@ -315,8 +310,8 @@ function Generator.create_in_out_variant(config)
             
             -- This is required for when the item may not be placed due to fluids-mixing
             minable = {result = config.base_name, mining_time=base_pole.minable.mining_time},
-            max_health = base_pole.max_health,
             resistances = base_pole.resistances,
+            max_health = base_pole.max_health,
             flags = {
                 "not-rotatable", 
                 "hide-alt-info", 
@@ -329,7 +324,6 @@ function Generator.create_in_out_variant(config)
 
             collision_box = base_pole.collision_box,
             selection_box = base_pole.selection_box,
-            damaged_trigger_effect = base_pole.damaged_trigger_effect,
 
             effectivity = 1,
             maximum_temperature = 15,
@@ -360,9 +354,6 @@ function Generator.create_in_out_variant(config)
                 localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
                 localised_description={"", {"fluidic-text.pole-out-variant-description"}},
                 next_upgrade = nil,
-
-                corpse = base_pole.corpse,
-                dying_explosion = base_pole.dying_explosion,
                 
                 -- Allows pasting of blueprints with circuits
                 -- Needs to be here with the hidden entity so that
@@ -444,6 +435,7 @@ function Generator.create_transmit_variant(config)
         localised_name = {"entity-name."..config.base_name},
         localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
         minable = {result = config.base_name, mining_time=base_pole.minable.mining_time},
+        resistances = base_pole.resistances,
         horizontal_window_bounding_box = {{0,0},{0,0}},
         vertical_window_bounding_box = {{0,0},{0,0}},
         
@@ -455,13 +447,7 @@ function Generator.create_transmit_variant(config)
         collision_box = base_pole.collision_box,
         selection_box = base_pole.selection_box,
         max_health = base_pole.max_health,
-        resistances = base_pole.resistances,
-        damaged_trigger_effect = base_pole.damaged_trigger_effect,
 
-        -- Overwrite flags so that this hidden component has barely any functionality
-        -- and most imporantly not "player-creation" so that biters won't attack it
-        -- but it might still happen that the entity dies and will not create the correct
-        -- ghost. Therefore handle the die callback correctly.
         flags = {
             "not-rotatable", 
             "hide-alt-info", 
@@ -533,9 +519,6 @@ function Generator.create_transmit_variant(config)
             localised_name = {"entity-name."..config.base_name},
             localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
             minable = {result = config.base_name},  -- It will return the vanilla item
-
-            corpse = base_pole.corpse,
-            dying_explosion = base_pole.dying_explosion,
             
             -- Allows pasting of blueprints with circuits
             -- Needs to be here with the hidden entity so that
