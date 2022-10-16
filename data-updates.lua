@@ -1,7 +1,7 @@
 require("prototypes.fluidic-energy")
-require("prototypes.fluidic-transformers")
 require("prototypes.fluidic-poles")
 require("prototypes.fluidic-accumulators")
 require("prototypes.fluidic-power-switch")
 require("prototypes.fluidic-energy-sensor")
 require("prototypes.fluidic-technology")
+require("prototypes.fluidic-transformers")

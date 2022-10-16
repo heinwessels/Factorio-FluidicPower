@@ -71,7 +71,7 @@ function Generator.create_in_out_variant(config)
                 type = "recipe",
                 name = "fluidic-generate-"..config.base_name,
                 icon_size = 64,
-                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-generate-icon.png",
+                icon = "__FluidicPower__/graphics/icons/energy-fluid-base.png",
                 category = "fluidic-generate",
                 subgroup = "energy-pipe-distribution",
                 order = "a[kilojoules]-a[kilojoules]",        

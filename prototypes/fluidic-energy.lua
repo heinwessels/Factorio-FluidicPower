@@ -19,8 +19,12 @@ data:extend
         heat_capacity = "10KJ",
         base_color = {r=0, g=1, b=0},
         flow_color = {r=0, g=1, b=0},
-        icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
-        icon_size = 64, icon_mipmaps = 4,
+        icons = {
+            {
+                icon = "__FluidicPower__/graphics/icons/energy-fluid-base.png",
+                icon_size = 64, icon_mipmaps = 4,
+            },
+        },
         order = "z[a]",
         subgroup = "fluidic-energy",
         auto_barrel = false -- That would be fun
@@ -36,12 +40,12 @@ data:extend
         flow_color = {r=0, g=1, b=0},
         icons = {
             {
-                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon = "__FluidicPower__/graphics/icons/energy-fluid-base.png",
                 icon_size = 64, icon_mipmaps = 4,
                 shift = {-4, 0},
             },
             {
-                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon = "__FluidicPower__/graphics/icons/energy-fluid-base.png",
                 icon_size = 64, icon_mipmaps = 4,
                 shift = {4, 0},
             },
@@ -61,17 +65,17 @@ data:extend
         flow_color = {r=0, g=1, b=0},
         icons = {
             {
-                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon = "__FluidicPower__/graphics/icons/energy-fluid-base.png",
                 icon_size = 64, icon_mipmaps = 4,
                 shift = {-8, 0},
             },
             {
-                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon = "__FluidicPower__/graphics/icons/energy-fluid-base.png",
                 icon_size = 64, icon_mipmaps = 4,
                 shift = {0, 0},
             },
             {
-                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon = "__FluidicPower__/graphics/icons/energy-fluid-base.png",
                 icon_size = 64, icon_mipmaps = 4,
                 shift = {8, 0},
             },

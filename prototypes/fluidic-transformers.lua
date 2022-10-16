@@ -1,5 +1,23 @@
 local hit_effects = require ("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
+local util = require("util")
+
+local function create_icon(from, to, direction)
+    local from_icons = data.raw.fluid[from].icons
+    local to_icons = data.raw.fluid[to].icons
+    local icons = {{
+        icon = "__FluidicPower__/graphics/icons/"..direction..".png",
+        icon_size = 35, icon_mipmaps = 1,
+    }}
+
+    local scale = 0.65
+    local shift = {10, 8}
+    if direction == "up" then shift[2] = -shift[2] end
+    return util.combine_icons(
+        util.combine_icons(icons, from_icons, 
+            {scale=scale, shift={-shift[1], -shift[2]}}),
+            to_icons, {scale=scale, shift=shift})
+end
 
 -- Create some recipes
 data:extend
@@ -62,9 +80,8 @@ data:extend
     },
     {
         type = "recipe",
-        name = "fluidic-10-kilo-to-megajoules",        
-        icon = "__FluidicPower__/graphics/icons/fluidic-level-2-up-icon.png",
-        icon_size = 64,
+        name = "fluidic-10-kilo-to-megajoules",
+        icons = create_icon("fluidic-10-kilojoules", "fluidic-megajoules", "up"),
         category = "fluidic-transformers",
         order = "a[a]-a[a]",
         subgroup = "fluidic-transformer-up",
@@ -78,9 +95,8 @@ data:extend
     },
     {
         type = "recipe",
-        name = "fluidic-mega-to-100-megajoules",        
-        icon_size = 64,
-        icon = "__FluidicPower__/graphics/icons/fluidic-level-3-up-icon.png",
+        name = "fluidic-mega-to-100-megajoules",
+        icons = create_icon("fluidic-megajoules", "fluidic-100-megajoules", "up"),
         order = "a[c]-a[100-megajoules]",
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-up",
@@ -94,9 +110,8 @@ data:extend
     },    
     {
         type = "recipe",
-        name = "fluidic-mega-to-10-kilojoules",        
-        icon_size = 64,
-        icon = "__FluidicPower__/graphics/icons/fluidic-level-1-down-icon.png",
+        name = "fluidic-mega-to-10-kilojoules",
+        icons = create_icon("fluidic-megajoules", "fluidic-10-kilojoules", "down"),
         order = "a[b]-a[b]",
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
@@ -110,9 +125,8 @@ data:extend
     },
     {
         type = "recipe",
-        name = "fluidic-100-mega-to-megajoule",        
-        icon_size = 64,
-        icon = "__FluidicPower__/graphics/icons/fluidic-level-2-down-icon.png",
+        name = "fluidic-100-mega-to-megajoule",
+        icons = create_icon("fluidic-100-megajoules", "fluidic-megajoules", "down"),
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
         order = "a[d]-a[megajoules]",
