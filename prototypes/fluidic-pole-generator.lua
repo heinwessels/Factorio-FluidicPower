@@ -32,7 +32,6 @@ function Generator.create_in_out_variant(config)
             type = "item",
             name = name.."-in",
             localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
-            localised_description={"", {"fluidic-text.pole-in-variant-description"}},
             place_result =  name.."-in-place",
             stack_size = item_out.stack_size,
             subgroup = item_out.subgroup,
@@ -57,7 +56,6 @@ function Generator.create_in_out_variant(config)
             type = "recipe",
             name = name.."-in",
             localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
-            localised_description={"", {"fluidic-text.pole-in-variant-description"}},
             ingredients = {{config.base_name, 1}},
             results = {{type = "item", name = name.."-in", amount = 1}},
             energy_required = 0.2,
@@ -144,7 +142,11 @@ function Generator.create_in_out_variant(config)
             type = "assembling-machine",
             name = name.."-in-place",
             localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
-            localised_description={"", {"fluidic-text.pole-in-variant-description"}},
+            localised_description={"", 
+                {"fluidic-text.pole-in-variant-description"},
+                "\n",
+                {"fluidic-text.pole-wire-description", config.wire_reach, base_pole.supply_area_distance*2},
+            },
             
             icon_size = base_pole.icon_size, 
             icon_mipmaps = base_pole.icon_mipmaps,
@@ -199,8 +201,6 @@ function Generator.create_in_out_variant(config)
             pole_in_place,
             {
                 name = name.."-in",
-                localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
-                localised_description={"", {"fluidic-text.pole-in-variant-description"}},
 
                 -- Allows pasting of blueprints with circuits
                 -- Needs to be here with the hidden entity so that
@@ -221,6 +221,7 @@ function Generator.create_in_out_variant(config)
                 localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
                 localised_description={"", 
                     {"fluidic-text.pole-in-variant-description"},
+                    "\n",
                     {"fluidic-text.power-rating", config.energy_usage}
                 },
                 icons = pole_in.icons,
@@ -302,7 +303,11 @@ function Generator.create_in_out_variant(config)
             type = "generator",
             name = name.."-out-place",
             localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
-            localised_description={"", {"fluidic-text.pole-out-variant-description"}},
+            localised_description={"", 
+                {"fluidic-text.pole-out-variant-description"},
+                "\n",
+                {"fluidic-text.pole-wire-description", config.wire_reach, base_pole.supply_area_distance*2},
+            },
 
             icon = base_pole.icon,
             icons = base_pole.icons,
@@ -352,8 +357,6 @@ function Generator.create_in_out_variant(config)
             pole_out_place,
             {
                 name = name.."-out",
-                localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
-                localised_description={"", {"fluidic-text.pole-out-variant-description"}},
                 next_upgrade = nil,
                 
                 -- Allows pasting of blueprints with circuits
@@ -376,6 +379,7 @@ function Generator.create_in_out_variant(config)
                 localised_name = {"", {"fluidic-text.pole-out-variant", {"entity-name."..config.base_name}}},
                 localised_description={"", 
                     {"fluidic-text.pole-out-variant-description"},
+                    "\n",
                     {"fluidic-text.power-rating", config.energy_usage}
                 },
                 minable = {result = config.base_name},

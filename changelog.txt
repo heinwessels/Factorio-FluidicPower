@@ -3,6 +3,7 @@ Version: 0.10.1
 Date: ??. 10. 2022
   Changes:
     - Improved transformer recipe icons.
+    - Improved some localisation.
   Optimizations:
     - Cleaned up data stage significantly.
 ---------------------------------------------------------------------------------------------------

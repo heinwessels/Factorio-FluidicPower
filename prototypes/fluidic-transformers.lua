@@ -81,6 +81,11 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-10-kilo-to-megajoules",
+        localised_description = {"",
+            {"fluidic-text.transformer-recipe-up"},
+            "\n",
+            {"fluidic-text.power-rating", "50MW"}
+        },
         icons = create_icon("fluidic-10-kilojoules", "fluidic-megajoules", "up"),
         category = "fluidic-transformers",
         order = "a[a]-a[a]",
@@ -96,6 +101,11 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-mega-to-100-megajoules",
+        localised_description = {"",
+            {"fluidic-text.transformer-recipe-up"},
+            "\n",
+            {"fluidic-text.power-rating", "500MW"}
+        },
         icons = create_icon("fluidic-megajoules", "fluidic-100-megajoules", "up"),
         order = "a[c]-a[100-megajoules]",
         category = "fluidic-transformers",
@@ -111,6 +121,11 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-mega-to-10-kilojoules",
+        localised_description = {"",
+            {"fluidic-text.transformer-recipe-down"},
+            "\n",
+            {"fluidic-text.power-rating", "50MW"}
+        },
         icons = create_icon("fluidic-megajoules", "fluidic-10-kilojoules", "down"),
         order = "a[b]-a[b]",
         category = "fluidic-transformers",
@@ -126,6 +141,11 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-100-mega-to-megajoule",
+        localised_description = {"",
+            {"fluidic-text.transformer-recipe-down"},
+            "\n",
+            {"fluidic-text.power-rating", "500MW"}
+        },
         icons = create_icon("fluidic-100-megajoules", "fluidic-megajoules", "down"),
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
