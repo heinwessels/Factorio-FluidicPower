@@ -34,8 +34,18 @@ data:extend
         heat_capacity = "1MJ",
         base_color = {r=0, g=1, b=0},
         flow_color = {r=0, g=1, b=0},
-        icon = "__FluidicPower__/graphics/icons/fluidic-level-2-icon.png",
-        icon_size = 64, icon_mipmaps = 4,
+        icons = {
+            {
+                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon_size = 64, icon_mipmaps = 4,
+                shift = {-4, 0},
+            },
+            {
+                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon_size = 64, icon_mipmaps = 4,
+                shift = {4, 0},
+            },
+        },
         order = "z[b]",
         subgroup = "fluidic-energy",
         auto_barrel = false -- That would be fun
@@ -49,8 +59,23 @@ data:extend
         heat_capacity = "100MJ",
         base_color = {r=0, g=1, b=0},
         flow_color = {r=0, g=1, b=0},
-        icon = "__FluidicPower__/graphics/icons/fluidic-level-3-icon.png",
-        icon_size = 64, icon_mipmaps = 4,
+        icons = {
+            {
+                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon_size = 64, icon_mipmaps = 4,
+                shift = {-8, 0},
+            },
+            {
+                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon_size = 64, icon_mipmaps = 4,
+                shift = {0, 0},
+            },
+            {
+                icon = "__FluidicPower__/graphics/icons/fluidic-level-1-icon.png",
+                icon_size = 64, icon_mipmaps = 4,
+                shift = {8, 0},
+            },
+        },
         order = "z[c]",
         subgroup = "fluidic-energy",
         auto_barrel = false -- That would be fun
