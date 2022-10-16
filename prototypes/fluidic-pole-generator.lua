@@ -39,7 +39,7 @@ function Generator.create_in_out_variant(config)
             order = item_out.order,
             icons = {
                 {
-                    icon = data.raw["item"][config.base_name].icon,
+                    icon = item_out.icon,
                     tint = tint_in
                 }                    
             },
@@ -223,7 +223,7 @@ function Generator.create_in_out_variant(config)
                     {"fluidic-text.pole-in-variant-description"},
                     {"fluidic-text.power-rating", config.energy_usage}
                 },
-                icon = "__FluidicPower__/graphics/icons/"..name.."-in-icon.png",
+                icons = pole_in.icons,
                 minable = {result = name.."-in"},
                 placeable_by = {item=name.."-in",count=1}, -- This is the magic to make the pipette and blueprint work!
                 maximum_wire_distance = config.wire_reach,  -- Make sure we can reach the extended length
@@ -231,6 +231,7 @@ function Generator.create_in_out_variant(config)
                 draw_copper_wires = false,                  -- Don't draw copper wires!
             }
         }
+        pole_in_electric.icon = nil
         pole_in_electric.next_upgrade = config.next_upgrade_base and config.next_upgrade_base.."-in-electric" or nil
         pole_in_electric.pictures.layers[1].tint = tint_in
         pole_in_electric.pictures.layers[1].hr_version.tint = tint_in
