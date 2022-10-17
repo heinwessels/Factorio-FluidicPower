@@ -2,23 +2,6 @@ local hit_effects = require ("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 local util = require("util")
 
-local function create_icon(from, to, direction)
-    local from_icons = data.raw.fluid[from].icons
-    local to_icons = data.raw.fluid[to].icons
-    local icons = {{
-        icon = "__FluidicPower__/graphics/icons/"..direction..".png",
-        icon_size = 35, icon_mipmaps = 1,
-    }}
-
-    local scale = 0.65
-    local shift = {10, 8}
-    if direction == "up" then shift[2] = -shift[2] end
-    return util.combine_icons(
-        util.combine_icons(icons, from_icons, 
-            {scale=scale, shift={-shift[1], -shift[2]}}),
-            to_icons, {scale=scale, shift=shift})
-end
-
 -- Create some recipes
 data:extend
 ({ 
@@ -81,12 +64,20 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-10-kilo-to-megajoules",
+        show_amount_in_title = false,
+        localised_name = {"fluidic-text.transformer-recipe-name",
+        "[img=fluid/fluidic-10-kilojoules]",
+        "[img=fluid/fluidic-megajoules]"
+        },
         localised_description = {"",
             {"fluidic-text.transformer-recipe-up"},
             "\n",
             {"fluidic-text.power-rating", "50MW"}
         },
-        icons = create_icon("fluidic-10-kilojoules", "fluidic-megajoules", "up"),
+        icons = {{
+            icon = "__FluidicPower__/graphics/icons/up.png",
+            icon_size = 35, icon_mipmaps = 1,
+        }},
         category = "fluidic-transformers",
         order = "a[a]-a[a]",
         subgroup = "fluidic-transformer-up",
@@ -101,12 +92,20 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-mega-to-100-megajoules",
+        show_amount_in_title = false,
+        localised_name = {"fluidic-text.transformer-recipe-name",
+            "[img=fluid/fluidic-megajoules]",
+            "[img=fluid/fluidic-100-megajoules]"
+        },
         localised_description = {"",
             {"fluidic-text.transformer-recipe-up"},
             "\n",
             {"fluidic-text.power-rating", "500MW"}
         },
-        icons = create_icon("fluidic-megajoules", "fluidic-100-megajoules", "up"),
+        icons = {{
+            icon = "__FluidicPower__/graphics/icons/up.png",
+            icon_size = 35, icon_mipmaps = 1,
+        }},
         order = "a[c]-a[100-megajoules]",
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-up",
@@ -121,12 +120,20 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-mega-to-10-kilojoules",
+        show_amount_in_title = false,
+        localised_name = {"fluidic-text.transformer-recipe-name",
+            "[img=fluid/fluidic-megajoules]",
+            "[img=fluid/fluidic-10-kilojoules]"
+        },
         localised_description = {"",
             {"fluidic-text.transformer-recipe-down"},
             "\n",
             {"fluidic-text.power-rating", "50MW"}
         },
-        icons = create_icon("fluidic-megajoules", "fluidic-10-kilojoules", "down"),
+        icons = {{
+            icon = "__FluidicPower__/graphics/icons/down.png",
+            icon_size = 35, icon_mipmaps = 1,
+        }},
         order = "a[b]-a[b]",
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
@@ -141,12 +148,20 @@ data:extend
     {
         type = "recipe",
         name = "fluidic-100-mega-to-megajoule",
+        show_amount_in_title = false,
+        localised_name = {"fluidic-text.transformer-recipe-name",
+            "[img=fluid/fluidic-100-megajoules]",
+            "[img=fluid/fluidic-megajoules]"
+        },
         localised_description = {"",
             {"fluidic-text.transformer-recipe-down"},
             "\n",
             {"fluidic-text.power-rating", "500MW"}
         },
-        icons = create_icon("fluidic-100-megajoules", "fluidic-megajoules", "down"),
+        icons = {{
+            icon = "__FluidicPower__/graphics/icons/down.png",
+            icon_size = 35, icon_mipmaps = 1,
+        }},
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
         order = "a[d]-a[megajoules]",
