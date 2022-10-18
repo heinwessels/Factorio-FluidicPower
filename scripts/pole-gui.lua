@@ -35,10 +35,10 @@ function pole_gui.refresh_statistics_for_player(gui_data, player)
 
     local ceiling = math.max(produced, consumed, 1)
     gui_data.production_bar.value = produced / ceiling
-    gui_data.production_bar.caption = util.format_number(produced, true).."W"
+    gui_data.production_bar.caption = fluidic_util.format_number(produced, true).."W"
 
     gui_data.consumption_bar.value = consumed / ceiling
-    gui_data.consumption_bar.caption = util.format_number(consumed, true).."W"
+    gui_data.consumption_bar.caption = fluidic_util.format_number(consumed, true).."W"
 end
 
 function pole_gui.refresh_this_pole_for_player(gui_data, player)

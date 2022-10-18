@@ -6,6 +6,8 @@ Date: ??. 10. 2022
     - Improved some localisation.
   Optimizations:
     - Cleaned up data stage significantly.
+  Bugfixes:
+    - Fix GUI showing too many decimals for energies less than 1kJ.
 ---------------------------------------------------------------------------------------------------
 Version: 0.10.0
 Date: 15. 10. 2022
