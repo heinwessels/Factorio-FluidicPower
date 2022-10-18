@@ -5,10 +5,17 @@ data:extend
         name = "fluidic-generate"
     },
     {
+        type = "item-group",
+        name = "fluidic-energy",
+        icon = "__FluidicPower__/graphics/icons/item-group.png",
+        icon_size = 128, icon_mipmaps = 1,
+        order = "y"
+    },
+    {
         type = "item-subgroup",
         name = "fluidic-energy",
-        group = "fluids",
-        order = "z"
+        group = "fluidic-energy",
+        order = "y"
     },
     {
         type = "fluid",
@@ -25,7 +32,7 @@ data:extend
                 icon_size = 64, icon_mipmaps = 4,
             },
         },
-        order = "z[a]",
+        order = "y[a]",
         subgroup = "fluidic-energy",
         auto_barrel = false -- That would be fun
     },

@@ -2,6 +2,9 @@ local hit_effects = require ("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 local util = require("util")
 
+local recipe_icon_shift_x = -4
+local recipe_icon_scale = 1
+
 -- Create some recipes
 data:extend
 ({ 
@@ -52,13 +55,13 @@ data:extend
     {
         type = "item-subgroup",
         name = "fluidic-transformer-up",
-        group = "fluids",
+        group = "fluidic-energy",
         order = "a"
     },
     {
         type = "item-subgroup",
         name = "fluidic-transformer-down",
-        group = "fluids",
+        group = "fluidic-energy",
         order = "b"
     },
     {
@@ -102,10 +105,20 @@ data:extend
             "\n",
             {"fluidic-text.power-rating", "500MW"}
         },
-        icons = {{
-            icon = "__FluidicPower__/graphics/icons/up.png",
-            icon_size = 35, icon_mipmaps = 1,
-        }},
+        icons = {
+            {
+                icon = "__FluidicPower__/graphics/icons/up.png",
+                icon_size = 35, icon_mipmaps = 1,
+                shift={-recipe_icon_shift_x, 0},
+                scale = recipe_icon_scale,
+            },
+            {
+                icon = "__FluidicPower__/graphics/icons/up.png",
+                icon_size = 35, icon_mipmaps = 1,
+                shift={recipe_icon_shift_x, 0},
+                scale = recipe_icon_scale,
+            },
+        },
         order = "a[c]-a[100-megajoules]",
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-up",
@@ -158,10 +171,20 @@ data:extend
             "\n",
             {"fluidic-text.power-rating", "500MW"}
         },
-        icons = {{
-            icon = "__FluidicPower__/graphics/icons/down.png",
-            icon_size = 35, icon_mipmaps = 1,
-        }},
+        icons = {
+            {
+                icon = "__FluidicPower__/graphics/icons/down.png",
+                icon_size = 35, icon_mipmaps = 1,
+                shift={-recipe_icon_shift_x, 0},
+                scale = recipe_icon_scale,
+            },
+            {
+                icon = "__FluidicPower__/graphics/icons/down.png",
+                icon_size = 35, icon_mipmaps = 1,
+                shift={recipe_icon_shift_x, 0},
+                scale = recipe_icon_scale,
+            },
+        },
         category = "fluidic-transformers",
         subgroup = "fluidic-transformer-down",
         order = "a[d]-a[megajoules]",
@@ -190,6 +213,7 @@ data:extend({
         dying_explosion = "assembling-machine-1-explosion",
         crafting_categories = {"fluidic-transformers"},
         allowed_effects = {},
+        entity_info_icon_shift = {0, 0},
         module_specification = {module_slots=0},
         crafting_speed = 1,
         resistances =
