@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.10.2
+Date: 21. 01. 2023
+  Bugfixes:
+    - Fix some recipes being erroneously unlocked before unlocking technology (Thanks 0n0w1c!)
+---------------------------------------------------------------------------------------------------
 Version: 0.10.1
-Date: ??. 10. 2022
+Date: 18. 10. 2022
   Changes:
     - Improved transformer recipe icons.
     - Improved some localisation.

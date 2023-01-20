@@ -59,6 +59,7 @@ function Generator.create_in_out_variant(config)
             ingredients = {{config.base_name, 1}},
             results = {{type = "item", name = name.."-in", amount = 1}},
             energy_required = 0.2,
+            enabled = false, -- By default
         }
     })
 
