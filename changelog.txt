@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.10.3
+Date: 22. 01. 2023
+  Bugfixes:
+    - Fix regression where Transformer and Energy Sensor was no longer researchable (Thanks again 0n0w1c!).
+---------------------------------------------------------------------------------------------------
 Version: 0.10.2
 Date: 21. 01. 2023
   Bugfixes:

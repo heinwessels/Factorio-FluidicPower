@@ -10,7 +10,11 @@
         },
         {
             "name": "1.1.74 - Ubuntu",
-            "factorioPath": "/home/hein/Documents/Personal/factorio_alpha_x64_1.1.74/factorio/bin/x64/factorio",
+            "factorioPath": "/home/hein/Documents/Personal/factorio_alpha_x64_1.1.74/factorio/bin/x64/factorio"
+        },
+        {
+            "name": "1.1.74 - Windows",
+            "factorioPath": "c:\\Users\\heinw\\Documents\\Factorio\\Versions\\Factorio_1.1.74\\bin\\x64\\factorio.exe",
             "active": true
         }
     ]
