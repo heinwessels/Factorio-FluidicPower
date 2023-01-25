@@ -3,6 +3,20 @@ constants = require("constants")
 fluidic_utils = require("scripts.fluidic-utils")
 Generator = require("prototypes.fluidic-pole-generator")
 
+if settings.startup["fluidic-override-pole-wire-length"].value then
+    local override_pole_wire_distance = {
+        ["small-electric-pole"] = 9, -- vanilla is 7.5
+        ["medium-electric-pole"] = 11, -- vanilla is 9
+        ["big-electric-pole"] = 34, -- vanilla reach is 30
+        ["substation"] = 20, -- vanilla is 18
+        ["kr-substation-mk2"] = 26, -- K2 is 24.25
+    }
+
+    for pole_name, new_wire_distance in pairs(override_pole_wire_distance) do
+        local pole = data.raw["electric-pole"][pole_name]
+        if pole then pole.maximum_wire_distance = new_wire_distance end
+    end
+end
 
 -- Formula to calculate fluid usage per tick
 --      P = Maximum power usage
@@ -22,7 +36,6 @@ Generator = require("prototypes.fluidic-pole-generator")
 
 -- Create small poles
 -------------------------------------------------------
-local small_wire_reach = 9  -- (vanilla is 7.5)
 Generator.create_in_out_variant{
     base_name = "small-electric-pole",
     fluid_usage_per_tick = 8.333333, -- P = 5MW
@@ -35,12 +48,10 @@ Generator.create_in_out_variant{
     energy_usage = "5MW",  -- Needs to correspond with recipe
     next_upgrade_base = "fluidic-medium-electric-pole",
     fluid_box_base_area = 0.5,
-    wire_reach = small_wire_reach,
 }
 
 -- Create Medium poles
 -------------------------------------------------------
-local medium_wire_reach = 11 -- (Vanilla is 9)
 Generator.create_in_out_variant{
     base_name = "medium-electric-pole",
     fluid_usage_per_tick = 50, -- P = 30MW
@@ -50,12 +61,10 @@ Generator.create_in_out_variant{
         results={{type="fluid", name="fluidic-10-kilojoules", amount=750}},
     },
     energy_usage = "30MW",  -- Needs to correspond with recipe
-    wire_reach = medium_wire_reach,
 }
 
 -- Create substations
 -------------------------------------------------------
-local substation_wire_reach = 20 -- vanilla is 18
 Generator.create_in_out_variant{
     base_name = "substation",
     fluid_usage_per_tick = 166.66666666, -- P = 100MW
@@ -66,16 +75,13 @@ Generator.create_in_out_variant{
         results={{type="fluid", name="fluidic-10-kilojoules", amount=2000}},
     },
     energy_usage = "100MW",  -- Needs to correspond with recipe
-    wire_reach = substation_wire_reach,
     size = 2,   -- This is a 2x2 entity
 }
 
 -- Create big pole
 -------------------------------------------------------
-local big_wire_reach = 34 -- vanilla reach is 30
 Generator.create_transmit_variant{
     base_name = "big-electric-pole",
-    wire_reach = big_wire_reach,
     size = 2,   -- This is a 2x2 entity
 }
 
@@ -86,7 +92,6 @@ if mods["Krastorio2"] and data.raw.recipe["kr-substation-mk2"] then
     Generator.create_in_out_variant{
         base_name = "kr-substation-mk2",
         fluid_usage_per_tick = 166.66666666, -- P = 100MW
-        wire_reach = 26, -- K2 is 24.25
         size = 2,   -- This is a 2x2 entity
         in_fixed_recipe = {
             energy_required = 0.2,

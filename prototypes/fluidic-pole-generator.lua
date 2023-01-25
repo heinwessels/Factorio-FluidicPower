@@ -21,6 +21,9 @@ function Generator.create_in_out_variant(config)
     local tint_in = { a = 0.75,  b = 0, g = 1.0, r = 1.0 }
     if not config.size then config.size = 1 end
 
+    local base_pole = data.raw["electric-pole"][config.base_name]
+    config.wire_reach = base_pole.maximum_wire_distance
+
     -- Items
     -----------------------------------
     -- The out pole will use the normal item
@@ -83,7 +86,6 @@ function Generator.create_in_out_variant(config)
 
     -- In (source) Entities
     -----------------------------------
-    local base_pole = data.raw["electric-pole"][config.base_name]
     do
         local pipe_offset = -math.floor(config.size / 2)
         local fluid_boxes
@@ -426,12 +428,12 @@ function Generator.create_transmit_variant(config)
 
     if not config.size then config.size = 1 end
 
+    local base_pole = data.raw["electric-pole"][config.base_name]
+    config.wire_reach = base_pole.maximum_wire_distance
+
     -- ITEM
     data.raw["item"][config.base_name].place_result = name.."-place"
     data.raw["item"][config.base_name].localised_name = {"entity-name."..config.base_name}
-
-    -- ENTITIES    
-    local base_pole = data.raw["electric-pole"][config.base_name]
     
     -- First create the entity that will be used while placing    
     local pipe_offset = -math.floor(config.size / 2)

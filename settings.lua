@@ -19,4 +19,10 @@ data:extend({
         setting_type = "startup",
         default_value = false
     },
+    {
+        type = "bool-setting",
+        name = "fluidic-override-pole-wire-length",
+        setting_type = "startup",
+        default_value = true
+    },
 })

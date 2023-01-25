@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.10.4
+Date: 25. 01. 2023
+  Features:
+    - Increasing pole wire reach is now a setting to allow other mods to modify the pole's values. Enabled by default.
+---------------------------------------------------------------------------------------------------
 Version: 0.10.3
 Date: 22. 01. 2023
   Bugfixes:
