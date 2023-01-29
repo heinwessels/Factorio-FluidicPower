@@ -1,18 +1,9 @@
-local poles_to_check = {
-    ["small-electric-pole"] = true,
-    ["medium-electric-pole"] = true,
-    ["big-electric-pole"] = true,
-    ["substation"] = true,
-}
+local config = require("config")
 
 local add_recipe_when = {
     ["big-electric-pole"] = "fluidic-transformer",
     ["constant-combinator"] = "fluidic-energy-sensor"
 }
-
-if mods["Krastorio2"] and data.raw.recipe["kr-substation-mk2"] then
-    poles_to_check["kr-substation-mk2"] = true
-end
 
 for technology_name, technology in pairs(data.raw.technology) do
     if not technology.effects then goto continue end
@@ -20,8 +11,8 @@ for technology_name, technology in pairs(data.raw.technology) do
     local effects_to_add = { }
     for index, effect in pairs(technology.effects) do
         -- Add added pole entities
-        if poles_to_check[effect.recipe] then
-            poles_to_check[effect.recipe] = false -- Remember to not `enable` recipe itself
+        if config.poles[effect.recipe] then
+            config.poles[effect.recipe].unlocked_through_technology = true
             if data.raw.recipe["fluidic-"..effect.recipe.."-in"] then
                 -- This is a in/out pole, so we need to also handle the `-in` entity recipe
                 effects_to_add[index] = { -- Index shows where to insert at
@@ -54,12 +45,12 @@ end
 
 -- Find all poles that doesn't need to be unlocked by a technology
 -- and unlock those recipes
-for pole, needs_technology in pairs(poles_to_check) do
-    if needs_technology and data.raw.recipe[pole] then
-        data.raw.recipe[pole].enabled = true
-        if data.raw.recipe["fluidic-"..pole.."-in"] then
+for pole_name, pole_config in pairs(config.poles) do
+    if not pole_config.unlocked_through_technology and data.raw.recipe[pole_name] then
+        data.raw.recipe[pole_name].enabled = true
+        if data.raw.recipe["fluidic-"..pole_name.."-in"] then
             -- This is a in/out pole, so we need to also handle the `-in` entity recipe
-            data.raw.recipe["fluidic-"..pole.."-in"].enabled = true
+            data.raw.recipe["fluidic-"..pole_name.."-in"].enabled = true
         end
     end
 end

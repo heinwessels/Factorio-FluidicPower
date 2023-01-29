@@ -3,11 +3,12 @@ local poles = require("scripts.fluidic-handle-poles")
 local overlay = require("scripts.overlay")
 local fluidic_utils = require("scripts.fluidic-utils")
 local pole_gui = require("scripts.pole-gui")
+local config = require("config")
 
 local function pickerdolly_handler(event)
     local top_entity = event.moved_entity
     local hidden_entity_name = 
-        fluidic_utils.entity_electric_to_fluid_lu[top_entity.name]
+        config.entity_electric_to_fluid_lu[top_entity.name]
     if hidden_entity_name then
         local hidden_entity = top_entity.surface.find_entity(
             hidden_entity_name,

@@ -1,4 +1,5 @@
 local fluidic_utils = require("scripts.fluidic-utils")
+local config = require("config")
 local util = require("util")
 
 local poles = {}
@@ -56,7 +57,7 @@ function poles.on_entity_created(event)
     end
 
     -- Now create whatever is needed to assist this entity
-    local fluid_name = fluidic_utils.entity_fluid_to_electric_lu[entity.name]
+    local fluid_name = config.entity_fluid_to_electric_lu[entity.name]
     if fluid_name then
 
         -- Place the electronic entity on the fluid entity
@@ -88,7 +89,7 @@ function poles.on_entity_created(event)
     -- part, and we want the fluidy part. So I add it here if it wasn't
     -- placed.
     -- TODO Why though?
-    local electric_name = fluidic_utils.entity_electric_to_fluid_lu[entity.name]
+    local electric_name = config.entity_electric_to_fluid_lu[entity.name]
     if electric_name then
         -- It could be an occation like this. Does the fluidy part exist?
         if not fluidic_utils.entity_exists_at(
@@ -117,8 +118,8 @@ function poles.on_entity_removed(event, die)
         if string.sub(entity.name, 1, 7) ~= "fluidic" then return end
 
         local surface = entity.surface
-        local fluid_name = fluidic_utils.entity_fluid_to_electric_lu[entity.name]
-        local electric_name = fluidic_utils.entity_electric_to_fluid_lu[entity.name]
+        local fluid_name = config.entity_fluid_to_electric_lu[entity.name]
+        local electric_name = config.entity_electric_to_fluid_lu[entity.name]
         if fluid_name then
             -- The removed/died entity is the fluidic component.
             -- This should ideally not happen, so it needs to be

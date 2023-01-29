@@ -1,5 +1,4 @@
 util = require("util")
-constants = require("constants")
 fluidic_utils = require("scripts.fluidic-utils")
 
 local Generator = { }
@@ -9,6 +8,10 @@ local empty_animation = {
     width = 32,
     height = 32,
 }
+
+-- Debug setting to make the hidden fluid entity be selectable
+-- instead of the power pole on top.
+expose_fluid_boxes = false
 
 ------------------------------------------------------------------------------------------------------
 -- In and Out Variant
@@ -241,7 +244,7 @@ function Generator.create_in_out_variant(config)
         pole_in_electric.pictures.layers[1].hr_version.tint = tint_in
 
         -- Depending on debug option, choose which entity is exposed (electric[default] or fluid)
-        if not constants.expose_fluid_boxes then
+        if not expose_fluid_boxes then
             -- Default fluid is not exposed
             pole_in.selection_box = {{0,0}, {0,0}}
             pole_in.drawing_box = {{0,0}, {0,0}}
@@ -395,7 +398,7 @@ function Generator.create_in_out_variant(config)
         pole_out_electric.next_upgrade = config.next_upgrade_base and config.next_upgrade_base.."-out-electric" or nil
 
         -- Depending on debug option, choose which entity is exposed
-        if not constants.expose_fluid_boxes then
+        if not expose_fluid_boxes then
             -- Default
             pole_out.selection_box = {{0,0}, {0,0}}        
         else
@@ -559,7 +562,7 @@ function Generator.create_transmit_variant(config)
     pole_electric.next_upgrade = config.next_upgrade_base and config.next_upgrade_base.."-electric" or nil
 
     -- Depending on debug option, choose which entity is exposed
-    if not constants.expose_fluid_boxes then
+    if not expose_fluid_boxes then
         -- Default
         pole_fluidic.selection_box = {{0,0}, {0,0}}
         pole_fluidic.drawing_box = {{0,0}, {0,0}}
