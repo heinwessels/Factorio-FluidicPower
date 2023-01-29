@@ -1,6 +1,7 @@
 local poles = require("scripts.fluidic-handle-poles")
 local overlay = require("scripts.overlay")
 local config = require("config")
+local util = require("util")
 
 -- Build generic setup code for basic functionality during simulations
 local function setup()
@@ -24,7 +25,7 @@ local function setup()
             end
             
             local electric_variant = config.entity_fluid_to_electric_lu[entity.name]
-            if electric_variant then
+            if electric_variant and not entity.surface.find_entity(electric_variant, entity.position) then
                 local pole = entity.surface.create_entity{
                     name = electric_variant,
                     position = entity.position,
@@ -37,7 +38,7 @@ local function setup()
             end
 
             local fluid_variant = config.entity_electric_to_fluid_lu[entity.name]
-            if fluid_variant then
+            if fluid_variant and not entity.surface.find_entity(fluid_variant, entity.position) then
                 local pole = entity.surface.create_entity{
                     name = fluid_variant,
                     position = entity.position,
@@ -114,8 +115,29 @@ local function setup()
 end
 
 do
-    local sim = data.raw["tips-and-tricks-item"]["electric-pole-connections"].simulation
-    sim.init = [[
+    local tip = data.raw["tips-and-tricks-item"]["electric-pole-connections"]
+    tip.trigger = {
+        type = "sequence",
+        triggers = {
+            {
+                type = "time-elapsed",
+                ticks = 4 * 60 * 60 * 60 -- 4 hours
+            },
+            {
+                type = "build-entity",
+                entity = "fluidic-small-electric-pole-in-place",
+                match_type_only = true,
+                count = 15
+            },
+            {
+                type = "build-entity",
+                entity = "fluidic-small-electric-pole-out-place",
+                match_type_only = true,
+                count = 15
+            }
+        }
+    }
+    tip.simulation.init = [[
         ]]..setup()..[[
 
         game.surfaces.nauvis.daytime = 1
@@ -190,6 +212,52 @@ do
 end
 
 do
-    -- data.raw["tips-and-tricks-item"]["electric-pole-connections"] = { simulation = { }}
-    -- local item = 
+    local tip = util.table.deepcopy(data.raw["tips-and-tricks-item"]["electric-pole-connections"])
+    tip.name = "electric-overlay"
+    tip.tag = "[item=small-electric-pole]"
+    tip.simulation.init = [[
+        ]]..setup()..[[
+            ]]
+            data:extend{ tip }
+        end
+        
+        do
+            local tip = util.table.deepcopy(data.raw["tips-and-tricks-item"]["electric-pole-connections"])
+            tip.name = "transformers"
+            tip.tag = "[item=fluidic-transformer]"
+            tip.trigger = {
+                type = "sequence",
+                triggers = {
+                    {
+                        type = "time-elapsed",
+                        ticks = 4 * 60 * 60 * 60 -- 4 hours
+                    },
+                    {
+                        type = "build-entity",
+                        entity = "fluidic-big-electric-pole-place",
+                        match_type_only = true,
+                        count = 5
+                    },
+            {
+                type = "build-entity",
+                entity = "fluidic-transformer",
+                match_type_only = true,
+                count = 1
+            },
+        }
+    }
+    tip.simulation.init_update_count = 600 -- To get the transformers filled up
+    tip.simulation.init = [[
+        ]]..setup()..[[
+            game.camera_alt_info = true
+            game.camera_zoom = 1.25
+            local surface = game.surfaces[1]
+            surface.create_entities_from_blueprint_string{
+                string = "0eNqtmOFyoyAQx9+Fz9IR1Kh5lZtOxugmx52Cg9hpp5N3vyUmqWkgpuE+dDpI/C277H8X+STbdoReC2nI+pOIWsmBrH99kkHsZdXaZ+ajB7ImwkBHIiKrzo4GA1VHzai3QgI5RETIBt7Jmh2ixXfhvdcwDNToSg690oZuoTUzCD+8RgSkEUbAtJrj4GMjx24LGq1cWELuhMQpWv+GwaCNXg34mpLWul1P8pJF5IOsafGSHS1Mv98MYIyQ+8H+TkOn3mAz4lxrQEOzsQvGKaNHOFiPvtnnN760qmpw5o79HK2fwyH70fp7w02WYnSHn6J/DmQagMzcyCwAyd3IVQAycSPzC3ILFaa1A8FPiHhKjWnPMX17gIZ2qhlboIlNRwe+uFnxiMmr91rh/8U1s6PFUzqo0XjyobzN817gOzdkyrITmvnTfC5diwBdo71qD0dBoff4pEJJ23EcxxHBENgXKkNbqFBdrjiw+LJGuzRqFJ1i4FpkerXIRmiop/mVi8weJ5c+MHeB+RXYgStmOBcgWQLkC4B0CbBaAGRLgGwB8KW4XTuKRtR0K/YUWgycxkGvMPfPI9dWHuFOZbA8CJ3dIRc35GOZ2CnduYpvcUJFWOFr0c/f62Bf2YxiMf0rWvVHodYHlwRZeWOzg0aM3TeHUMR3nGLx/e3gsaez+nPTU+85e5iULZBmXe7s6m7UsqrhjoM+WEBr8xR4/iWiHVYnKuQA2jibMJ+RFssDz0JKO59Xdm+j5wENz9OVef480rdpxY8jnD5S2Xn5Mx3T9MguXEI+Cdhq2WraL+Qk/h8Vr3DFKWHPhz53hz7hzyNXHmTyWCUT8l4Yzo2p8BgJOG+WHmTAedO3ygD5MU8JTwL0Z6unk1kEMD1lMykDmJ7jexoHMD31LA0QFfN9DAWoinmUmgZ0NuaRahqgIuaRURogI+bRURqgI+7RURqgI+7RUVo8fmFwPsjw5IkLg13VDhCR6fF0dXG2q5WkStujU43nCIN93PGFNbtHeXU6Uj5+88DnbszPPA98eGYBguaewpMFCJp7Ck/2hKDT6w2+Oqu8TtcA9tLgci0WkTfcyyl0BUvzkuerDP9Yfjj8AzIaYq4=",
+                position = {-3, 3},
+                force = "player"
+            }
+            lib.update_all_poles(surface)
+        ]]
+    data:extend{ tip }
 end

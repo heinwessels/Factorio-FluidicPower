@@ -94,7 +94,7 @@ for pole_name, pole_config in pairs(config.poles) do
     else
         config.entity_fluid_to_electric_lu["fluidic-"..pole_name] =
             "fluidic-"..pole_name.."-electric"        
-        config.entity_fluid_to_electric_lu["fluidic-"..pole_name.."-electric"] =
+        config.entity_electric_to_fluid_lu["fluidic-"..pole_name.."-electric"] =
         "fluidic-"..pole_name
     end
 end
