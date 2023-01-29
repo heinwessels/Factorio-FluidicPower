@@ -1,5 +1,21 @@
 local config = { }
 
+-- Formula to calculate fluid usage per tick
+--      P = Maximum power usage
+--      u = energy of single unit in Joule    
+--      s = fluid usage per tick
+-- Then:
+--      P = u * s * 60
+
+-- Here is a formula to show the correlation between
+-- the recipe and the requried assembler energy usage
+--      P = Assembler power usage in Watt
+--      i = energy of input unit in Joule        
+--      n = Amount of units produced per craft
+--      t = Time required per craft
+-- Then:
+--      P = ( i * n ) / t
+
 config.poles = {
     ["small-electric-pole"] = {
         type = "in-out",
@@ -13,6 +29,7 @@ config.poles = {
         energy_usage = "5MW",  -- Needs to correspond with recipe
         next_upgrade_base = "fluidic-medium-electric-pole",
         fluid_box_base_area = 0.5,
+        wire_distance_override = 9, -- vanilla is 7.5
     },
     ["medium-electric-pole"] = {
         type = "in-out",
@@ -23,6 +40,7 @@ config.poles = {
             results={{type="fluid", name="fluidic-10-kilojoules", amount=750}},
         },
         energy_usage = "30MW",  -- Needs to correspond with recipe
+        wire_distance_override = 11, -- vanilla is 9
     },
     ["substation"] = {
         type = "in-out",
@@ -35,15 +53,26 @@ config.poles = {
         },
         energy_usage = "100MW",  -- Needs to correspond with recipe
         size = 2,   -- This is a 2x2 entity
+        wire_distance_override = 34, -- vanilla reach is 30
     },
     ["big-electric-pole"] = {
         type = "transmit",
         size = 2,   -- This is a 2x2 entity
+        wire_distance_override = 20, -- vanilla is 18
     },
+    ["kr-substation-mk2"] = {
+        type = "in-out",
+        fluid_usage_per_tick = 166.66666666, -- P = 100MW
+        size = 2,   -- This is a 2x2 entity
+        in_fixed_recipe = {
+            energy_required = 0.2,
+            results={{type="fluid", name="fluidic-10-kilojoules", amount=2000}},
+        },
+        energy_usage = "100MW",  -- Needs to correspond with recipe
+        size = 2,   -- This is a 2x2 entity
+        wire_distance_override = 26, -- K2 is 24.25
+    }
 }
-
-
--- TODO(HW) Add K2 pole
 
 ------------------
 -- POST PROCESSING
