@@ -13,7 +13,7 @@ for pole_name, pole_config in pairs(config.poles) do
     end
 
     -- Now create the fluidic variations
-    if pole_config.type == "in-out" then
+    if not pole_config.transmit_only then
         Generator.create_in_out_variant(util.merge{
             {base_name = pole_name}, pole_config 
         })
