@@ -55,9 +55,50 @@ local function setup()
         end)
 
         function lib.render_connection(this, that)
+            function is_pole_empty(entity)
+                if not (string.match(entity.name, "electric") or string.match(entity.name, "substation")) then
+                    return 
+                end
+                for this_index = 1, #entity.fluidbox do
+                    if not entity.fluidbox[this_index] then
+                        return true
+                    end
+                end
+                return false
+            end
+            function is_connection_fluids_mixed(this_entity, that_entity)
+                if not this_entity.neighbours or 
+                        not that_entity.neighbours then return false end
+                for this_index = 1, #this_entity.fluidbox do
+                    if this_entity.fluidbox[this_index] then
+                        local this_fluid = this_entity.fluidbox[this_index]
+                        for _, that_fluidbox in pairs(this_entity.fluidbox.get_connections(this_index)) do
+                            if that_fluidbox.owner.unit_number == that_entity.unit_number then
+                                -- We now this is a connection between this and that entity
+                                for that_index = 1, #that_fluidbox do
+                                    if that_fluidbox[that_index] ~= nil then
+                                        -- Now we must make sure that that fluidbox is actually
+                                        -- connected to this
+                                        for _, backtrack_fluidbox in pairs(that_fluidbox.get_connections(that_index)) do
+                                            if backtrack_fluidbox.owner.unit_number == this_entity.unit_number then
+                                                local that_fluid = that_fluidbox[that_index]
+                                                if this_fluid.name ~= that_fluid.name then
+                                                    return {this_fluid, that_fluid}
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            
             local ctx = { }
             local this_config = config.poles[ config.entity_fluid_to_base_lu[ this.name ] ] or { }
             local that_config = config.poles[ config.entity_fluid_to_base_lu[ that.name ] ] or { }
+            local is_mixed = is_connection_fluids_mixed(this, that) ~= nil
 
             local line_format
             if this_config.transmit_only and that_config.transmit_only then
@@ -75,12 +116,12 @@ local function setup()
                     dash_length = 0.5,
                 }
             end
-            if ctx.mixed then 
+            if is_mixed then 
                 line_format.colour = {r = 1,  g = 0, b = 0, a = 0} 
             end
             
             for i, entity in pairs{this, that} do
-                if ctx.mixed then
+                if is_mixed then
                     rendering.draw_circle{
                         color = {r = 1,  g = 0, b = 0, a = 0},
                         width = 5,
@@ -88,9 +129,9 @@ local function setup()
                         target = entity.position,
                         surface = entity.surface,
                     }
-                elseif ({ctx.this_empty, ctx.that_empty})[i] then
+                elseif ({is_pole_empty(this), is_pole_empty(that)})[i] then
                     rendering.draw_circle{
-                        color = {r = 1, g = 0, b = 0, a = 0},
+                        color = {r = 1, g = 0.64, b = 0, a = 0},
                         width = 3,
                         radius = 0.25,
                         target = entity.position,
@@ -116,7 +157,13 @@ local function setup()
             end
         end
 
-        function lib.render_all_connections()
+        function lib.render_all_connections_from(entity)
+            local fluid_variant = config.entity_electric_to_fluid_lu[entity.name]
+            if fluid_variant then
+                entity = surface.find_entity(fluid_variant, entity.position)
+                if not entity then error("could not find: "..fluid_variant) end
+            end
+
             function get_fluid_neighbours(entity)    
                 local neighbours = {}
                 local neighbours_lu = {}
@@ -134,12 +181,8 @@ local function setup()
                 end
                 return neighbours
             end
-            
-            local poles_to_find = { }
-            for pole_name, _ in pairs(config.entity_fluid_to_electric_lu) do 
-                table.insert(poles_to_find, pole_name)
-            end
-            local white_list = surface.find_entities_filtered{name = poles_to_find}
+
+            local white_list = { entity }
             local black_list = { }
             local function to_key(a, b) return math.min(a.unit_number, b.unit_number).."."..math.max(a.unit_number, b.unit_number) end
             
@@ -147,16 +190,24 @@ local function setup()
             while length > 0 do
                 local entity = white_list[#white_list]
                 local neighbours = get_fluid_neighbours(entity)
+                local neighbours_to_iterate = { }
                 for _, neighbour in pairs(neighbours) do
                     if not black_list[to_key(entity, neighbour)] then
-                        lib.render_connection(entity, neighbour)
+                        lib.render_connection(
+                            entity, neighbour, 
+                            {mixed = true})
                         black_list[to_key(entity, neighbour)] = true
+                        table.insert(neighbours_to_iterate, neighbour)
                     end
                 end
 
-                ::continue::
                 table.remove(white_list, length)
                 length = length - 1
+
+                for _, neighbour in pairs(neighbours_to_iterate) do
+                    table.insert(white_list, neighbour)
+                    length = length + 1
+                end
             end
         end
 
@@ -169,19 +220,13 @@ do
         type = "sequence",
         triggers = {
             {
-                type = "time-elapsed",
-                ticks = 4 * 60 * 60 * 60 -- 4 hours
-            },
-            {
                 type = "build-entity",
                 entity = "fluidic-small-electric-pole-in-place",
-                match_type_only = true,
                 count = 15
             },
             {
                 type = "build-entity",
                 entity = "fluidic-small-electric-pole-out-place",
-                match_type_only = true,
                 count = 15
             }
         }
@@ -212,7 +257,7 @@ do
         player.cursor_ghost = "small-electric-pole"
         local drawn = false
         script.on_nth_tick(1, function() 
-            if player.selected and not drawn then lib.render_all_connections(); drawn = true
+            if player.selected and not drawn then lib.render_all_connections_from(player.selected); drawn = true
             elseif not player.selected and drawn then rendering.clear(); drawn = false end
 
             if state == "start" then
@@ -260,35 +305,111 @@ end
 
 do
     local tip = util.table.deepcopy(data.raw["tips-and-tricks-item"]["electric-pole-connections"])
-    tip.name = "electric-overlay"
+    tip.name = "fluidic-electric-overlay"
     tip.tag = "[item=small-electric-pole]"
+    tip.trigger = {
+        type = "sequence",
+        triggers = {
+            {
+                type = "build-entity",
+                entity = "fluidic-small-electric-pole-in-place",
+                count = 15
+            },
+            {
+                type = "build-entity",
+                entity = "fluidic-small-electric-pole-out-place",
+                count = 15
+            }
+        }
+    }
+    tip.simulation.init_update_count = 600 -- To get the left poles to fill up, otherwise it doesn't show red
     tip.simulation.init = [[
         ]]..setup()..[[
+        local player = game.create_test_player{name = "Alden Winters"}
+        player.character.teleport{0, 1}
+        game.camera_player = player
+        game.camera_player_cursor_position = player.position
+        game.camera_alt_info = true
+
+        surface.create_entities_from_blueprint_string{
+            string = "0eNqtlNtOwzAMht/F1wlqyrZufRWEULZ6lSGHKkkR09R3x+lENbGyAdpFpTixv992Uh9ha3rsArkE9RFo512E+ukIkVqnTd5Lhw6hBkpoQYDTNlsxobYy9WFLDmEQQK7BD6jV8CwAXaJEeAKNxuHF9XaLgR0mREcdyuRlG3zvGkZ3PnKYd1mUUbJUD0sBB47hxTCIC1Y5scjtyfGRzNCrqIJRYvJ/iZgSuTZmx/PSMgPDjgV1i2PWXD7vaC4520VRCLC+yQE6SYM6JpjL8fGHll3LcTNf7uI/rVuN9TYUcHdyWMyQlxN5b3pqaCctNtRbiYbDAtudNyh9n6adGVH1+CVazRewuovM+oZKdaESrTbmbyLljbtY30GkuKGx+V27yF29lK92lcW8iirue/k/6qgLnRS0i3sfLJ/PENWJp769XwG8pu4cpAr5RsbnX8Jiq199b3j6zCVR3vUJnmrliTcOx/pslgp4xxDHkHKtFtWmrFZL/lQ1DJ8SU9DD",
+            position = {-5, -2},
+            force = "player"
+        }
+        lib.update_all_poles(surface)
+        
+        local left = surface.find_entity("fluidic-medium-electric-pole-out", {-7.5, -0.5})
+        local smol = surface.find_entities_filtered{name="fluidic-small-electric-pole-out"}[1]
+
+        local state = "start"
+        local counter
+        local drawn = false
+        script.on_nth_tick(1, function() 
+            if player.selected and not drawn then lib.render_all_connections_from(player.selected); drawn = true
+            elseif not player.selected and drawn then rendering.clear(); drawn = false end
+
+            if state == "start" then
+                if game.move_cursor({position = left.position, speed = 0.1}) then                    
+                    counter = 60
+                    state = "wait-transformer"                    
+                end
+            elseif state == "wait-transformer" then
+                counter = counter - 1
+                if counter <= 0 then
+                    state = "middle"
+                end
+            elseif state == "middle" then
+                if game.move_cursor({position = player.position, speed = 0.1}) then
+                    counter = 60
+                    state = "middle-wait"
+                end
+            elseif state == "middle-wait" then
+                counter = counter - 1
+                if counter <= 0 then
+                    state = "smol"
+                end
+            elseif state == "smol" then
+                if game.move_cursor({position = smol.position, speed = 0.1}) then                    
+                    counter = 60
+                    state = "wait-smol"                    
+                end
+            elseif state == "wait-smol" then
+                counter = counter - 1
+                if counter <= 0 then
+                    state = "return"
+                end
+            elseif state == "return" then
+                if game.move_cursor({position = player.position, speed = 0.1}) then
+                    counter = 60
+                    state = "end-wait"
+                end
+            elseif state == "end-wait" then
+                counter = counter - 1
+                if counter <= 0 then
+                    state = "start"
+                end
+            end       
+        end)        
+
     ]]
     data:extend{ tip }
 end
         
 do
     local tip = util.table.deepcopy(data.raw["tips-and-tricks-item"]["electric-pole-connections"])
-    tip.name = "transformers"
+    tip.name = "fluidic-transformers"
     tip.tag = "[item=fluidic-transformer]"
     tip.trigger = {
         type = "sequence",
         triggers = {
             {
-                type = "time-elapsed",
-                ticks = 4 * 60 * 60 * 60 -- 4 hours
-            },
-            {
                 type = "build-entity",
                 entity = "fluidic-big-electric-pole-place",
-                match_type_only = true,
                 count = 5
             },
             {
                 type = "build-entity",
                 entity = "fluidic-transformer",
-                match_type_only = true,
                 count = 1
             },
         }
@@ -316,7 +437,7 @@ do
         local counter
         local drawn = false
         script.on_nth_tick(1, function() 
-            if player.selected and not drawn then lib.render_all_connections(); drawn = true
+            if player.selected and not drawn then lib.render_all_connections_from(player.selected); drawn = true
             elseif not player.selected and drawn then rendering.clear(); drawn = false end
 
             if state == "start" then

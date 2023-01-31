@@ -3,6 +3,8 @@ Version: 1.0.0
 Date: ??. 01. 2023
   Features:
     - Added Tips & Tricks.
+  Bugfixes:
+    - Fix overlay indicating empty poles in red instread of orange.
 ---------------------------------------------------------------------------------------------------
 Version: 0.10.4
 Date: 25. 01. 2023

@@ -265,7 +265,7 @@ function overlay.draw_connection(player, this_entity, that_entity)
     for _, entity in pairs{this_entity, that_entity} do
         if overlay.is_pole_empty(entity) == true then
             rendering.draw_circle{
-                color = {r = 1, g = 0, b = 0, a = 0},
+                color = {r = 1, g = 0.64, b = 0, a = 0},
                 width = 3,
                 radius = 0.25,
                 target = entity.position,
