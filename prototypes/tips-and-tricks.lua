@@ -465,3 +465,23 @@ do
     ]]
     data:extend{ tip }
 end
+
+
+do
+    local tip = data.raw["tips-and-tricks-item"]["low-power"]
+    tip.simulation.init_update_count = 600 -- To get the poles filled up
+    tip.simulation.init = [[
+        for x = -5.5, -3.5, 1 do
+          for y = 0.5, 2.5, 1 do
+            game.surfaces[1].create_entity{name = "iron-ore", amount = 500, position = {x, y}}
+          end
+        end
+        game.surfaces[1].create_entities_from_blueprint_string
+        {
+          string = "0eNqVlt1ygyAQhd+Fa+kE1Jj6Kp1OhuimYYrgwNppJuO7F5PG2AYTvPCCv28Pyx7wRHaqg9ZKjaQ8EVkZ7Uj5diJOfmihhj48tkBKIhEakhAtmqHljBKWtkKDIn1CpK7hm5SsT56uBAUVWlnRRmqpP2htpZoyeP+eENAoUcJFyrlx3Oqu2YH1QYIiEtIa59cYPUT2HFq85Ak5+vkveT/o+ofh94r2ndWiggCLP2alIwut0K41FukOFN6T2C9o5UEJqaX1oc+jPIDNorHpEmwejeVLsOtobL4EW0RjsyXYzYhVRtS+5w5XzMCSsa512yEJsF9HttR7X+V4pNUBXEDy5o/k6+ytA0TvDTfMstCYL9h2fkwhWKi3g5/8ENoOQsXIVk+8Nm+VLCZz7GbAvepk7fGuEUrRMVprFFCpx45AxGsJpGFDMT5JoQOLoQOi6QTyR3YWQqZRsk2Hj3SvnujOYnSzJ5B8Upv+1A7C34w1nQdeeTwqD/E+pdmiuoh36nj8ceBNPDidgEOomzX3wuGDnI4nnf+XuA49Jqt4iWwOHNo7Z8vBWUwZ8JvDhHPQ7NRwQTSiOkgNlM8X2UW2Z8vLJWiNpg5l9UmGh/v81peTn4qEfIF1l/1tWFa88mKd+48Vff8DGgHMMw==",
+          position = {3,0}
+        }
+        ]]..setup()..[[
+        lib.update_all_poles(surface)
+      ]]
+end
