@@ -1,10 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
-Date: ??. 01. 2023
+Date: 01. 02. 2023
   Features:
     - Added Tips & Tricks.
+    - Poles now show what voltages they support in tooltip.
   Bugfixes:
     - Fix overlay indicating empty poles in red instread of orange.
+    - Big pole tooltip not always showing Wire Reach and Supply Area.
 ---------------------------------------------------------------------------------------------------
 Version: 0.10.4
 Date: 25. 01. 2023

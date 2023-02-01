@@ -151,6 +151,8 @@ function Generator.create_in_out_variant(config)
             localised_description={"", 
                 {"fluidic-text.pole-in-variant-description"},
                 "\n",
+                {"fluidic-text.pole-supports", "[img=fluid/fluidic-10-kilojoules]"},
+                "\n",
                 {"fluidic-text.pole-wire-description", config.wire_reach, base_pole.supply_area_distance*2},
             },
             
@@ -227,6 +229,8 @@ function Generator.create_in_out_variant(config)
                 localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
                 localised_description={"", 
                     {"fluidic-text.pole-in-variant-description"},
+                    "\n",
+                    {"fluidic-text.pole-supports", "[img=fluid/fluidic-10-kilojoules]"},
                     "\n",
                     {"fluidic-text.power-rating", config.energy_usage}
                 },
@@ -312,6 +316,8 @@ function Generator.create_in_out_variant(config)
             localised_description={"", 
                 {"fluidic-text.pole-out-variant-description"},
                 "\n",
+                {"fluidic-text.pole-supports", "[img=fluid/fluidic-10-kilojoules]"},
+                "\n",
                 {"fluidic-text.pole-wire-description", config.wire_reach, base_pole.supply_area_distance*2},
             },
 
@@ -386,6 +392,8 @@ function Generator.create_in_out_variant(config)
                 localised_description={"", 
                     {"fluidic-text.pole-out-variant-description"},
                     "\n",
+                    {"fluidic-text.pole-supports", "[img=fluid/fluidic-10-kilojoules]"},
+                    "\n",
                     {"fluidic-text.power-rating", config.energy_usage}
                 },
                 minable = {result = config.base_name},
@@ -444,7 +452,14 @@ function Generator.create_transmit_variant(config)
         type = "pipe",
         name = name.."-place",
         localised_name = {"entity-name."..config.base_name},
-        localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
+        localised_description={"", 
+            {"fluidic-text.pole-transmit-variant-description"},
+            "\n",
+            {"fluidic-text.pole-supports", 
+                "[img=fluid/fluidic-10-kilojoules][img=fluid/fluidic-megajoules][img=fluid/fluidic-100-megajoules]"},
+                "\n",
+                {"fluidic-text.pole-wire-description", config.wire_reach, 0},
+        },
         minable = {result = config.base_name, mining_time=base_pole.minable.mining_time},
         resistances = base_pole.resistances,
         horizontal_window_bounding_box = {{0,0},{0,0}},
@@ -528,7 +543,6 @@ function Generator.create_transmit_variant(config)
         {
             name = name,
             localised_name = {"entity-name."..config.base_name},
-            localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
             minable = {result = config.base_name},  -- It will return the vanilla item
             
             -- Allows pasting of blueprints with circuits
@@ -550,7 +564,12 @@ function Generator.create_transmit_variant(config)
         {
             name = name.."-electric",
             localised_name = {"entity-name."..config.base_name},
-            localised_description={"", {"fluidic-text.pole-transmit-variant-description"}},
+            localised_description={"", 
+                {"fluidic-text.pole-transmit-variant-description"},
+                "\n",
+                {"fluidic-text.pole-supports", 
+                    "[img=fluid/fluidic-10-kilojoules][img=fluid/fluidic-megajoules][img=fluid/fluidic-100-megajoules]"}
+            },
             minable = {result = config.base_name},
             placeable_by = {item=config.base_name,count=1}, -- This is the magic to make the pipette and blueprint work!
             supply_area_distance = 0,            
