@@ -177,9 +177,11 @@ function Generator.create_in_out_variant(config)
                 "player-creation",  -- Allows to place ghosts with shift-click
                 "not-upgradable",   -- Upgrades are done through electric entity
             },
-            
+
+            collision_mask = base_pole.collision_mask,
             collision_box = base_pole.collision_box,
             selection_box = base_pole.selection_box,
+            max_health = base_pole.max_health,
             
             crafting_speed = 1,
             fixed_recipe = "fluidic-generate-"..config.base_name,
@@ -340,8 +342,10 @@ function Generator.create_in_out_variant(config)
                 "not-upgradable",   -- Upgrades are done through electric entity
             },
 
+            collision_mask = base_pole.collision_mask,
             collision_box = base_pole.collision_box,
             selection_box = base_pole.selection_box,
+            max_health = base_pole.max_health,
 
             effectivity = 1,
             maximum_temperature = 15,
@@ -470,6 +474,7 @@ function Generator.create_transmit_variant(config)
         icon_size = base_pole.icon_size, 
         icon_mipmaps = base_pole.icon_mipmaps,
 
+        collision_mask = base_pole.collision_mask,
         collision_box = base_pole.collision_box,
         selection_box = base_pole.selection_box,
         max_health = base_pole.max_health,

@@ -1,8 +1,8 @@
 {
 	"name": "FluidicPower",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"title": "Fluidic Power",
-	"author": "stringweasel",	
+	"author": "stringweasel",
 	"factorio_version": "1.1",
 	"dependencies": [
 		"base >= 1.1.67",
@@ -13,7 +13,8 @@
 		"! nullius",
 		"! IndustrialRevolution",
 		"! pyfusionenergy",
-		"! pyhightech"
+		"! pyhightech",
+		"(?) water-poles"
 	],
 	"description": "Overhauls the power network to use the game's built-in fluid system in an attempt to make electricity more realistic. Adds working transformers for high power transmission, and creates various new and interesting power distribution challenges. Similar to the mods Flow Network and High Voltage, but significantly different by being the first mod that uses no on-tick power calculations. This means the UPS impact should be minimal for non-gigantic bases."
 }
