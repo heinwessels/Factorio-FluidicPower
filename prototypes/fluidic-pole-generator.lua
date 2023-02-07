@@ -199,6 +199,7 @@ function Generator.create_in_out_variant(config)
             crafting_categories = {"fluidic-generate"},
             fluid_boxes = fluid_boxes,            
             animation = util.table.deepcopy(base_pole.pictures),
+            water_reflection = base_pole.water_reflection,
         }
         pole_in_place.animation.layers[1].tint = tint_in
         pole_in_place.animation.layers[1].hr_version.tint = tint_in
@@ -363,6 +364,7 @@ function Generator.create_in_out_variant(config)
             },
             vertical_animation = util.table.deepcopy(base_pole.pictures),
             horizontal_animation = util.table.deepcopy(base_pole.pictures),
+            water_reflection = base_pole.water_reflection,
         }
         if mods["BottleneckLite"] then
             pole_out_place.bottleneck_ignore = true   -- For BottleNeck Lite
@@ -468,6 +470,7 @@ function Generator.create_transmit_variant(config)
         resistances = base_pole.resistances,
         horizontal_window_bounding_box = {{0,0},{0,0}},
         vertical_window_bounding_box = {{0,0},{0,0}},
+        water_reflection = base_pole.water_reflection,
         
         icon = base_pole.icon,
         icons = base_pole.icons,

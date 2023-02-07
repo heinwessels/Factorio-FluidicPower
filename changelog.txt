@@ -1,11 +1,13 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 07. 02. 2023
-  Changes:
+  Features:
+    - Now supports Cargo Ships' additional Floating Electric Pole.
     - Now compatible with Water Poles.
   Bugfixes:
     - Fix some generated power pole entities not keeping original collision mask (Thanks again 0n0w1c!).
     - Fix some generated power pole entities not keeping original maximum health.
+    - Fix generated power pole entities not keeping water reflections.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 01. 02. 2023

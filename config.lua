@@ -67,7 +67,12 @@ config.poles = {
         energy_usage = "100MW",  -- Needs to correspond with recipe
         size = 2,   -- This is a 2x2 entity
         wire_distance_override = 26, -- K2 is 24.25
-    }
+    },
+    ["floating-electric-pole"] = { -- From Cargo Ships
+        transmit_only = true,
+        size = 2,   -- This is a 2x2 entity
+        wire_distance_override = 52, -- Default is 48
+    },
 }
 
 ------------------
