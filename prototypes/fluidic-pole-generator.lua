@@ -212,17 +212,17 @@ function Generator.create_in_out_variant(config)
             pole_in_place,
             {
                 name = name.."-in",
-
-                -- Allows pasting of blueprints with circuits
-                -- Needs to be here with the hidden entity so that
-                -- blueprints still collide correctly.
-                -- Note: This breaks quick-replace, since the top entity (pole)
-                -- and entity-to-place (fluidic) don't have the same collision masks.
-                -- Prefer having blueprints functioning correctly.
-                collision_mask = {},
             }
         }
         pole_in.animation = empty_animation
+        -- Allows pasting of blueprints with circuits
+        -- Needs to be here with the hidden entity so that
+        -- blueprints still collide correctly.
+        -- Note: This breaks quick-replace, since the top entity (pole)
+        -- and entity-to-place (fluidic) don't have the senergy_usageame collision masks.
+        -- Prefer having blueprints functioning correctly.
+        -- Needs to be done explicitly because table.merge doesn't handle it correctly
+        pole_in.collision_mask = {}
 
         -- Now update create the electric entity
         local pole_in_electric = util.merge{
@@ -376,18 +376,18 @@ function Generator.create_in_out_variant(config)
             {
                 name = name.."-out",
                 next_upgrade = nil,
-                
-                -- Allows pasting of blueprints with circuits
-                -- Needs to be here with the hidden entity so that
-                -- blueprints still collide correctly.
-                -- Note: This breaks quick-replace, since the top entity (pole)
-                -- and entity-to-place (fluidic) don't have the same collision masks.
-                -- Prefer having blueprints functioning correctly.
-                collision_mask = {},
             }
         }
         pole_out.vertical_animation = empty_animation
         pole_out.horizontal_animation = empty_animation
+        -- Allows pasting of blueprints with circuits
+        -- Needs to be here with the hidden entity so that
+        -- blueprints still collide correctly.
+        -- Note: This breaks quick-replace, since the top entity (pole)
+        -- and entity-to-place (fluidic) don't have the senergy_usageame collision masks.
+        -- Prefer having blueprints functioning correctly.
+        -- Needs to be done explicitly because table.merge doesn't handle it correctly
+        pole_out.collision_mask = {}
 
         -- Now update create the electric entity
         local pole_out_electric = util.merge{
@@ -552,19 +552,20 @@ function Generator.create_transmit_variant(config)
             name = name,
             localised_name = {"entity-name."..config.base_name},
             minable = {result = config.base_name},  -- It will return the vanilla item
-            
-            -- Allows pasting of blueprints with circuits
-            -- Needs to be here with the hidden entity so that
-            -- blueprints still collide correctly.
-            -- Note: This breaks quick-replace, since the top entity (pole)
-            -- and entity-to-place (fluidic) don't have the senergy_usageame collision masks.
-            -- Prefer having blueprints functioning correctly.
-            collision_mask = {},
         }
     }
     for key, _ in pairs(pole_fluidic.pictures) do       
         pole_fluidic.pictures[key] = empty_animation
     end
+
+    -- Allows pasting of blueprints with circuits
+    -- Needs to be here with the hidden entity so that
+    -- blueprints still collide correctly.
+    -- Note: This breaks quick-replace, since the top entity (pole)
+    -- and entity-to-place (fluidic) don't have the senergy_usageame collision masks.
+    -- Prefer having blueprints functioning correctly.
+    -- Needs to be done explicitly because table.merge doesn't handle it correctly
+    pole_fluidic.collision_mask = {}
     
     -- Now update create the electric entity
     local pole_electric = util.merge{
