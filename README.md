@@ -1,16 +1,16 @@
 # [Fluidic Power](https://mods.factorio.com/mod/FluidicPower)
 
-[![shield](https://img.shields.io/badge/dynamic/json?color=orange&label=Factorio&query=downloads_count&suffix=%20downloads&url=https%3A%2F%2Fmods.factorio.com%2Fapi%2Fmods%2FFluidicPower)](https://mods.factorio.com/mod/FluidicPower)
-
 This mod changes the power network to use the game's in-built fluid system in an attempt to make electricity more realistic. This makes it possible to add working transformers for high power transmission, and all new and interesting power distribution challenges.
 
 More realistic power distribution has been requested from players for years. Essentially, you shouldn't be able to power your entire factory through a single small power pole. However, the developers decided not to implement this for simplicity and performance reasons. There are outdated mods that have attempted this as well. For example [Flow Network](https://mods.factorio.com/mods/Simdezimon/flownetwork) from Factorio 0.13 and [High Voltage](https://mods.factorio.com/mods/JeroenDStout/highvoltage) for Factorio 0.15. However, both these mods had a massive impact on the game's performance because they manually calculated the power transmission between all poles on every game tick. What sets `Fluidic Power` apart is that it utilizes the game's `built-in fluid system` to simulate the transmission of power between poles. No on tick power calculations are done. 
 
 ---
 
-*If you're curious about the performance of this mod, or what kind of UPS you will be able to get, see the [FAQ](https://mods.factorio.com/mod/FluidicPower/faq).*
+*If you're curious about the performance of this mod or some history of electricity overhaul mods you can read this [Alt-F4 article](https://alt-f4.blog/ALTF4-51/).*
 
 ---
+
+[![Support me on kofi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/stringweasel)
 
 ## How It Works
 
