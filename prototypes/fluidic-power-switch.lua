@@ -106,4 +106,3 @@ data:extend{switch}
 -- Disable vanilla entity
 data.raw["recipe"]["power-switch"].enabled = false
 data.raw["recipe"]["power-switch"].hidden = false
-data.raw["item"]["power-switch"].flags = {"hidden"}
