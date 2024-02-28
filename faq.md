@@ -60,7 +60,7 @@ Yes. At the moment there's no automatic migration from vanilla to Fluidic Power.
 
 ## Does it work with other mods?
 
-It *should* work out of the box if the other mod doesn't touch power poles or create any new power poles. Contact me if you want to make sure that it works with your mods. This also means that overhaul mods like Krastorio or Space Exploration will definitely not work.
+It *should* work out of the box if the other mod doesn't touch power poles or create any new power poles. Contact me if you want to make sure that it works with your mods. This also means that overhaul mods like Space Exploration will definitely not work.
 
 ---
 
@@ -70,8 +70,12 @@ Yes. It's just important to remember that Fluidic Power creates all new power po
 
 ---
 
-## Can I still see my total power production and consumption on a graph?
-Yes! Open the production GUI (`P`) and click on `Fluids`. There you will see the total amount of energy created and consumed in your world, while not taking transformers into the calculation. To put these numbers into usable terms you can do the following quick calculation:
+## Can I still see my total power production and consumption?
+Yes! Just click on any power pole and a little GUI will show on the left with your total production and consumption.
+
+![](https://assets-mod.factorio.com/assets/6e822c2e450314417a6c7ca4f364fbe33f57a032.png)
+
+Alternatively, open the production GUI (`P`) and click on `Fluids`. There you will see the total amount of energy created and consumed in your world, while not taking transformers into the calculation. To put these numbers into usable terms you can do the following quick calculation:
 
 1. Read the production or consumption per minute, e.g. `1.35M/m` fluid units.
 2. Divide it by 60 to get it in `per second`, e.g. `1.35 M/m / 60 = 22.5k/s` fluid units.
