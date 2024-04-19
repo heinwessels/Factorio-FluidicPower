@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 19. 04. 2024
+  Changes:
+    - Change incompatibility from Industrial Revolution 2 to the newer IR3.
+  Localization:
+    - Update translations from Crowdin.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 05. 12. 2023
   Bugfixes:
