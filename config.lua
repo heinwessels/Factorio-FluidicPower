@@ -27,7 +27,6 @@ config.poles = {
         },
         energy_usage = "5MW",  -- Needs to correspond with recipe
         next_upgrade_base = "fluidic-medium-electric-pole",
-        fluid_box_base_area = 0.5,
         wire_distance_override = 9, -- vanilla is 7.5
     },
     ["medium-electric-pole"] = {
@@ -48,14 +47,13 @@ config.poles = {
             energy_required = 0.2,
             results={{type="fluid", name="fluidic-10-kilojoules", amount=2000}},
         },
+        wire_distance_override = 20, -- vanilla is 18
         energy_usage = "100MW",  -- Needs to correspond with recipe
-        size = 2,   -- This is a 2x2 entity
-        wire_distance_override = 34, -- vanilla reach is 30
     },
     ["big-electric-pole"] = {
         transmit_only = true,
         size = 2,   -- This is a 2x2 entity
-        wire_distance_override = 20, -- vanilla is 18
+        wire_distance_override = 34, -- vanilla reach is 30
     },
     ["kr-substation-mk2"] = {
         fluid_usage_per_tick = 166.66666666, -- P = 100MW
@@ -65,7 +63,6 @@ config.poles = {
             results={{type="fluid", name="fluidic-10-kilojoules", amount=2000}},
         },
         energy_usage = "100MW",  -- Needs to correspond with recipe
-        size = 2,   -- This is a 2x2 entity
         wire_distance_override = 26, -- K2 is 24.25
     },
     ["floating-electric-pole"] = { -- From Cargo Ships
