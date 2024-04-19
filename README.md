@@ -1,6 +1,6 @@
 # [Fluidic Power](https://mods.factorio.com/mod/FluidicPower)
 
-[![shield](https://img.shields.io/badge/Ko--fi-Donate%20-hotpink?logo=kofi&logoColor=white)](https://ko-fi.com/stringweasel) [![shield](https://img.shields.io/badge/dynamic/json?color=orange&label=Factorio&query=downloads_count&suffix=%20downloads&url=https%3A%2F%2Fmods.factorio.com%2Fapi%2Fmods%2FFluidicPower)](https://mods.factorio.com/mod/FluidicPower)
+[![shield](https://img.shields.io/badge/Ko--fi-Donate%20-hotpink?logo=kofi&logoColor=white)](https://ko-fi.com/stringweasel) [![shield](https://img.shields.io/badge/dynamic/json?color=orange&label=Factorio&query=downloads_count&suffix=%20downloads&url=https%3A%2F%2Fmods.factorio.com%2Fapi%2Fmods%2FFluidicPower)](https://mods.factorio.com/mod/FluidicPower) [![shield](https://img.shields.io/badge/Crowdin-Translate-brightgreen)](https://crowdin.com/project/factorio-mods-localization)
 
 This mod changes the power network to use the game's in-built fluid system in an attempt to make electricity more realistic. This makes it possible to add working transformers for high power transmission, and all new and interesting power distribution challenges.
 
