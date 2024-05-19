@@ -43,6 +43,7 @@ config.poles = {
         fluid_usage_per_tick = 166.66666666, -- P = 100MW
         wire_reach = substation_wire_reach,
         size = 2,   -- This is a 2x2 entity
+        fluid_box_base_area = 1.7,
         in_fixed_recipe = {
             energy_required = 0.2,
             results={{type="fluid", name="fluidic-10-kilojoules", amount=2000}},
@@ -58,6 +59,8 @@ config.poles = {
     ["kr-substation-mk2"] = {
         fluid_usage_per_tick = 166.66666666, -- P = 100MW
         size = 2,   -- This is a 2x2 entity
+        wire_reach = substation_wire_reach,
+        fluid_box_base_area = 1.7,
         in_fixed_recipe = {
             energy_required = 0.2,
             results={{type="fluid", name="fluidic-10-kilojoules", amount=2000}},

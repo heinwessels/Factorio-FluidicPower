@@ -15,7 +15,7 @@ local function fluid_to_energy(amount, fluid_type)
     if not fluid_type or fluid_type == "fluidic-10-kilojoules" then return amount * 10e3 end
     if fluid_type == "fluidic-megajoules" then return amount * 1e6 end
     if fluid_type == "fluidic-100-megajoules" then return amount * 100e6 end
-    error("Bad fluid type: "..fluid_type)    
+    error("Bad fluid type: "..fluid_type)
 end
 
 function pole_gui.refresh_statistics_for_player(gui_data, player)
@@ -26,7 +26,7 @@ function pole_gui.refresh_statistics_for_player(gui_data, player)
         end
     end
     if not precision_index then error("Could not find precision index!") end
-    
+
     local fluid_statistics = player.force.fluid_production_statistics
     local produced = fluid_to_energy(fluid_statistics.get_flow_count{name = "fluidic-10-kilojoules", 
         input = true, precision_index = precision_index}) / 60
@@ -42,7 +42,6 @@ function pole_gui.refresh_statistics_for_player(gui_data, player)
 end
 
 function pole_gui.refresh_this_pole_for_player(gui_data, player)
-    local fluids_frame = gui_data.fluids_frame
     local fluidic_entity = gui_data.entities.fluidic
 
     gui_data.visible = fluidic_entity.valid

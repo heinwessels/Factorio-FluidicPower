@@ -58,7 +58,7 @@ function Generator.create_in_out_variant(config)
     -- The out pole will use the base recipe
     -- The in pole will be made from the out pole
     data:extend({
-        {   
+        {
             type = "recipe",
             name = name.."-in",
             localised_name = {"", {"fluidic-text.pole-in-variant", {"entity-name."..config.base_name}}},
@@ -79,9 +79,9 @@ function Generator.create_in_out_variant(config)
                 icon = "__FluidicPower__/graphics/icons/energy-fluid-base.png",
                 category = "fluidic-generate",
                 subgroup = "energy-pipe-distribution",
-                order = "a[kilojoules]-a[kilojoules]",        
+                order = "a[kilojoules]-a[kilojoules]",
                 ingredients ={},
-                hidden = true  
+                hidden = true
             },
             config.in_fixed_recipe
         }
@@ -93,12 +93,12 @@ function Generator.create_in_out_variant(config)
         local pipe_offset = -math.floor(config.size / 2)
         local fluid_boxes
         if not config.size or config.size == nil or config.size == 1 then
-            fluid_boxes = { 
+            fluid_boxes = {
                 {
                     production_type = "output",
                     base_area = config.fluid_box_base_area or 1,
                     filter = "fluidic-10-kilojoules",
-                    
+
                     -- Source box higher to aid pushing the fluid out just like pumps
                     -- Also, subsequent poles only fill up to about 60% if we don't increase this
                     height = 2,
@@ -114,7 +114,7 @@ function Generator.create_in_out_variant(config)
                 },
             }  -- Default 1x1 sized fluidbox. Won't work for substation
         elseif config.size and config.size == 2 then
-            fluid_boxes = { 
+            fluid_boxes = {
                 {
                     production_type = "output",        
                     base_area = config.fluid_box_base_area or 1,
@@ -124,7 +124,7 @@ function Generator.create_in_out_variant(config)
                         {type = "output", position = {1.5,  -0.5}, max_underground_distance = config.wire_reach + pipe_offset},
                         {type = "output", position = {-0.5, -1.5}, max_underground_distance = config.wire_reach + pipe_offset},
                         {type = "output", position = { -0.5, 1.5}, max_underground_distance = config.wire_reach + pipe_offset},
-        
+
                         -- These connections are only for energy sensors.
                         -- Will not connect to other poles (unless placed directly adjacent)
                         -- and thus not influence fluid flow
