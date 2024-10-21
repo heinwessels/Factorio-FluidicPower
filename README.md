@@ -1,6 +1,14 @@
-# [Fluidic Power](https://mods.factorio.com/mod/FluidicPower)
+# [Fluidic Power](https://mods.factorio.com/mod/FluidicPower) *(Deprecated)*
 
 [![shield](https://img.shields.io/badge/Ko--fi-Donate%20-hotpink?logo=kofi&logoColor=white)](https://ko-fi.com/stringweasel) [![shield](https://img.shields.io/badge/dynamic/json?color=orange&label=Factorio&query=downloads_count&suffix=%20downloads&url=https%3A%2F%2Fmods.factorio.com%2Fapi%2Fmods%2FFluidicPower)](https://mods.factorio.com/mod/FluidicPower) [![shield](https://img.shields.io/badge/Crowdin-Translate-brightgreen)](https://crowdin.com/project/factorio-mods-localization)
+
+---
+
+**DEPRECATED**:
+
+The Factorio 2.0 update changed the fundamental game mechanic this mod (ab)uses, the fluid mechanics, and thus completely breaks this mod. Thanks for everyone that played it (special shoutout to JamesFire)! I really had fun developing this mod, but leaving it behind lifts a weight from my shoulders. If you want more information, or want to try fix it yourself, there's a discussion page [here](https://mods.factorio.com/mod/FluidicPower/discussion/6675b757ae0dfeac3bead6d9).
+
+---
 
 This mod changes the power network to use the game's in-built fluid system in an attempt to make electricity more realistic. This makes it possible to add working transformers for high power transmission, and all new and interesting power distribution challenges.
 
